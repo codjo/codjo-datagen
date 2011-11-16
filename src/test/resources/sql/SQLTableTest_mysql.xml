@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="gen.Dividend" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+        <feature>
+            <sql/>
+        </feature>
+
+        <primary-key key-generator="identity">
+            <field name="operationCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="operationCode" type="big-decimal">
+                <description>Id</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+            <field name="model" type="string">
+                <description>Model de sécurité</description>
+                <sql type="text"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

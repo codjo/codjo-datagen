@@ -1,0 +1,33 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.database.api.query.PreparedQuery;
+import net.codjo.mad.server.handler.XMLUtils;
+import net.codjo.mad.server.handler.sql.SqlHandler;
+import net.codjo.mad.server.handler.sql.Getter;
+import java.sql.*;
+import java.util.Map;
+/**
+ *  Classe Handler de selection pour generated.Dividend. <p>
+ *
+ *  Query : <code>select ...</code>
+ */
+public class NeoSelectHandler extends SqlHandler {
+    private static final String[] PK = {};
+
+
+    public NeoSelectHandler(Database database) {
+        super(PK, "select ...", database);
+
+        addGetter("portfolioCode", new Getter(1));
+        addGetter("creationDatetime", new Getter(2, java.sql.Types.TIMESTAMP));
+    }
+
+    public String getId() {
+        return "neoSelect";
+    }
+
+    @Override
+    protected void fillQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
+    }
+}
+

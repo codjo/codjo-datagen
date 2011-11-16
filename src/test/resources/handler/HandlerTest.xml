@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <entity name="generated.Dividend" table="AP_DIVIDEND" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <sql/>
+        <bean/>
+        <historic-audit-trail functionalKey="portfolioCode,netDividend"
+                          auditClass="net.codjo.sif.data.DataAudit"  />
+        <handler-new id="newDividend"/>
+        <handler-select id="selectDividendHandlerByPk">
+            <query type="OQL">SELECT p FROM generated.Dividend p WHERE portfolioCode = $1 and dividendDate = $2</query>
+            <arg>portfolioCode</arg>
+            <arg>dividendDate</arg>
+        </handler-select>
+        <handler-delete id="deleteDividend"/>
+        <handler-update id="updateDividend"/>
+        <handler-command id="myCommand" type="big-decimal" package="net.codjo.pims.command">
+            <body>
+            return Util.compute((String)args.get(portfolioCode)
+                            , new java.math.BigDecimal((String)args.get(number)));
+            </body>
+            <arg type="string">portfolioCode</arg>
+            <arg type="big-decimal">number</arg>
+        </handler-command>
+        <controlable jndi="java:comp/env/ejb/ControlManagerEJB" />
+        <audit-trail/>
+    </feature>
+
+    <primary-key>
+        <field name="portfolioCode" />
+        <field name="dividendDate" />
+    </primary-key>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+        <field name="netDividend" type="big-decimal">
+          <sql type="numeric" precision="17,2" required="true"/>
+        </field>
+        <field name="dividendDate" type="java.sql.Timestamp">
+          <sql type="timestamp" required="true" />
+        </field>
+        <field name="automaticUpdate" type="boolean" >
+          <sql type="bit" required="true"/>
+        </field>
+        <field name="audit" structure="generated.Audit"/>
+    </properties>
+  </entity>
+  <entity name="generated.Security" table="AP_SECURITY" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <sql/>
+        <bean/>
+        <handler-new id="newDividendHandler"/>
+        <handler-select id="selectDividendHandlerByPk">
+            <query type="OQL">SELECT p FROM generated.Dividend p WHERE portfolioCode = $1 and dividendDate = $2</query>
+            <arg>portfolioCode</arg>
+            <arg>dividendDate</arg>
+        </handler-select>
+        <handler-delete id="deleteSecurityHandler"/>
+        <handler-update id="updateSecurity"/>
+        <controlable jndi="java:comp/env/ejb/ControlManagerEJB" />
+        <audit-trail/>
+    </feature>
+
+    <primary-key>
+        <field name="portfolioCode" />
+        <field name="dividendDate" />
+    </primary-key>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+        <field name="netDividend" type="big-decimal">
+          <sql type="numeric" precision="17,2" required="true"/>
+        </field>
+        <field name="dividendDate" type="java.sql.Timestamp">
+          <sql type="timestamp" required="true" />
+        </field>
+        <field name="automaticUpdate" type="boolean" >
+          <sql type="bit" required="true"/>
+        </field>
+        <field name="audit" structure="generated.Audit"/>
+    </properties>
+  </entity>
+
+  <structure name="generated.Audit">
+    <description>Piste d'audit</description>
+    <feature>
+        <bean/>
+    </feature>
+    <properties>
+        <field name="comment" type="string">
+          <description >Commentaire de fiche</description>
+          <sql type="varchar" precision="6" />
+        </field>
+        <field name="createdBy" type="string">
+          <sql type="varchar" precision="6" />
+        </field>
+    </properties>
+  </structure>
+
+
+</data>
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="net.codjo.test.EntityWithComplexLinks" table="AP_ENTITY_WITH_COMPLEX_LINKS">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <foreign-keys>
+            <link id="FK_COUNTRY_DEPARTMENT" name="refCountry" table="net.codjo.test.Country">
+                <field from="countryCode" to="refCode"/>
+                <field from="beginDate" to="refDate"/>
+            </link>
+            <link id="FK_CURRENCY_DEPARTMENT" name="refCurrency" table="net.codjo.test.Currency" required="true">
+                <field from="currencyCode" to="refCode"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="name" type="string">
+                <description>Nom du département</description>
+                <sql type="varchar" precision="15" required="true"/>
+            </field>
+            <field name="highSecurity" type="boolean">
+                <description>Département classé Haute-Sécurité</description>
+                <sql type="bit"/>
+            </field>
+            <field name="countryCode" type="string">
+                <description>Code du pays</description>
+                <sql type="varchar" precision="6"/>
+            </field>
+            <field name="beginDate" type="java.sql.Date">
+                <description>Date de début</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="currencyCode" type="integer">
+                <description>Code de la devise</description>
+                <sql type="integer" precision="6"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

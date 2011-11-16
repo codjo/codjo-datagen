@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<link-def>
+<links id="dividendRequetor" root="AP_DIVIDEND">
+<link from="AP_DIVIDEND" to="AP_RATINGS" type="inner join">
+<key from="CODE" operator="=" to="DIVIDEND_CODE"/>
+<key from="DATE" operator="&lt;=" to="DIVIDEND_DATE"/>
+</link>
+</links>
+</link-def>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="gen.Dividend" table="DATAGEN_FILES">
+        <description>Mon dividend a moi</description>
+        <feature>
+            <trigger-delete>
+                <cascade entity="gen.Son">
+                    <key from="id" to="fileId"/>
+                </cascade>
+            </trigger-delete>
+            <trigger-insert>
+                <sql>
+                    -- SQL code for insert
+                </sql>
+            </trigger-insert>
+            <trigger-update>
+                <sql>
+                    -- SQL code for update
+                </sql>
+            </trigger-update>
+        </feature>
+        <primary-key/>
+        <properties/>
+    </entity>
+    <entity name="gen.Son" table="DATAGEN_FILE_CONTENTS">
+    </entity>
+
+    <append-to-trigger-delete name="gen.Dividend">
+        <sql>
+            -- Appended sql code delete
+        </sql>
+    </append-to-trigger-delete>
+    <append-to-trigger-insert name="gen.Dividend">
+        <sql>
+            -- Appended sql code insert
+        </sql>
+    </append-to-trigger-insert>
+    <append-to-trigger-update name="gen.Dividend">
+        <sql>
+            -- Appended sql code update
+        </sql>
+    </append-to-trigger-update>
+</data>

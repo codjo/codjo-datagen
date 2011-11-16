@@ -1,0 +1,19 @@
+package net.codjo.test.globs;
+
+import org.crossbowlabs.globs.metamodel.*;
+import org.crossbowlabs.globs.metamodel.utils.GlobTypeLoader;
+import org.crossbowlabs.globs.metamodel.fields.*;
+import org.crossbowlabs.globs.metamodel.annotations.*;
+
+@SuppressWarnings({"ALL"})
+public class EntityTwo {
+    public static GlobType TYPE;
+
+    @Key
+    public static IntegerField ID;
+    public static BooleanField HIGH_SECURITY;
+
+    static {
+        GlobTypeLoader loader = GlobTypeLoader.init(EntityTwo.class);
+    }
+}

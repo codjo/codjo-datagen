@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+
+    <entity name="net.codjo.mint.ref.Asset" table="REF_ASSET">
+        <description>Asset</description>
+        <feature>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteAsset"/>
+            <handler-update id="updateAsset"/>
+            <handler-select id="selectAssetById" type="By_Primary-Key"/>
+            <handler-select id="selectAllAsset" type="All"/>
+            <handler-new id="newAsset"/>
+            <handler-requetor id="allAsset"/>
+            <handler-sql id="selectAllAssetWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_ASSET
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Country" table="REF_COUNTRY">
+        <description>Pays</description>
+        <feature>
+            <referential/>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteCountry"/>
+            <handler-update id="updateCountry"/>
+            <handler-select id="selectCountryById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCountry" type="All"/>
+            <handler-new id="newCountry"/>
+            <handler-requetor id="allCountry"/>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.mint.ref.Currency" table="REF_CURRENCY">
+        <description>Devise</description>
+        <feature>
+            <referential/>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteCurrency"/>
+            <handler-update id="updateCurrency"/>
+            <handler-select id="selectCurrencyById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCurrency" type="All"/>
+            <handler-new id="newCurrency"/>
+            <handler-requetor id="allCurrency"/>
+            <handler-sql id="selectAllCurrencyWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>currencyCountry</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, CURRENCY_COUNTRY
+                    from REF_CURRENCY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+        <primary-key key-generator="MAX">
+            <field name="refCode"/>
+            <field name="refLabel"/>
+            <field name="currencyCountry"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="currencyCountry" type="string">
+                <description>Pays devise</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Family" table="REF_FAMILY">
+        <description>Poulet</description>
+        <feature>
+            <referential/>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+            <audit-trail/>
+
+            <handler-delete id="deleteFamily"/>
+            <handler-update id="updateFamily"/>
+            <handler-select id="selectFamilyById" type="By_Primary-Key"/>
+            <handler-select id="selectAllFamily" type="All"/>
+            <handler-new id="newFamily"/>
+            <handler-requetor id="allFamily"/>
+            <handler-sql id="selectAllFamilyWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>isValuated</name>
+                    <name>anInteger</name>
+                    <name>aBigDecimal</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, IS_VALUATED, AN_INTEGER, A_BIG_DECIMAL
+                    from REF_FAMILY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code famille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="isValuated" type="boolean">
+                <description>Valuated</description>
+                <sql type="bit" default="1"/>
+            </field>
+            <field name="anInteger" type="integer">
+                <description>un entier</description>
+                <sql type="integer"/>
+            </field>
+            <field name="aBigDecimal" type="big-decimal">
+                <description>un gros decimal</description>
+                <sql type="numeric" precision="22,2" default="234.56"/>
+            </field>
+            <field name="aLong" type="long">
+                <description>un long</description>
+                <sql type="numeric" precision="20"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="audit" structure="net.codjo.mint.data.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.ValFrequency" table="REF_VAL_FREQUENCY">
+        <description>ValFrequency</description>
+        <feature>
+            <referential/>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+            <audit-trail/>
+
+            <handler-delete id="deleteValFrequency"/>
+            <handler-update id="updateValFrequency"/>
+            <handler-select id="selectValFrequencyById" type="By_Primary-Key"/>
+            <handler-select id="selectAllValFrequency" type="All"/>
+            <handler-new id="newValFrequency"/>
+            <handler-requetor id="allValFrequency"/>
+            <handler-sql id="selectAllValFrequencyWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_VAL_FREQUENCY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code Fréquence de Valo</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="audit" structure="net.codjo.mint.data.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.ExecutionVl" table="REF_EXECUTION_VL">
+        <description>ExecutionVl</description>
+        <feature>
+            <referential>
+                <fill field="valFrequencyCode" handlerId="selectAllValFrequencyWithCloseDate"/>                
+            </referential>
+            <sql/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+            <audit-trail/>
+
+            <handler-delete id="deleteExecutionVl"/>
+            <handler-update id="updateExecutionVl"/>
+            <handler-select id="selectExecutionVlById" type="By_Primary-Key"/>
+            <handler-select id="selectAllExecutionVl" type="All"/>
+            <handler-new id="newFamily"/>
+            <handler-requetor id="allExecutionVl"/>
+            <handler-sql id="selectAllExecutionVlWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>valFrequencyCode</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, VAL_FREQUENCY_CODE
+                    from REF_EXECUTION_VL
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+        <foreign-keys>
+            <link id="FK_EXEC_VAL_VAL_FREQ" table="net.codjo.mint.ref.ValFrequency">
+                <field from="valFrequencyCode" to="refCode"/>
+            </link>
+        </foreign-keys>
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code VL d'exécution</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="valFrequencyCode" type="string">
+                <description>Code Fréquence de Valo</description>
+                <sql type="varchar" precision="6" required="false"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="audit" structure="net.codjo.mint.data.Audit"/>
+        </properties>
+    </entity>
+
+</data>

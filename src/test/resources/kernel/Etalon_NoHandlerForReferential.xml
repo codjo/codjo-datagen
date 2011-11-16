@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>target/MainTest/Sql/table</sql>
+            <sql-view>target/MainTest/Sql/view</sql-view>
+            <sql-index>target/MainTest/Sql/index</sql-index>
+            <sql-constraint>target/MainTest/Sql/constraint</sql-constraint>
+            <trigger>target/MainTest/Sql/trigger</trigger>
+            <bean>target/MainTest/DataLib/src</bean>
+            <handlers>target/MainTest/HandlerLib/src</handlers>
+            <castor>target/MainTest/ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>target/MainTest/HandlerLib/src</cmdHandler>
+            <structure>target/MainTest/ClientAPP/src</structure>
+            <requetor>target/MainTest/ClientAPP/dest</requetor>
+            <referential>target/MainTest/ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
+    <roles>
+    </roles>
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
+        <description>Référentiel poulets</description>
+        <feature>
+            <sql name="REF_POULET"/>
+            <referential generateHandler="false"/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+        </feature>
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql precision="6" required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+</data>

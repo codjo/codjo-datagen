@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="generated.Dividend" table="AP_UNE_TABLE">
+        <description>Mon portefeuille</description>
+        <feature>
+            <bean/>
+            <controlable/>
+
+            <historic-audit-trail functionalKey="dividendId,dividendCode" auditClass="net.codjo.sif.data.DataAudit"/>
+
+            <handler-new id="newDividend">
+                <query>
+                <![CDATA[
+                    exec sp_Mint_CreateNewDividend(@DIVIDEND_ID=?,@DIVIDEND_CODE=?,@OPEN_DATE=?)
+                ]]>
+                </query>
+            </handler-new>
+
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="dividendId"/>
+            <field name="dividendCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="dividendId" type="string">
+                <description>Id portefeuille genere</description>
+            </field>
+            <field name="dividendCode" type="string">
+                <description>Code portefeuille</description>
+            </field>
+            <field name="openDate" type="java.sql.Date">
+                <description>Date ouverture</description>
+            </field>
+        </properties>
+
+    </entity>
+
+</data>

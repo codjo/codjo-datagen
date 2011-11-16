@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="test" table="AP_TEST">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="id" type="integer">
+                <description>ID de la table</description>
+                <sql type="int" required="true"/>
+            </field>
+            <field name="ref" type="string">
+                <sql type="varchar" precision="255"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity name="moreTypes" table="AP_MORE_TYPES">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="date" type="java.sql.Date">
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="double" type="big-decimal">
+                <sql type="numeric" precision="17,2"/>
+            </field>
+            <field name="boolean" type="boolean">
+                <sql type="bit" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="notGenerated" table="AP_NOT_GENERATED">
+        <feature/>
+        <properties>
+            <field name="ID" type="integer"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.Country" table="REF_COUNTRY">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="REF_CODE" type="string"/>
+            <field name="REF_VALUE" type="string"/>
+        </properties>
+    </entity>
+    <entity name="myReferential" table="MY_REFERENTIAL" extends="net.codjo.Country">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="REF_VALUE" type="integer"/>
+            <field name="REF_OPT" type="integer"/>
+        </properties>
+    </entity>
+
+    <entity name="testQuarantine" table="Q_AP_TEST_QUARANTINE" type="quarantine">
+        <feature>
+            <sql/>
+            <user-quarantine name="userTestQuarantine" table="Q_AP_USER_TEST_QUARANTINE"/>
+        </feature>
+        <properties>
+            <field name="ID_QUARANTINE" type="integer"/>
+            <field name="REF_QUARANTINE" type="string"/>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar" precision="6"/>
+                <referential name="net.codjo.pims.ref.Referential" family="Suscribers"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+</data>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+    <entity name="gen.Dividend" table="DATAGEN_FILES">
+        <description>Mon dividend a moi</description>
+        <!--
+         | Definition des features
+        -->
+        <feature>
+            <!--
+             | DELETE : Niveau Papa
+            -->
+            <trigger-delete>
+                <cascade entity="gen.Son">
+                    <key from="id" to="fileId"/>
+                </cascade>
+                <sql>
+                    -- Additional sql code
+                </sql>
+                <sql>
+                    -- append-to-trigger-delete content here
+                </sql>
+            </trigger-delete>
+        </feature>
+        <!--
+         | Definition de la PK
+        -->
+        <primary-key/>
+        <!--
+         | Definition des properties
+        -->
+        <properties/>
+    </entity>
+    <!--
+     | Definition des features
+    -->
+    <entity name="gen.Son" table="DATAGEN_FILE_CONTENTS">
+    </entity>
+</data>
+

@@ -1,0 +1,205 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+import net.codjo.control.common.ControlException;
+import net.codjo.control.common.manager.ControlManager;
+import java.util.*;
+import net.codjo.mad.server.handler.*;
+import net.codjo.mad.server.util.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import java.sql.*;
+import net.codjo.mad.server.handler.util.QueryUtil;
+
+/**
+ *  Handler de MAJ pour generated.Dividend.
+ */
+public class UpdateDividendHandler extends AbstractHandler {
+    private ControlManager controlManager;
+    private final static String sql = "SELECT \"PORTFOLIO_CODE\",\"NET_DIVIDEND\",\"DIVIDEND_DATE\",\"AUTOMATIC_UPDATE\",\"COMMENT\",\"CREATED_BY\" FROM AP_DIVIDEND WHERE PORTFOLIO_CODE = ? and DIVIDEND_DATE = ?";
+    Map setters = new HashMap();
+
+    public UpdateDividendHandler(ControlManager controlManager) {
+        this.controlManager = controlManager;
+
+        setters.put("portfolioCode",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setPortfolioCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("netDividend",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setNetDividend(XMLUtils.convertFromStringValue(java.math.BigDecimal.class, xmlValue));
+                }
+            });
+
+        setters.put("dividendDate",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setDividendDate(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, xmlValue));
+                }
+            });
+
+        setters.put("automaticUpdate",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setAutomaticUpdate((XMLUtils.convertFromStringValue(Boolean.class, xmlValue)).booleanValue());
+                }
+            });
+
+        setters.put("comment",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.getAudit().setComment(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("createdBy",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.getAudit().setCreatedBy(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+    }
+
+
+    public String getId() {
+        return "updateDividend";
+    }
+
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Map pks = XMLUtils.getPrimaryKeys(node);
+
+            Connection connection = getContext().getTxConnection();
+            try {
+                Dividend obj = selectObject(connection, pks);
+
+                java.sql.Timestamp creationDate = obj.getAudit().getCreationDatetime();
+                String creator = obj.getAudit().getCreationBy();
+
+                update(node, obj);
+
+                obj.getAudit().setCreationDatetime(creationDate);
+                obj.getAudit().setCreationBy(creator);
+                obj.getAudit().setUpdateBy(this.getContext().getUser());
+                obj.getAudit().setUpdateDatetime(new java.sql.Timestamp(System.currentTimeMillis()));
+
+                executeControl(obj);
+
+                updateBean(obj);
+
+                executeDatabaseUpdate(connection, "{call sp_UpdateDividend(@PORTFOLIO_CODE=?,@NET_DIVIDEND=?, etc.)}", obj);
+
+                String requestId = XMLUtils.getAttribute(node, "request_id");
+                String expected = "<result request_id=\"" + requestId + "\"><primarykey>"
+                         + "<field name=\"portfolioCode\"/>"
+                         + "<field name=\"dividendDate\"/>"
+                         + "</primarykey><row>"
+                         + "<field name=\"portfolioCode\">" + XMLUtils.convertToStringValue(obj.getPortfolioCode()) + "</field>"
+                         + "<field name=\"dividendDate\">" + XMLUtils.convertToStringValue(obj.getDividendDate()) + "</field>"
+                         + "</row></result>";
+
+                return expected;
+            }
+            finally {
+                connection.close();
+            }
+        }
+        catch (HandlerException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+    protected void updateBean(Dividend obj) {
+    }
+
+    private void removePk(Map fields) {
+        fields.remove("portfolioCode");
+        fields.remove("dividendDate");
+    }
+
+
+    private void update(Node node, Dividend obj) throws SAXException, HandlerException{
+        Map fields = XMLUtils.getRowFields(node);
+        removePk(fields);
+
+        for (Iterator i = fields.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry item = (Map.Entry) i.next();
+            String name = item.getKey().toString();
+            String value = (String) item.getValue();
+
+            Setter props = (Setter) setters.get(name);
+            try {
+                props.set(obj, value);
+            }
+            catch (Exception ex) {
+                throw new HandlerException("Valeur '" +  value + "' incorrecte pour " + name, ex);
+            }
+        }
+    }
+
+    private void executeControl(Dividend obj) throws ControlException {
+        controlManager.controlUpdatedEntity(obj);
+    }
+
+    private static interface Setter {
+        public void set(Dividend dv, String xmlValue);
+    }
+
+    private Dividend selectObject(Connection connection, Map pks) throws SQLException {
+        PreparedStatement query = connection.prepareStatement(QueryUtil.replaceUser(sql, getContext().getUser()));
+        try {
+            query.setString(1, XMLUtils.convertFromStringValue(String.class, (String) pks.get("portfolioCode")));
+            query.setTimestamp(2, XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("dividendDate")));
+            ResultSet rs = query.executeQuery();
+
+            if (!rs.next()) {
+                throw new IllegalArgumentException("ligne non trouvée");
+            }
+            
+            Dividend obj = new Dividend();
+            obj.setPortfolioCode(rs.getString(1));
+            obj.setNetDividend(rs.getBigDecimal(2));
+            obj.setDividendDate(rs.getTimestamp(3));
+            obj.setAutomaticUpdate(rs.getBoolean(4));
+            obj.getAudit().setComment(rs.getString(5));
+            obj.getAudit().setCreatedBy(rs.getString(6));
+
+            rs.close();
+
+            return obj;
+        }
+        finally {
+            query.close();
+        }
+    }
+
+    private void executeDatabaseUpdate(Connection connection, String querySql, Dividend obj) throws SQLException {
+        CallableStatement query = connection.prepareCall(querySql);
+
+        try {
+            query.setString(1,obj.getPortfolioCode());
+            query.setBigDecimal(2,obj.getNetDividend());
+            query.setTimestamp(3,obj.getDividendDate());
+            query.setBoolean(4,obj.getAutomaticUpdate());
+            query.setString(5,obj.getAudit().getComment());
+            query.setString(6,obj.getAudit().getCreatedBy());
+            query.execute();
+        } finally {
+            query.close();
+        }
+    }
+
+}
+

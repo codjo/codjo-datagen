@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<preferenceList>
+    <preference id="CountryList"
+                detailWindowClassName="net.codjo.referential.gui.ReferentialDetailLogic">
+        <entity>Country</entity>
+        <selectAll>selectAllCountry</selectAll>
+        <selectByPk>selectCountryById</selectByPk>
+        <update>updateCountry</update>
+        <delete>deleteCountry</delete>
+        <insert>newCountry</insert>
+        <requetor>allCountry</requetor>
+        <column fieldName="refCode" label="Code" preferredSize="6"/>
+        <column fieldName="refLabel" label="Libellé" preferredSize="255"/>
+    </preference>
+
+    <preference id="CurrencyList"
+                detailWindowClassName="net.codjo.referential.gui.ReferentialDetailLogic">
+        <entity>Currency</entity>
+        <selectAll>selectAllCurrency</selectAll>
+        <selectByPk>selectCurrencyById</selectByPk>
+        <update>updateCurrency</update>
+        <delete>deleteCurrency</delete>
+        <insert>newCurrency</insert>
+        <requetor>allCurrency</requetor>
+        <column fieldName="refCode" label="Code" preferredSize="6"/>
+        <column fieldName="refLabel" label="Libellé" preferredSize="255"/>
+        <column fieldName="currencyCountry" label="Pays devise" preferredSize="255"/>
+        <column fieldName="closedDate" label="Date de clôture"
+                renderer="net.codjo.mad.gui.request.util.renderers.HideInfiniteDateRenderer"
+                format="date(dd/MM/yyyy)" preferredSize="30"/>
+    </preference>
+
+    <preference id="FamilyList"
+                detailWindowClassName="net.codjo.referential.gui.ReferentialDetailLogic">
+        <entity>Family</entity>
+        <selectAll>selectAllFamily</selectAll>
+        <selectByPk>selectFamilyById</selectByPk>
+        <update>updateFamily</update>
+        <delete>deleteFamily</delete>
+        <insert>newFamily</insert>
+        <requetor>allFamily</requetor>
+        <column fieldName="refCode" label="Code famille" preferredSize="6"/>
+        <column fieldName="refLabel" label="Libellé" preferredSize="255"/>
+        <column fieldName="isValuated" label="Valuated" preferredSize="20" sorter="Boolean"/>
+        <column fieldName="anInteger" label="un entier" sorter="Numeric" preferredSize="50"/>
+        <column fieldName="aBigDecimal" label="un gros decimal" format="Numeric(#,##0.00)" sorter="Numeric"
+                preferredSize="50"/>
+        <column fieldName="aLong" label="un long" format="Numeric(#,##0)" sorter="Numeric"
+                preferredSize="50"/>
+        <column fieldName="closedDate" label="Date de clôture"
+                renderer="net.codjo.mad.gui.request.util.renderers.HideInfiniteDateRenderer"
+                format="date(dd/MM/yyyy)" preferredSize="30"/>
+    </preference>
+
+    <preference id="ValFrequencyList"
+                detailWindowClassName="net.codjo.referential.gui.ReferentialDetailLogic">
+        <entity>ValFrequency</entity>
+        <selectAll>selectAllValFrequency</selectAll>
+        <selectByPk>selectValFrequencyById</selectByPk>
+        <update>updateValFrequency</update>
+        <delete>deleteValFrequency</delete>
+        <insert>newValFrequency</insert>
+        <requetor>allValFrequency</requetor>
+        <column fieldName="refCode" label="Code Fréquence de Valo" preferredSize="6"/>
+        <column fieldName="refLabel" label="Libellé" preferredSize="255"/>
+        <column fieldName="closedDate" label="Date de clôture"
+                renderer="net.codjo.mad.gui.request.util.renderers.HideInfiniteDateRenderer"
+                format="date(dd/MM/yyyy)" preferredSize="30"/>
+    </preference>
+
+    <preference id="ExecutionVlList"
+                detailWindowClassName="net.codjo.referential.gui.ReferentialDetailLogic">
+        <entity>ExecutionVl</entity>
+        <selectAll>selectAllExecutionVl</selectAll>
+        <selectByPk>selectExecutionVlById</selectByPk>
+        <update>updateExecutionVl</update>
+        <delete>deleteExecutionVl</delete>
+        <insert>newExecutionVl</insert>
+        <requetor>allExecutionVl</requetor>
+        <column fieldName="refCode" label="Code VL d'exécution" preferredSize="6"/>
+        <column fieldName="refLabel" label="Libellé" preferredSize="255"/>
+        <column fieldName="valFrequencyCode" label="Code Fréquence de Valo" preferredSize="6"/>
+        <column fieldName="closedDate" label="Date de clôture"
+                renderer="net.codjo.mad.gui.request.util.renderers.HideInfiniteDateRenderer"
+                format="date(dd/MM/yyyy)" preferredSize="30"/>
+    </preference>
+
+</preferenceList>

@@ -1,0 +1,37 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.database.api.query.PreparedQuery;
+import net.codjo.mad.server.handler.XMLUtils;
+import net.codjo.mad.server.handler.sql.SqlHandler;
+import net.codjo.mad.server.handler.sql.Getter;
+import java.sql.*;
+import java.util.Map;
+/**
+ *  Classe Handler de selection pour generated.Dividend. <p>
+ *
+ *  Query : <code>select d.PORTFOLIO_CODE as portfolioCode , codif.LABEL as label from AP_DIVIDEND d inner join CODIF ... </code>
+ */
+public class NeoSelectHandler extends SqlHandler {
+    private static final String[] PK = {};
+
+
+    public NeoSelectHandler(Database database) {
+        super(PK, "select d.PORTFOLIO_CODE as portfolioCode , codif.LABEL as label  from AP_DIVIDEND d inner join CODIF ... ", database);
+
+        addGetter("portfolioCode", new Getter(1));
+        addGetter("dividendDate", new Getter(2, java.sql.Types.DATE));
+        addGetter("label", new Getter(3));
+        addGetter("externalDate", new Getter(4, java.sql.Types.DATE));
+    }
+
+    public String getId() {
+        return "neoSelect";
+    }
+
+    @Override
+    protected void fillQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
+        query.setDate(1, XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("date")));
+        query.setString(2, XMLUtils.convertFromStringValue(String.class, (String) pks.get("bidule")));
+    }
+}
+

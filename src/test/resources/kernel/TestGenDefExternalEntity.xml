@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE data [
+      <!ENTITY structures SYSTEM "src/test/resources/kernel/TableDataDef.xml">
+]>
+<data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://datagen.xsd">
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>../../Sql/Tables</sql>
+            <sql-index>../../Sql/Indexes</sql-index>
+            <sql-constraint>../../Sql/Constraints</sql-constraint>
+            <trigger>../../Sql/Triggers</trigger>
+            <bean>../../DataLib/src</bean>
+            <handlers>../../HandlerLib/src</handlers>
+            <castor>../../ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>../../HandlerLib/src</cmdHandler>
+            <structure>../../ClientAPP/src</structure>
+            <requetor>../../ClientAPP/dest</requetor>
+            <referential>../../ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
+
+    <roles>
+        <role id="consultation">
+            <include>select*</include>
+        </role>
+
+        <role id="administration_vl">
+            <include>*FundPrice*</include>
+            <include>PortFolioCodification*</include>
+            <exclude>selectAllTruc</exclude>
+        </role>
+    </roles>
+
+    <add-field to="net.codjo.broadcast.common.data.BroadcastFileContents">
+        <field name="lastFundPrice" type="boolean">
+            <description>False : VL du jour</description>
+            <sql type="bit" required="true"/>
+        </field>
+    </add-field>
+
+    <add-field to="net.codjo.broadcast.common.data.BroadcastFileContentsBisRepetita">
+        <field name="TEMPLATE" type="string">
+            <description>Juste pour tester le addField</description>
+            <sql required="true" type="varchar"/>
+        </field>
+    </add-field>
+&structures;
+</data>
+

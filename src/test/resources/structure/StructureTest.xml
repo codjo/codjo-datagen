@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<data>
+    <entity name="generated.Dividend" table="Q_AP_DIVIDEND" type="quarantine">
+        <description>Mon dividend a moi éèçàù</description>
+
+        <feature>
+            <sql/>
+            <bean/>
+            <doc-structure/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="portfolioCode"/>
+            <field name="netDividend"/>
+        </functional-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du
+                    coupon</description>
+                <sql type="varchar" precision="6" required="true"/>
+                <referential name="net.codjo.pims.ref.Person" family="Mngr"/>
+            </field>
+            <field name="netDividend" type="big-decimal">
+                <sql type="numeric" precision="17,2" required="true"/>
+                <referential name="net.codjo.pims.ref.Referential" family="Suscribers"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql type="timestamp" required="true"/>
+            </field>
+            <field name="automaticUpdate" type="boolean">
+                <sql type="bit" required="true"/>
+            </field>
+            <field name="errorFields" type="string">
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity name="generated.Toto" table="Q_AP_TOTO" type="quarantine">
+
+        <feature>
+            <sql/>
+            <bean/>
+            <doc-structure/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolio"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolio" type="string">
+                <description>Code portefeuille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="netDividend" type="big-decimal">
+                <sql type="numeric" precision="17,2" required="true"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="generated.Toto" table="gahahou">
+
+        <feature>
+            <sql/>
+            <bean/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolio" type="string">
+                <description>Code portefeuille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="netDividend" type="big-decimal">
+                <sql type="numeric" precision="17,2" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar" precision="6"/>
+                <referential name="net.codjo.pims.ref.Referential" family="Suscribers"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+
+</data>
+

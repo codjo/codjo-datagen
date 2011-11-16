@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+  <entity name="gen.Dividend" table="DATAGEN_FILES">
+    <description>Mon dividend a moi</description>
+    <!--
+     | Definition des features
+    -->
+    <feature>
+      <!--
+       | DELETE : Niveau Papa
+      -->
+      <trigger-update>
+        <sql>
+            -- Additional sql code update
+        </sql>
+      </trigger-update>
+    </feature>
+    <!--
+     | Definition de la PK
+    -->
+    <primary-key />
+    <!--
+     | Definition des properties
+    -->
+    <properties />
+  </entity>
+
+</data>
+

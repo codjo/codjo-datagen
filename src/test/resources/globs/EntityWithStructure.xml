@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="net.codjo.test.EntityWithStructure" table="AP_ENTITY_STRUCTURE">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="name" type="string" namingField="true">
+                <description>Nom du département</description>
+                <sql type="varchar" precision="15" required="true"/>
+            </field>
+            <field name="highSecurity" type="boolean">
+                <description>Département classé Haute-Sécurité</description>
+                <sql type="bit"/>
+            </field>
+            <field name="date" type="java.sql.Date" encrypted="true">
+                <description>Date</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="comment" type="string" multiLineText="true">
+                <description>Commentaire</description>
+                <sql type="varchar" precision="255"/>
+            </field>
+
+            <field name="audit" structure="generated"/>
+        </properties>
+    </entity>
+
+    <structure name="generated">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="commentaire" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar" precision="6"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+</data>
+

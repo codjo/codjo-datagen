@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <entity name="generated.Dividend" table="AP_DIVIDEND" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <handler-sql id="neoSelect" return-pk="false">
+            <attributes>
+                <name>portfolioCode</name>
+                <name>creationDatetime</name>
+            </attributes>
+           <query><![CDATA[select ...]]></query>
+        </handler-sql>
+    </feature>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+        <field name="audit" structure="generated.Audit"/>
+        <field name="log" structure="generated.Log"/>
+    </properties>
+  </entity>
+
+  <structure name="generated.Audit">
+    <description>Piste d'audit</description>
+    <feature>
+        <bean/>
+    </feature>
+    <properties>
+        <field name="creationDatetime" type="java.sql.Timestamp">
+          <sql type="timestamp"/>
+        </field>
+        <field name="comment" type="string">
+          <description >Commentaire de fiche</description>
+          <sql type="varchar" precision="6" />
+        </field>
+    </properties>
+  </structure>
+
+    <structure name="generated.Log">
+    <description>Piste de log</description>
+    <feature>
+        <bean/>
+    </feature>
+    <properties>
+        <field name="log" type="string">
+          <sql type="varchar" precision="6" />
+        </field>
+    </properties>
+  </structure>
+</data>
+

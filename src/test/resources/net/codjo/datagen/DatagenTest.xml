@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+    <entity name="gen.Toto" table="AP_TOTO">
+        <description>Mon toto a moi</description>
+        <!--
+         | Definition des features
+        -->
+        <feature>
+            <sql gap="10000"/>
+            <sql-constraint/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_"/>
+                <idx type="index" name-prefix="X2_">
+                    <field name="portfolioCode"/>
+                </idx>
+                <idx type="index" name-prefix="X3_" unique="true">
+                    <field name="dividendDate"/>
+                </idx>
+                <idx type="index" name-prefix="X4_" clustered="true">
+                    <field name="automaticUpdate"/>
+                </idx>
+                <idx type="index" name-prefix="X5_" unique="true" clustered="true">
+                    <field name="portfolioCode"/>
+                    <field name="dividendDate"/>
+                </idx>
+            </sql-index>
+            <trigger-delete>
+                <cascade entity="net.codjo.Meretoto2">
+                    <key from="portfolioCode" to="isinCode2"/>
+                </cascade>
+                <sql>blablabla</sql>
+            </trigger-delete>
+            <trigger-insert>
+                <sql>-- Additional insert sql code</sql>
+            </trigger-insert>
+            <trigger-update>
+                <sql>-- Additional update sql code</sql>
+            </trigger-update>
+            <trigger-iu>
+                <check-record-exist entity="gen.Father">
+                    <key from="sectionId" to="id"/>
+                </check-record-exist>
+                <check-record-exist entity="net.codjo.Meretoto">
+                    <key from="portfolioCode" to="isinCode2"/>
+                </check-record-exist>
+            </trigger-iu>
+            <view id="VU_PTF_IN_DIVIDEND">
+                select portfolioCode
+                from AP_DIVIDEND
+                group by portfolioCode
+            </view>
+        </feature>
+
+        <!--
+         | Definition de la PK
+        -->
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <!--
+         | Definition des FK
+        -->
+        <foreign-keys>
+            <link id="FK_MERETOTO_TOTO" table="net.codjo.Meretoto">
+                <field from="portfolioCode" to="isinCode"/>
+                <field from="automaticUpdate" to="automaticUpdate"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon.</description>
+                <sql precision="6" required="true" type="varchar"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql required="true" type="timestamp"/>
+            </field>
+            <field name="audit" structure="castortest.Audit"/>
+            <field name="automaticUpdate" type="boolean">
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="gen.Tutu" table="AP_TUTU">
+        <description>Mon tutu a moi</description>
+        <!--
+         | Definition des features
+        -->
+        <feature>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+        </feature>
+
+        <!--
+         | Definition de la PK
+        -->
+        <primary-key>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql required="true" type="timestamp"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.Meretoto" table="AP_MERETOTO"/>
+    <entity name="net.codjo.Meretoto2" table="AP_MERETOTO2"/>
+    <entity name="net.codjo.Meretoto2" table="AP_MERETOTOTUTUTATATITITETE">
+        <feature>
+            <trigger-delete>
+                <cascade entity="net.codjo.Meretoto">
+                    <key from="isinCode2" to="isinCode"/>
+                </cascade>
+            </trigger-delete>
+        </feature>
+    </entity>
+    <entity name="gen.Father" table="DATAGEN_SECTION">
+    </entity>
+
+    <structure name="castortest.Audit">
+        <description>Piste d'audit</description>
+        <properties>
+            <field name="comment" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+</data>
+

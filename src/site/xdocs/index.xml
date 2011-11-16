@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<document>
+
+    <properties>
+        <title>datagen</title>
+    </properties>
+
+    <body>
+        <section name="DataGen">
+            <p>
+                DataGen est un generateur de fichier. Il se configure via un fichier
+                de configuration XML (
+                <a href="syntaxe.html">syntaxe</a>), et
+                via un système de feature extensible.
+            </p>
+        </section>
+        <section name="Contraintes">
+            <p>
+                Il est possible maintenant de générer des clés étrangères sur une table.
+                Exemple :
+            </p>
+            <source><![CDATA[
+...
+<feature>
+	...
+    <sql-constraint/>
+	...
+</feature>
+...
+<foreign-keys>
+    <link id="FK_TABLE_MERE1_TABLE_FILLE" table="net.codjo.TableMere1">
+        <field from="portfolioCode" to="isinCode"/>
+        <field from="automaticUpdate" to="automaticUpdate"/>
+    </link>
+    <link id="FK_TABLE_MERE2_TABLE_FILLE" table="net.codjo.TableMere2">
+        <field from="portfolioCode" to="isinCode"/>
+        <field from="totoDate" to="automaticUpdate"/>
+    </link>
+    ...
+</foreign-keys>
+ ...]]>
+            </source>
+
+        </section>
+
+        <section name="Indexes">
+            <p>
+                Génération des indexes sur une table (clé primaire et autres).
+                Exemple :
+            </p>
+            <source><![CDATA[
+...
+<feature>
+    ...
+    <sql-index>
+        <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+        <idx type="index" name-prefix="X2_" unique="true" clustered="false">
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </idx>
+        <idx type="index" name-prefix="X3_" unique="false" clustered="false">
+            <field name="isinCode"/>
+        </idx>
+    </sql-index>
+    ...
+</feature>
+...
+<primary-key>
+    <field name="period"/>
+    <field name="valuationDate"/>
+</primary-key>
+ ...]]>
+            </source>
+
+        </section>
+
+        <section name="Jointures">
+            <p>
+                Définition des jointures avec d'autres tables (pas encore implémentée).
+                Exemple :
+            </p>
+            <source><![CDATA[
+...
+<links>
+    <link id="Nom de la jointure1" table="net.codjo.TableLiee1">
+        <field from="portfolioCode" to="isinCode"/>
+        <field from="automaticUpdate" to="automaticUpdate"/>
+    </link>
+    <link id="Nom de la jointure2" table="net.codjo.TableLiee2">
+        <field from="totoDate" to="automaticUpdate"/>
+    </link>
+    ...
+</links>
+ ...]]>
+            </source>
+
+        </section>
+
+        <section name="Attributs sur handler-sql">
+            <p>
+                Ajout d'attribut pour la feature
+                <code>handler-sql</code>
+                permettant d'indiquer si le handler retourne la PK.
+            </p>
+            <table>
+                <tr>
+                    <th>Attribut</th>
+                    <th>Valeurs</th>
+                    <th>Optionnel</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>return-pk</td>
+                    <td>true/false</td>
+                    <td>oui</td>
+                    <td>Indique si le handler doit retourner la PK de l'entité</td>
+                </tr>
+                <tr>
+                    <td>transaction</td>
+                    <td>true/false</td>
+                    <td>oui</td>
+                    <td>Indique si le handler participe à la transaction ou non</td>
+                </tr>
+                <tr>
+                    <td>force-transaction-mode</td>
+                    <td>true/false</td>
+                    <td>oui</td>
+                    <td>Permet de forcer l'utilisation d'un select en transaction ou d'un update/delete/insert hors transaction</td>
+                </tr>
+            </table>
+            <p>
+                Exemple :
+            </p>
+            <source><![CDATA[
+<handler-sql id="NeoSelectHandler" return-pk="false">
+    <attributes>
+        <name>portfolioCode</name>
+    </attributes>
+    <query>
+        select d.PORTFOLIO_CODE as portfolioCode
+        from AP_DIVIDEND d
+    </query>
+    <arg type="java.sql.Date">date</arg>
+</handler-sql>
+<handler-sql id="TransacNeoSelectHandler" return-pk="false" transaction="true" force-transaction-mode="true">
+    <attributes>
+        <name>portfolioCode</name>
+    </attributes>
+    <query>
+        select d.PORTFOLIO_CODE as portfolioCode
+        from AP_DIVIDEND d
+    </query>
+    <arg type="java.sql.Date">date</arg>
+</handler-sql>
+ ]]>
+            </source>
+        </section>
+        <section name="Factory sur handler-sql">
+            <p>
+                Il est possible de configurer un handler SQL pour que la requete
+                SQL soit construite par une factory. Un attribut est ajouté sur la
+                balise query.
+            </p>
+            <p>
+                La classe de factory doit :
+                <ul>
+                    <li>Etre accessible à partir du package du handler.</li>
+                    <li>Avoir un constructeur public sans argument.</li>
+                    <li>Et une méthode accessible ayant la signature :
+                        <code>String buildQuery(final Map args)</code>
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Il est possible de définir une classe factory qui a une méthode ayant la signature
+                <code>String buildQuery(final Map args, SqlHandler handler)</code>.
+                <br/>
+                Pour cela il faut ajouter l'attribut
+                <code>with-handler="true"</code>.
+            </p>
+            <table>
+                <tr>
+                    <th>Attribut</th>
+                    <th>Valeurs</th>
+                    <th>Optionnel</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>factory</td>
+                    <td>nom de classe</td>
+                    <td>oui</td>
+                    <td>Nom de la classe de factory</td>
+                </tr>
+            </table>
+            <p>
+                Exemples :
+            </p>
+            <source><![CDATA[
+<handler-sql id="NeoSelectHandler">
+    <attributes>
+        <name>portfolioCode</name>
+    </attributes>
+    <query factory="net.codjo.truc.QueryBidule"/>
+    <arg type="java.sql.Date">date</arg>
+</handler-sql> ]]>
+            </source>
+        </section>
+
+        <section name="Handler multi-select">
+            <p>
+                Le multi select permet de créer une table qui contiendra les pk d'une séléction.
+            </p>
+            <p>
+                Il génére 3 handler-sql :
+                <ul>
+                    <li>Un create de la table.</li>
+                    <li>Un drop de la table.</li>
+                    <li>Un insert dans la table.</li>
+                </ul>
+            </p>
+
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Attribut</th>
+                    <th>Optionnel</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>multi-select</td>
+                    <td>handler</td>
+                    <td>non</td>
+                    <td>Prefixe des noms des handlers générés</td>
+                </tr>
+                <tr>
+                    <td>multi-select</td>
+                    <td>selection-table</td>
+                    <td>non</td>
+                    <td>Nom de la table temporaire (doit commencer par #)</td>
+                </tr>
+                <tr>
+                    <td>parameters</td>
+                    <td> - </td>
+                    <td>non </td>
+                    <td>Liste des arg</td>
+                </tr>
+                <tr>
+                    <td>arg</td>
+                    <td>type</td>
+                    <td>non </td>
+                    <td>Type java utilisé dans le handler insert généré</td>
+                </tr>
+                <tr>
+                    <td>arg</td>
+                    <td>sql-name</td>
+                    <td>non </td>
+                    <td>Nom sql de la colonne dans la table temporaire</td>
+                </tr>
+                <tr>
+                    <td>arg</td>
+                    <td>sql-type</td>
+                    <td>non </td>
+                    <td>Type sql de la colonne dans la table temporaire</td>
+                </tr>
+                <tr>
+                    <td>arg</td>
+                    <td>precision</td>
+                    <td>non </td>
+                    <td>Precision sql de la colonne dans la table temporaire</td>
+                </tr>
+                <tr>
+                    <td>arg</td>
+                    <td> </td>
+                    <td>non </td>
+                    <td>Nom java de la colonne, utilisé dans le handler insert</td>
+                </tr>
+            </table>
+            <p>
+                Exemples :
+            </p>
+            <source><![CDATA[
+            <multi-select handler="selectBcpDeTrucs" selection-table="#SELECTION">
+                <parameters>
+                    <arg type="string" sql-name="ACTION_CODE" sql-type="varchar" precision="20">actionCode</arg>
+                    <arg type="BigDecimal" sql-name="CODE_NUM" sql-type="numeric" precision="2,5">codeNum</arg>
+                </parameters>
+            </multi-select>
+            ]]>
+            </source>
+            <p>
+                Le résultat généré donne :
+            </p>
+            <source><![CDATA[
+            <handler-sql return-pk="false" transaction="false" id="selectBcpDeTrucs_TempCreate">
+                <query>
+                    create table #SELECTION (
+                        ACTION_CODE varchar(20) not null,
+                        CODE_NUM numeric(2,5) not null,
+                    )
+                </query>
+            </handler-sql>
+            <handler-sql return-pk="false" transaction="false" id="selectBcpDeTrucs_TempDrop">
+                <query>
+                    drop table #SELECTION
+                </query>
+            </handler-sql>
+            <handler-sql force-transaction-mode="true" return-pk="false" transaction="false" id="selectBcpDeTrucs_TempFill">
+                <query>
+                    insert into #SELECTION values (
+                        ?
+                        ,?
+                    )
+                </query>
+                <arg type="string">actionCode</arg>
+                <arg type="BigDecimal">codeNum</arg>
+            </handler-sql>
+            ]]>
+            </source>
+        </section>
+
+        <section name="Entités héritables">
+            <p>
+                Il est possible de déclarer une entité comme héritant d'une entité mère. Cette déclaration se fait à l'aide de l'attribut extends sur l'élément entity. L'héritage se fait sur un seul niveau; il est interdit d'étendre une entity qui étend déjà une autre entity.
+            </p>
+            <p>
+                Le comportement de l'héritage est le suivant : les contenus des noeuds &gt;feature&lt; et &gt;properties&lt; sont fusionnés, le contenu des autres noeuds est remplacé par ceux de l'entité enfant. Lors de la fusion des noeuds père et fils, si deux éléments ont le même nom c'est l'élément fils qui prévaut.
+            </p>
+            <p>
+                Exemple :
+            </p>
+            <source><![CDATA[
+    <entity name="net.codjo.mint.ref.Family" table="REF_FAMILY">
+        <feature>
+            <sql/>
+            <bean/>
+            <castor/>
+            ...
+            <handler-select id="selectAll" type="All"/>
+            ...
+            <handler-sql id="selectAllWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                </attributes>
+                <query>
+                    select REF_CODE
+                    from REF_FAMILY
+                    where CLOSED_DATE > ?
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+            ...
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Currency" table="REF_CURRENCY" extends="net.codjo.mint.ref.Family">
+        <feature>
+            <handler-sql id="selectAllWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_CURRENCY
+                    where CLOSED_DATE > ?
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <properties>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="250" required="true"/>
+            </field>
+        </properties>
+    </entity>
+            ]]></source>
+            <p>
+                Ici l'entity Currency étend Family. Le handler-sql a le même id que celui de son père, il le remplace donc. Les autres éléments de feature restent inchangés. Dans &gt;properties&lt;, un nouveau champ refLabel est ajouté aux champs existants. L'entity fille Currency est donc équivalente à l'écriture suivante sans "extends" :
+            </p>
+            <source><![CDATA[
+    <entity name="net.codjo.mint.ref.Currency" table="REF_CURRENCY">
+        <feature>
+            <sql/>
+            <bean/>
+            <castor/>
+            ...
+            <handler-select id="selectAll" type="All"/>
+            ...
+            <handler-sql id="selectAllWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_CURRENCY
+                    where CLOSED_DATE > ?
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+            ...
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="closedDate" type="java.sql.Date">
+                <description>Date de clôture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="250" required="true"/>
+            </field>
+        </properties>
+    </entity>
+            ]]></source>
+
+        </section>
+        <section name="Référentiels">
+            <p>
+                L'ajout de l'élément &gt;referential name="xxx"&lt; dans le noeud feature d'une entity permet de générer automatiquement les éléments de base nécéssaire à un référentiel (voir section "Variables" pour l'explication des ${className}) :
+            </p>
+            <source><![CDATA[
+        <sql/>
+        <bean/>
+        <castor/>
+        <doc-structure/>
+        <sql-index>
+            <idx clustered="true" name-prefix="X1_" type="primary-key"/>
+        </sql-index>
+
+        <handler-delete id="delete{$className}"/>
+        <handler-update id="update{$className}"/>
+        <handler-select id="select{$className}ById" type="By_Primary-Key"/>
+        <handler-select id="selectAll{$className}" type="All"/>
+        <handler-new id="new{$className}"/>
+        <handler-requetor id="all{$className}"/>
+            ]]></source>
+            <p>
+                L'ajout de cet élément cause également la génération de deux fichiers de paramétrage XML pour le plugin ReferentialGuiPlugin (agf-referential). Ces fichiers sont packagés par le plugin agf-datagen-plugin dans $APPLICATION$-datagen-$VERSION$-client.jar. Voir la documentation spécifique à agf-referential pour l'utilisation de ce plugin.
+            </p>
+        </section>
+
+        <section name="Variables">
+            <p>
+                Un certain nombre de variables sont disponibles lors de la rédaction des handlers. Ces variables seront remplacées dynamiquement lors de la génération. Les variables suivantes sont disponibles :
+            </p>
+            <table>
+                <tr><td>{$className}</td><td>Nom de la classe de l'entité contenante (portion du "name" située après le dernier ".").</td></tr>
+                <tr><td>${SQLAttributes}</td><td>Liste de tous les noms SQL des attributs associés au handler.</td></tr>
+                <tr><td>${table}</td><td>Nom de la table (champs "table" de l'entity).</td></tr>
+                <tr><td>${SQLName:xxxxYyyyZzzz}</td><td>Cette variable particulière permet de convertir n'importe quel nom au format SQL (ici on obtient XXXX_YYYY_ZZZZ).</td></tr>
+            </table>
+            <p>
+                Exemple :
+            </p>
+            <source><![CDATA[
+                <entity name="net.codjo.mint.ref.Country" table="REF_COUNTRY">
+                      <feature>
+                          <handler-sql id="selectAll${className}WithClosedDate">
+                              <attributes>
+                                  <name>refCode</name>
+                                  <name>refLabel</name>
+                              </attributes>
+                              <query>
+                select ${SQLAttributes} from ${table}
+                where ${SQLName:closedDate} &gt; ? OR ${SQLName:closedDate} = '9999-12-31'
+                              </query>
+                          </handler-sql>
+                      </feature>
+                  </entity>
+            ]]></source>
+            <p>
+                Equivalent à :
+            </p>
+            <source><![CDATA[
+                         <handler-sql id="selectAllCountryWithClosedDate">
+                              <attributes>                                
+                                  <name>refCode</name>
+                                  <name>refLabel</name>
+                              </attributes>
+                              <query>
+                select REF_CODE, REF_LABEL from REF_COUNTRY
+                where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                              </query>
+                          </handler-sql>
+            ]]></source>
+
+        </section>
+
+        <section name="Attributs sur user-quarantine">
+            <p>
+                Ajout d'attribut pour la feature
+                <code>user-quarantine</code>.
+                Il est possible de preciser la generation ou non des handlers
+                par defaut.
+            </p>
+            <table>
+                <tr>
+                    <th>Attribut</th>
+                    <th>Valeurs</th>
+                    <th>Optionnel</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>delete</td>
+                    <td>true/false</td>
+                    <td>oui</td>
+                    <td>Generation ou non du handler delete</td>
+                </tr>
+                <tr>
+                    <td>update</td>
+                    <td>true/false</td>
+                    <td>oui</td>
+                    <td>Generation ou non du handler update</td>
+                </tr>
+            </table>
+            <p>
+                Exemple : Dans ce cas, le handler delete n'est pas généré (mais
+                le handler update oui).
+            </p>
+            <source><![CDATA[
+<user-quarantine name="net.codjo.QUserIssuer" 
+                 table="Q_AP_USER_ISSUER" 
+                 delete="false"/>]]>
+            </source>
+        </section>
+        <section name="Configuration des droits d'acces">
+            <p>
+                Ajout d'un noeud 'roles' permettant de définir la gestion des droits d'acces.
+            </p>
+            <p>
+            	Dans cet exemple, le rôle consultation pourra utiliser tout les handler
+            	dont l'identifiant commence par 'select' et ne verifiant pas 'select*AdminLog'.
+            </p>
+            <source><![CDATA[
+<roles>
+    <role id="consultation">
+       <include>select*</include>
+       <exclude>select*AdminLog</exclude>
+    </role>
+
+    <role id="administration_vl">
+       <include>*FundPrice*</include>
+       <include>PortFolioCodification*</include>
+       <exclude>selectAllTruc</exclude>
+    </role>
+</roles>]]>
+            </source>
+        </section>
+        <section name="Noeud de configuration">
+            <p>
+                Ajout d'un noeud 'configuration' permettant de configurer la generation.
+                Pour lancer la generation il suffit d'appeler kernel.Main en passant le
+                nom du fichier.
+            </p>
+            <source><![CDATA[
+  <configuration>
+    <project>
+        <name>Red</name>
+    </project>
+    <path>
+        <sql>../../Sql/Tables</sql>
+        <sql-index>../../Sql/Indexes</sql-index>
+        <bean>../../DataLib/src</bean>
+        <handlers>../../HandlerLib/src</handlers>
+        <castor>../../ServerLib/src/net/codjo/red/util</castor>
+        <cmdHandler>../../HandlerLib/src</cmdHandler>
+        <structure>../../ClientAPP/src</structure>
+    </path>
+  </configuration>]]>
+            </source>
+        </section>
+        <section name="Generation de la documentation">
+            <p>
+                Pour generer la documentation avec maven, il suffit de rajouter dans le
+                fichier
+                <b>maven.xml</b> le goal suivant :
+            </p>
+            <source><![CDATA[
+<!-- *************************************************************************
+  |  GOAL : doc
+  | ..........................................................................
+  |  Generation de la documentation des fichiers.
+  ************************************************************************ -->
+<goal name="doc" prereqs="datagen:init">
+    <exec dir="${basedir}/target" executable="jar">
+      <arg line="-xvf ${pom.getDependencyPath('agf-datagen')} doc" />
+    </exec>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg value="-IN" />
+      <arg value="${datagen.file}" />
+      <arg value="-XSL" />
+      <arg value="${basedir}/target/doc/doc_structure.xsl" />
+      <arg value="-OUT" />
+      <arg value="${basedir}/target/doc/Structure.html" />
+      <classpath>
+        <pathelement location="${pom.getDependencyPath('agf-datagen')}" />
+        <pathelement location="${pom.getDependencyPath('xalan')}" />
+        <pathelement location="${pom.getDependencyPath('xml-apis')}" />
+        <pathelement location="${pom.getDependencyPath('xerces')}" />
+      </classpath>
+    </java>
+</goal>]]>
+            </source>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,1 @@
+${createTriggerScript(DATAGEN_COLUMNS.TR_DATAGEN_COLUMNS_IU)}

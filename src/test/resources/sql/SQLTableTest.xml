@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+    </configuration>
+    <entity name="gen.Dividend" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <sql pk-generator="no" gap="1000"/>
+
+            <view id="VU_PTF_IN_DIVIDEND">
+                select portfolioCode
+                from AP_DIVIDEND
+                group by portfolioCode
+            </view>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon.</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="netDividend" type="big-decimal">
+                <sql type="numeric" precision="17,2" required="true" default="121.00"/>
+            </field>
+            <field name="num" type="big-decimal">
+                <sql type="numeric" precision="18" required="true" identity="true"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql type="timestamp" required="true"/>
+            </field>
+            <field name="automaticUpdate" type="boolean">
+                <sql type="bit" required="true"/>
+            </field>
+            <field name="status" type="string">
+                <sql type="varchar" required="true" in="'A','B','C'"/>
+            </field>
+            <field name="length" type="integer">
+                <sql type="integer"/>
+            </field>
+            <field name="audit" structure="castortest.Audit"/>
+            <field name="last" type="integer">
+                <sql type="integer"/>
+            </field>
+        </properties>
+    </entity>
+
+    <structure name="castortest.Audit">
+        <description>Piste d'audit</description>
+        <properties>
+            <field name="comment" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+
+</data>
+

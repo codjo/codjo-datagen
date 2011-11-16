@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+  <entity name="gen.Dividend" table="DATAGEN_COLUMNS">
+    <description>Mon dividend a moi</description>
+    <!--
+     | Definition des features
+    -->
+    <feature>
+      <!--
+       | INSERT UPDATE : Niveau Fils
+      -->
+      <trigger-iu>
+        <check-record-exist entity="gen.Father">
+          <key from="sectionId" to="id" />
+        </check-record-exist>
+      </trigger-iu>
+    </feature>
+    <primary-key />
+    <properties />
+  </entity>
+  <entity name="gen.Father" table="DATAGEN_SECTION">
+  </entity>
+</data>
+

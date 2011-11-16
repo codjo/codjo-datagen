@@ -1,0 +1,277 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+import net.codjo.control.common.ControlException;
+import net.codjo.control.common.manager.ControlManager;
+import java.util.*;
+import net.codjo.mad.server.handler.*;
+import net.codjo.mad.server.util.*;
+import org.exolab.castor.jdo.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import java.lang.reflect.Method;
+
+/**
+ *  Handler de MAJ pour generated.Dividend.
+ */
+public class UpdateDividendHandler extends AbstractHandler {
+    private ControlManager controlManager;
+    private final static String oql = "SELECT p FROM generated.Dividend p WHERE portfolioCode = $1 and dividendDate = $2";
+    Map setters = new HashMap();
+
+    public UpdateDividendHandler(ControlManager controlManager) {
+        this.controlManager = controlManager;
+
+        setters.put("portfolioCode",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setPortfolioCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("netDividend",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setNetDividend(XMLUtils.convertFromStringValue(java.math.BigDecimal.class, xmlValue));
+                }
+            });
+
+        setters.put("dividendDate",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setDividendDate(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, xmlValue));
+                }
+            });
+
+        setters.put("automaticUpdate",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setAutomaticUpdate((XMLUtils.convertFromStringValue(Boolean.class, xmlValue)).booleanValue());
+                }
+            });
+
+        setters.put("comment",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.getAudit().setComment(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("createdBy",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.getAudit().setCreatedBy(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+    }
+
+
+    public String getId() {
+        return "updateDividend";
+    }
+
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Map pks = XMLUtils.getPrimaryKeys(node);
+
+            Database db = getContext().getDatabase();
+            try {
+                OQLQuery query = db.getOQLQuery(oql);
+
+                query.bind(XMLUtils.convertFromStringValue(String.class, (String) pks.get("portfolioCode")));
+
+                query.bind(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("dividendDate")));
+
+                QueryResults results = query.execute();
+                if (results.hasMore() == false) {
+                    throw new IllegalArgumentException("ligne non trouvée");
+                }
+                Dividend obj = (Dividend) results.next();
+
+                java.sql.Timestamp creationDate = obj.getAudit().getCreationDatetime();
+                String creator = obj.getAudit().getCreationBy();
+
+                update(node, obj);
+
+                obj.getAudit().setCreationDatetime(creationDate);
+                obj.getAudit().setCreationBy(creator);
+                obj.getAudit().setUpdateBy(this.getContext().getUser());
+                obj.getAudit().setUpdateDatetime(new java.sql.Timestamp(System.currentTimeMillis()));
+
+                executeControl(obj);
+
+                updateBean(obj);
+
+                String requestId = XMLUtils.getAttribute(node, "request_id");
+                String expected = "<result request_id=\"" + requestId + "\"><primarykey>"
+                         + "<field name=\"portfolioCode\"/>"
+                         + "<field name=\"dividendDate\"/>"
+                         + "</primarykey><row>"
+                         + "<field name=\"portfolioCode\">" + XMLUtils.convertToStringValue(obj.getPortfolioCode()) + "</field>"
+                         + "<field name=\"dividendDate\">" + XMLUtils.convertToStringValue(obj.getDividendDate()) + "</field>"
+                         + "</row></result>";
+
+                return expected;
+            }
+            finally {
+                db.close();
+            }
+        }
+        catch (HandlerException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+    protected void updateBean(Dividend obj) {
+    }
+
+    private void removePk(Map fields) {
+        fields.remove("portfolioCode");
+        fields.remove("dividendDate");
+    }
+
+
+    private void update(Node node, Dividend obj) throws SAXException, HandlerException{
+        Map fields = XMLUtils.getRowFields(node);
+        Map fieldsForHistoricAudit = new HashMap(fields);
+        Map pks = XMLUtils.getPrimaryKeys(node);
+        removePk(fields);
+
+        for (Iterator i = fields.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry item = (Map.Entry) i.next();
+            String name = item.getKey().toString();
+            String value = (String) item.getValue();
+
+        try {
+                String getterName = "get"+  name.substring(0,1).toUpperCase() + name.substring(1,name.length()) ;
+                Method met = obj.getClass().getMethod(getterName);
+                Object oldValue = met.invoke(obj);
+                if (oldValue==null){
+                    oldValue="null";
+                }
+                if (value==null){
+                    value="null";
+                }
+                if (!(oldValue.equals(value))){
+                    proceedDataAudit(fieldsForHistoricAudit, pks, oldValue.toString(), value, name);
+                }
+        } catch (NoSuchMethodException e) {            }
+            catch(Exception ex){
+            ex.printStackTrace();
+        }
+
+            Setter props = (Setter) setters.get(name);
+            try {
+                props.set(obj, value);
+            }
+            catch (Exception ex) {
+                throw new HandlerException("Valeur '" +  value + "' incorrecte pour " + name, ex);
+            }
+        }
+    }
+
+    private void executeControl(Dividend obj) throws ControlException {
+        controlManager.controlUpdatedEntity(obj);
+    }
+
+    private static interface Setter {
+        public void set(Dividend dv, String xmlValue);
+    }
+
+    private void proceedDataAudit(Map fields, Map pks, String oldValue, String newValue, String dbFieldName) {
+        net.codjo.sif.data.DataAudit dataAudit = new  net.codjo.sif.data.DataAudit();
+
+        HashMap keyMap = new HashMap();
+        StringTokenizer t = new StringTokenizer(getFunctionalKey(), ",");
+        String functionalKeyStr = "";
+
+        if (t.countTokens() == 1) {
+            functionalKeyStr = toSqlName(getFunctionalKey()) + "= '" + fields.get(getFunctionalKey().trim())
+                    + "',";
+        } else {
+
+            while (t.hasMoreElements()) {
+                String fieldName = t.nextElement().toString().trim();
+                Object fieldValue = fields.get(fieldName);
+                if ( fieldValue == null || "null".equals(fieldValue) ) {
+                    fieldValue = pks.get(fieldName);
+                }
+                keyMap.put(fieldName, fieldValue);
+            }
+
+            Iterator iter = keyMap.keySet().iterator();
+            while (iter.hasNext()) {
+                String fieldName = (String) iter.next();
+                functionalKeyStr += toSqlName(fieldName) + "='" + (String) keyMap.get(fieldName) + "',";
+            }
+        }
+
+
+        dataAudit.setDbTableName(getDbTableName());
+        dataAudit.setFunctionalKey(functionalKeyStr.substring(0, functionalKeyStr.length() - 1));
+        dataAudit.setStatus(getStatus());
+        dataAudit.setUserName(this.getContext().getUser());
+        dataAudit.setInsertionDate(new java.sql.Timestamp(System.currentTimeMillis()));
+        dataAudit.setNewValue(newValue);
+        dataAudit.setOldValue(oldValue);
+        dataAudit.setDbFieldName(toSqlName(dbFieldName));
+        try {
+            createDataAudit(dataAudit);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void createDataAudit(net.codjo.sif.data.DataAudit obj) throws PersistenceException {
+        Database db = getContext().getDatabase();
+        try {
+            db.create(obj);
+        }
+        finally {
+            db.close();
+        }
+    }
+    private String getDbTableName(){
+    return "AP_DIVIDEND";
+    }
+   private String getFunctionalKey(){
+        return "portfolioCode,netDividend";
+    }
+     private String getStatus(){
+    return "UPDATE";
+    }
+    public static String toSqlName(String propertyName) {
+        String sqlName = toSqlUpper(propertyName);
+        if (sqlName.length() > 28) {
+            throw new IllegalArgumentException("La colonne pour le field " + propertyName
+                    + " dépasse 28 caractères ! C'est pas bien !! "
+                    + " Et quand je dis que c'est pas bien, c'est que c'est vraiment pas bien !"
+                    + " m'enfin, il faut relativiser quand meme, c'est pas le bout du monde "
+                    + " je vais tout simplement bloquer la génération jusqu'a ce que vous "
+                    + " corrigiez le probleme !");
+        }
+        return sqlName;
+    }
+
+
+    public static String toSqlUpper(String propertyName) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < propertyName.length(); i++) {
+            if (Character.isUpperCase(propertyName.charAt(i))) {
+                buffer.append('_');
+            }
+            buffer.append(propertyName.charAt(i));
+        }
+
+        String sqlName = buffer.toString().toUpperCase();
+        return sqlName;
+    }
+
+}
+

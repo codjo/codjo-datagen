@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="net.codjo.test.EntityOne" table="AP_ENTITY_ONE">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="name" type="string">
+                <description>Nom du département</description>
+                <sql type="varchar" precision="15" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.test.EntityTwo" table="AP_ENTITY_TWO">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="highSecurity" type="boolean">
+                <description>Département classé Haute-Sécurité</description>
+                <sql type="bit"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

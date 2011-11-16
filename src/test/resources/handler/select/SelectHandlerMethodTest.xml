@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <entity name="generated.Dividend" table="AP_DIVIDEND" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <handler-select id="SelectDividendHandlerByPk">
+            <query type="OQL">SELECT p FROM generated.Dividend p
+                    WHERE portfolioCode = $1
+            </query>
+            <arg type="string">toto</arg>
+        </handler-select>
+    </feature>
+
+    <primary-key>
+        <field name="portfolioCode" />
+    </primary-key>
+
+    <methods>
+      <method name="computeAnnualPerf" type="big-decimal">
+        <description >Calcul truc muche</description>
+        <throws>Exception, Error</throws>
+        <body>
+          return FundPriceHelper.compute(this);
+        </body>
+      </method>
+    </methods>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+    </properties>
+  </entity>
+
+</data>
+

@@ -1,0 +1,63 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.mad.server.handler.XMLUtils;
+import net.codjo.mad.server.handler.select.AbstractSelectHandler;
+import net.codjo.mad.server.handler.select.Getter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+/**
+ * Classe Handler de selection abstraite pour generated.Dividend.
+ */
+public abstract class AbstractSelectDividendHandler extends AbstractSelectHandler<Dividend> {
+
+    protected AbstractSelectDividendHandler(int queryType,
+                                            String selectQuery,
+                                            Database database) {
+        super(queryType,
+              selectQuery,
+              new String[]{"portfolioCode" , "dividendDate"},
+              database);
+
+        addGetter("portfolioCode", new Getter<Dividend>(1) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getPortfolioCode());
+            }
+        });
+
+        addGetter("netDividend", new Getter<Dividend>(2) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getNetDividend());
+            }
+        });
+
+        addGetter("dividendDate", new Getter<Dividend>(3, java.sql.Types.TIMESTAMP) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getDividendDate());
+            }
+        });
+
+        addGetter("automaticUpdate", new Getter<Dividend>(4) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getAutomaticUpdate());
+            }
+        });
+
+        addGetter("comment", new Getter<Dividend>(5) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getAudit().getComment());
+            }
+        });
+
+        addGetter("createdBy", new Getter<Dividend>(6) {
+            @Override
+            public String get(Dividend dv) {
+                return XMLUtils.convertToStringValue(dv.getAudit().getCreatedBy());
+            }
+        });
+    }
+}

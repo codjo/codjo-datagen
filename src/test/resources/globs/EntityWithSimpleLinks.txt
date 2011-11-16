@@ -1,0 +1,27 @@
+package net.codjo.test.globs;
+
+import org.crossbowlabs.globs.metamodel.*;
+import org.crossbowlabs.globs.metamodel.utils.GlobTypeLoader;
+import org.crossbowlabs.globs.metamodel.fields.*;
+import org.crossbowlabs.globs.metamodel.annotations.*;
+
+@SuppressWarnings({"ALL"})
+public class EntityWithSimpleLinks {
+    public static GlobType TYPE;
+
+    @Key
+    public static IntegerField ID;
+    @Required @MaxSize(15)
+    public static StringField NAME;
+    public static BooleanField HIGH_SECURITY;
+    @MaxSize(6)
+    public static StringField COUNTRY_CODE;
+
+    public static Link REF_COUNTRY;
+
+    static {
+        GlobTypeLoader loader = GlobTypeLoader.init(EntityWithSimpleLinks.class);
+        loader.defineLink(REF_COUNTRY)
+              .add(COUNTRY_CODE, net.codjo.test.globs.Country.REF_CODE);
+    }
+}

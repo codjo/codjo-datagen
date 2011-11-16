@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<data>
+
+    <roles>
+        <role id="el-deletor">
+            <include-handler entity="/data/entity[starts-with(@type,'quarantine')]"
+                             pattern="(delete)*"/>
+        </role>
+
+        <role id="consultation">
+            <include>select*</include>
+            <include-handler entity="/data/entity[starts-with(@type,'quarantine')]"
+                             pattern="(new|update|select|all)*"/>
+        </role>
+
+    </roles>
+
+    <entity name="generated.q.QCountry" table="Q_AP_COUNTRY" type="quarantine_ref">
+        <feature>
+            <handler-delete id="deleteCountry"/>
+            <handler-update id="updateCountry"/>
+            <handler-select id="selectCountryById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCountry" type="All"/>
+            <handler-new id="newCountry"/>
+            <handler-requetor id="allCountry"/>
+            <handler-sql id="selectAllCountryWithClosedDate"/>
+        </feature>
+    </entity>
+
+    <entity name="generated.q.QDividend" table="Q_AP_DIVIDEND" type="quarantine_data">
+        <feature>
+            <handler-delete id="deleteDividend"/>
+            <handler-update id="updateDividend"/>
+            <handler-select id="selectDividendById" type="By_Primary-Key"/>
+            <handler-select id="selectAllDividend" type="All"/>
+            <handler-new id="newDividend"/>
+            <handler-requetor id="allDividend"/>
+            <handler-sql id="selectAllDividendWithClosedDate"/>
+        </feature>
+    </entity>
+
+    <entity name="generated.Product" table="AP_PRODUCT">
+        <feature>
+            <handler-delete id="deleteProduct"/>
+            <handler-update id="updateProduct"/>
+            <handler-select id="selectProductById" type="By_Primary-Key"/>
+            <handler-select id="selectAllProduct" type="All"/>
+            <handler-new id="newProduct"/>
+            <handler-requetor id="allProduct"/>
+            <handler-sql id="selectAllProductWithClosedDate"/>
+        </feature>
+    </entity>
+
+</data>
+

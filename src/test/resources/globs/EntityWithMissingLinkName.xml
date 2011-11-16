@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="net.codjo.test.EntityWithMissingLinkName" table="AP_ENTITY_WITH_MISSING_LINK_NAME">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <foreign-keys>
+            <link id="FK_COUNTRY_DEPARTMENT" table="net.codjo.test.Country">
+                <field from="countryCode" to="refCode"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="countryCode" type="string">
+                <description>Code du pays</description>
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

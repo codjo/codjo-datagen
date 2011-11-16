@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>../../Sql/Tables</sql>
+            <sql-index>../../Sql/Indexes</sql-index>
+            <sql-constraint>../../Sql/Constraints</sql-constraint>
+            <trigger>../../Sql/Triggers</trigger>
+            <bean>../../DataLib/src</bean>
+            <handlers>../../HandlerLib/src</handlers>
+            <castor>../../ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>../../HandlerLib/src</cmdHandler>
+            <structure>../../ClientAPP/src</structure>
+            <requetor>../../ClientAPP/dest</requetor>
+            <referential>../../ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
+    <roles>
+        <role id="consultation">
+            <include>select*</include>
+        </role>
+        <role id="administration_vl">
+            <include>*FundPrice*</include>
+            <include>PortFolioCodification*</include>
+            <exclude>selectAllTruc</exclude>
+        </role>
+    </roles>
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </structure>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+        <feature>
+            <sql name="AP_DIVIDEND"/>
+            <bean/>
+            <castor/>
+            <handler-new id="newBroadcastFileContents"/>
+            <handler-delete id="deleteBroadcastFileContents"/>
+            <handler-update id="updateBroadcastFileContents"/>
+            <handler-select type="By_Primary-Key" id="selectBroadcastFileContentsById"/>
+            <handler-select type="All" id="selectAllBroadcastFileContents"/>
+            <sql-constraint/>
+            <handler-sql return-pk="false" transaction="false"
+                         id="selectBcpDeTrucs_TempCreate">
+                <query>create table #SELECTION ( ACTION_CODE varchar(20) not null,
+                    CODE_NUM numeric(2,5) not null, TEST varchar(5) not null, )</query>
+            </handler-sql>
+            <handler-sql return-pk="false" transaction="false"
+                         id="selectBcpDeTrucs_TempDrop">
+                <query>drop table #SELECTION</query>
+            </handler-sql>
+            <handler-sql force-transaction-mode="true" return-pk="false"
+                         transaction="false" id="selectBcpDeTrucs_TempFill">
+                <query>insert into #SELECTION values ( ? ,? ,? )</query>
+                <arg type="string">actionCode</arg>
+                <arg type="integer">codeNum</arg>
+                <arg type="string">errorTest</arg>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="lastFundPrice" type="boolean">
+                <description>False : VL du jour</description>
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContentsTer" table="AP_MANAGEMENT">
+        <description>Mon dividend a moi</description>
+        <feature>
+            <sql name="AP_MANAGEMENT"/>
+            <castor/>
+            <audit-trail/>
+            <doc-structure/>
+            <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
+            <controlable jndi="java:comp/env/ejb/ControlManagerEJB"/>
+            <handler-archive id="archiveBroadcastFileContentsTerHandler"/>
+            <handler-new id="newBroadcastFileContentsTer"/>
+            <handler-update id="updateBroadcastFileContentsTer"/>
+            <handler-select type="By_Primary-Key" id="selectBroadcastFileContentsTerById"/>
+            <handler-select id="selectValidBroadcastFileContentsTer">
+                <query type="SQL">select caract.* from AP_MANAGEMENT caract where
+                    caract.DATE_BEGIN &lt;= ? and caract.DATE_END &gt; ? and
+                    caract.PORTFOLIO_CODE = ?</query>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+            <handler-select id="selectAllBroadcastFileContentsTerByPtfCode">
+                <query type="SQL">select caract.* from AP_MANAGEMENT caract where
+                    caract.PORTFOLIO_CODE = ? order by caract.DATE_END desc</query>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+        </feature>
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="beginDate"/>
+        </primary-key>
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="beginDate" type="java.sql.Date">
+                <description>Code portefeuille du coupon</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="accountManager" type="java.lang.Integer">
+                <description>Chargé de compte</description>
+                <sql type="integer"/>
+                <referential family="AccountMgr" name="net.codjo.pims.ref.Person"/>
+            </field>
+            <field name="geographicArea" type="java.lang.Integer">
+                <description>Zone géographique</description>
+                <sql type="integer"/>
+                <referential family="GeographArea" name="net.codjo.pims.ref.Referential"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+            <field name="generated.Management" type="string">
+                <description>Juste pour tester le addField dans entities</description>
+                <sql required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContentsBisRepetita" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature></feature>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="TEMPLATE" type="string">
+                <description>Juste pour tester le addField</description>
+                <sql required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="EntityCaractNotControlable" table="TABLE_CARAC">
+        <description>Tables de Characteristic mais non controllable</description>
+        <feature>
+            <sql name="TABLE_CARAC"/>
+            <castor/>
+            <audit-trail/>
+            <doc-structure/>
+            <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
+            <handler-archive id="archiveEntityCaractNotControlableHandler"/>
+            <handler-new id="newEntityCaractNotControlable"/>
+            <handler-update id="updateEntityCaractNotControlable"/>
+            <handler-select type="By_Primary-Key"
+                            id="selectEntityCaractNotControlableById"/>
+            <handler-select id="selectValidEntityCaractNotControlable">
+                <query type="SQL">select caract.* from TABLE_CARAC caract where
+                    caract.DATE_BEGIN &lt;= ? and caract.DATE_END &gt; ? and
+                    caract.PORTFOLIO_CODE = ?</query>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+            <handler-select id="selectAllEntityCaractNotControlableByPtfCode">
+                <query type="SQL">select caract.* from TABLE_CARAC caract where
+                    caract.PORTFOLIO_CODE = ? order by caract.DATE_END desc</query>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+        </feature>
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+        <properties>
+            <field name="id" type="big-decimal">
+                <description>Id de la table</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+        </properties>
+    </entity>
+    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA">
+        <feature>
+            <sql pk-generator="no" name="AP_MEI_A"/>
+            <sql-index>
+                <idx name-prefix="X1_" type="primary-key"/>
+            </sql-index>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagA"/>
+            <handler-update id="updateMeiRealManagA"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagAById"/>
+            <handler-select type="All" id="selectAllMeiRealManagA"/>
+            <handler-sql id="selectAllMeiRealManagAWithParameters">
+            <attributes>
+                <name>quarantineId</name>
+                <name>TEMPLATE</name>
+            </attributes>
+            <query><![CDATA[
+            declare @TEMPLATE  varchar(255)
+            select @TEMPLATE = ?
+            if (@TEMPLATE = 'null')
+                select @TEMPLATE = null
+
+            select QUARANTINE_ID,TEMPLATE
+            from AP_MEI_A
+            where (TEMPLATE = @TEMPLATE or @TEMPLATE = 'Tout')
+            ]]>
+            </query>
+            <arg type="string">TEMPLATE</arg>
+        </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="TEMPLATE" type="string">
+                <description>Juste pour tester le addField</description>
+                <sql required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB">
+        <feature>
+            <sql pk-generator="no" name="AP_MEI_B"/>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagB"/>
+            <handler-update id="updateMeiRealManagB"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagBById"/>
+            <handler-select type="All" id="selectAllMeiRealManagB"/>
+        </feature>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="TEMPLATE" type="string">
+                <description>Juste pour tester le addField</description>
+                <sql required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC">
+        <feature>
+            <sql pk-generator="no" name="AP_MEI_C"/>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagC"/>
+            <handler-update id="updateMeiRealManagC"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagCById"/>
+            <handler-select type="All" id="selectAllMeiRealManagC"/>
+        </feature>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="TEMPLATE" type="string">
+                <description>Juste pour tester le addField</description>
+                <sql required="true" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+</data>

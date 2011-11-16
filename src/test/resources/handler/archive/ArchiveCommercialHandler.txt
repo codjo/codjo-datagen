@@ -1,0 +1,255 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+import net.codjo.control.common.ControlException;
+import net.codjo.control.common.manager.ControlManager;
+import net.codjo.mad.server.handler.*;
+import net.codjo.mad.server.util.*;
+import java.util.*;
+import org.exolab.castor.jdo.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+/**
+ *  Handler d'Historisation pour generated.CommercialData.
+ */
+public class ArchiveCommercialHandler extends AbstractHandler {
+    private ControlManager controlManager;
+    private final static String oql = "SELECT p FROM generated.CommercialData p WHERE  branch = $1 and dateBegin = $2";
+    Map setters = new HashMap();
+
+
+    public ArchiveCommercialHandler(ControlManager controlManager) {
+        this.controlManager = controlManager;
+
+        setters.put("portfolioCode",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setPortfolioCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("cD",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setCD(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("branch",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setBranch(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("portfolioType",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setPortfolioType(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("label",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setLabel(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("dateBegin",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setDateBegin(XMLUtils.convertFromStringValue(java.sql.Date.class, xmlValue));
+                }
+            });
+
+        setters.put("dateEnd",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setDateEnd(XMLUtils.convertFromStringValue(java.sql.Date.class, xmlValue));
+                }
+            });
+
+        setters.put("sicovamCode",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setSicovamCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("attachedSicovamCode",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setAttachedSicovamCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("isinCode",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setIsinCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("externalValuation",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.setExternalValuation((XMLUtils.convertFromStringValue(Boolean.class, xmlValue)).booleanValue());
+                }
+            });
+
+        setters.put("creationBy",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.getAudit().setCreationBy(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("creationDatetime",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.getAudit().setCreationDatetime(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, xmlValue));
+                }
+            });
+
+        setters.put("updateBy",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.getAudit().setUpdateBy(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+        setters.put("updateDatetime",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.getAudit().setUpdateDatetime(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, xmlValue));
+                }
+            });
+
+        setters.put("comment",
+            new Setter() {
+                public void set(CommercialData dv, String xmlValue) {
+                    dv.getAudit().setComment(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+
+    }
+
+
+    public String getId() {
+        return "archiveCommercial";
+    }
+
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Map pks = XMLUtils.getPrimaryKeys(node);
+
+            Database db = getContext().getDatabase();
+            try {
+                OQLQuery query = db.getOQLQuery(oql);
+                query.bind(XMLUtils.convertFromStringValue(String.class, (String) pks.get("branch")));
+                query.bind(XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("dateBegin")));
+
+                QueryResults results = query.execute();
+                if (results.hasMore() == false) {
+                    throw new IllegalArgumentException("ligne non trouvée");
+                }
+                CommercialData containingObj = (CommercialData) results.next();
+                CommercialData obj = new CommercialData();
+
+                update(containingObj, obj);
+                update(XMLUtils.getRowFields(node), obj);
+
+                obj.getAudit().setCreationDatetime(new java.sql.Timestamp(System.currentTimeMillis()));
+                obj.getAudit().setCreationBy(this.getContext().getUser());
+                obj.getAudit().setUpdateBy(null);
+                obj.getAudit().setUpdateDatetime(null);
+                containingObj.getAudit().setUpdateBy(obj.getAudit().getCreationBy());
+                containingObj.getAudit().setUpdateDatetime(obj.getAudit().getCreationDatetime());
+                containingObj.setDateEnd(obj.getDateBegin());
+
+                executeControlForAdd(obj);
+                db.create(obj);
+
+                net.codjo.test.TestHelper.postArchive(db, containingObj, obj);
+
+                String requestId = XMLUtils.getAttribute(node, "request_id");
+                String expected = "<result request_id=\"" + requestId + "\"><primarykey>"
+                         + "<field name=\"branch\"/>"
+                         + "<field name=\"dateBegin\"/>"
+                         + "</primarykey><row>"
+                         + "<field name=\"branch\">" + XMLUtils.convertToStringValue(obj.getBranch()) + "</field>"
+                         + "<field name=\"dateBegin\">" + XMLUtils.convertToStringValue(obj.getDateBegin()) + "</field>"
+                         + "</row></result>";
+
+                results.close();
+
+                return expected;
+            }
+            finally {
+                db.close();
+            }
+        }
+        catch (HandlerException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+
+    private void update(CommercialData prev, CommercialData obj) {
+        obj.setPortfolioCode(prev.getPortfolioCode());
+        obj.setCD(prev.getCD());
+        obj.setBranch(prev.getBranch());
+        obj.setPortfolioType(prev.getPortfolioType());
+        obj.setLabel(prev.getLabel());
+        obj.setDateBegin(prev.getDateBegin());
+        obj.setDateEnd(prev.getDateEnd());
+        obj.setSicovamCode(prev.getSicovamCode());
+        obj.setAttachedSicovamCode(prev.getAttachedSicovamCode());
+        obj.setIsinCode(prev.getIsinCode());
+        obj.setExternalValuation(prev.getExternalValuation());
+        obj.getAudit().setCreationBy(prev.getAudit().getCreationBy());
+        obj.getAudit().setCreationDatetime(prev.getAudit().getCreationDatetime());
+        obj.getAudit().setUpdateBy(prev.getAudit().getUpdateBy());
+        obj.getAudit().setUpdateDatetime(prev.getAudit().getUpdateDatetime());
+        obj.getAudit().setComment(prev.getAudit().getComment());
+    }
+
+
+    private void update(Map fields, CommercialData obj) throws SAXException, HandlerException {
+        for (Iterator i = fields.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry item = (Map.Entry) i.next();
+            String name = item.getKey().toString();
+            String value = (String) item.getValue();
+
+            Setter props = (Setter) setters.get(name);
+            try {
+                props.set(obj, value);
+            }
+            catch (Exception ex) {
+                if (props == null) {
+                    throw new HandlerException("Attribut incorrecte " + name + " valeur " + value, ex);
+                }
+                else {
+                    throw new HandlerException("Valeur '" + value + "' incorrecte pour " + name, ex);
+                }
+            }
+        }
+    }
+
+    private void executeControlForAdd(CommercialData obj) throws ControlException {
+        controlManager.controlNewEntity(obj);
+    }
+
+    private static interface Setter {
+        public void set(CommercialData dv, String xmlValue);
+    }
+}
+

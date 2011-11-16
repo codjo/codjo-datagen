@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="net.codjo.test.SimpleEntity" table="AP_SIMPLE_ENTITY">
+
+        <feature>
+            <glob/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="integer">
+                <description>Identifiant</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="name" type="string" namingField="true">
+                <description>Nom du département</description>
+                <sql type="varchar" precision="15" required="true"/>
+            </field>
+            <field name="highSecurity" type="boolean">
+                <description>Département classé Haute-Sécurité</description>
+                <sql type="bit"/>
+            </field>
+            <field name="value" type="double">
+                <description>Valeur</description>
+                <sql type="double"/>
+            </field>
+            <field name="date" type="java.sql.Date" encrypted="true">
+                <description>Date</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="comment" type="string" multiLineText="true">
+                <description>Commentaire</description>
+                <sql type="varchar" precision="255"/>
+            </field>
+            <field name="minicomment" type="string" multiLineText="true">
+                <description>Commentaire</description>
+                <sql type="varchar" precision="10"/>
+            </field>
+            <field name="shortcomment" type="string">
+                <description>Commentaire</description>
+                <sql type="varchar"/>
+            </field>
+             <field name="longcomment" type="string">
+                <description>Commentaire</description>
+                <sql type="text"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

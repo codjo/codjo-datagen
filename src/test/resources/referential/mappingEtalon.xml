@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<referentialList>
+    <linkReferential name="Country" preferenceId="CountryList" label="Pays">
+        <field isGenerated="false" label="Code" name="refCode" type="string" precision="6" primary="true" required="true"/>
+        <field isGenerated="false" label="Libellé" name="refLabel" type="string" precision="255" primary="false" required="true"/>
+    </linkReferential>
+    <linkReferential name="Currency" preferenceId="CurrencyList" label="Devise">
+        <field isGenerated="true" label="Code" name="refCode" type="string" precision="6" required="true" primary="true"/>
+        <field isGenerated="true" label="Libellé" name="refLabel" type="string" precision="255" required="true" primary="true"/>
+        <field isGenerated="true" label="Pays devise" name="currencyCountry" type="string" precision="255" required="true" primary="true"/>
+        <field isGenerated="false" label="Date de clôture" name="closedDate" type="java.sql.Date" primary="false"/>
+    </linkReferential>
+    <linkReferential name="Family" preferenceId="FamilyList" label="Poulet">
+        <field isGenerated="false" label="Code famille" name="refCode" type="string" precision="6" required="true" primary="true"/>
+        <field isGenerated="false" label="Libellé" name="refLabel" type="string" precision="255" required="true" primary="false"/>
+        <field isGenerated="false" label="Valuated" name="isValuated" type="boolean" primary="false" default="1"/>
+        <field isGenerated="false" label="un entier" name="anInteger" type="integer" primary="false"/>
+        <field isGenerated="false" label="un gros decimal" name="aBigDecimal" type="big-decimal" precision="22,2" primary="false" default="234.56"/>
+        <field isGenerated="false" label="un long" name="aLong" type="long" precision="20" primary="false"/>
+        <field isGenerated="false" label="Date de clôture" name="closedDate" type="java.sql.Date" primary="false"/>
+        <field isGenerated="false" label="" name="audit" structure="net.codjo.mint.data.Audit" primary="false"/>
+    </linkReferential>
+    <linkReferential name="ValFrequency" preferenceId="ValFrequencyList" label="ValFrequency">
+        <field isGenerated="false" label="Code Fréquence de Valo" name="refCode" type="string" precision="6" required="true" primary="true"/>
+        <field isGenerated="false" label="Libellé" name="refLabel" type="string" precision="255" required="true" primary="false"/>
+        <field isGenerated="false" label="Date de clôture" name="closedDate" type="java.sql.Date" primary="false"/>
+        <field isGenerated="false" label="" name="audit" structure="net.codjo.mint.data.Audit" primary="false"/>
+    </linkReferential>
+    <linkReferential name="ExecutionVl" preferenceId="ExecutionVlList" label="ExecutionVl">
+        <field isGenerated="false" label="Code VL d'exécution" name="refCode" type="string" precision="6" required="true" primary="true"/>
+        <field isGenerated="false" label="Libellé" name="refLabel" type="string" precision="255" required="true" primary="false"/>
+        <field isGenerated="false" label="Code Fréquence de Valo" name="valFrequencyCode" type="string" precision="6" required="false" primary="false">
+            <refHandler id="selectAllValFrequencyWithCloseDate"/>
+        </field>
+        <field isGenerated="false" label="Date de clôture" name="closedDate" type="java.sql.Date" primary="false"/>
+        <field isGenerated="false" label="" name="audit" structure="net.codjo.mint.data.Audit" primary="false"/>
+    </linkReferential>
+</referentialList>

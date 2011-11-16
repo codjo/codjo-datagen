@@ -1,0 +1,30 @@
+package net.codjo.test.globs;
+
+import org.crossbowlabs.globs.metamodel.*;
+import org.crossbowlabs.globs.metamodel.utils.GlobTypeLoader;
+import org.crossbowlabs.globs.metamodel.fields.*;
+import org.crossbowlabs.globs.metamodel.annotations.*;
+
+@SuppressWarnings({"ALL"})
+public class EntityWithStructure {
+    public static GlobType TYPE;
+
+    @Key
+    public static IntegerField ID;
+    @Required
+    @NamingField @MaxSize(15)
+    public static StringField NAME;
+    public static BooleanField HIGH_SECURITY;
+    @Encrypted
+    public static DateField DATE;
+    @MultiLineText @MaxSize(255)
+    public static StringField COMMENT;
+    @MaxSize(6)
+    public static StringField COMMENTAIRE;
+    @MaxSize(6)
+    public static StringField CREATED_BY;
+
+    static {
+        GlobTypeLoader loader = GlobTypeLoader.init(EntityWithStructure.class);
+    }
+}

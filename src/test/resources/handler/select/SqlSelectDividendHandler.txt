@@ -1,0 +1,34 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.mad.server.handler.*;
+import java.util.*;
+import net.codjo.database.api.query.PreparedQuery;
+import java.sql.*;
+/**
+ *  Classe Handler de selection pour generated.Dividend. <p>
+ *
+ *  Query : <code>SELECT p.* FROM AP_DIVIDEND p WHERE PORTFOLIO_CODE = ? and ... ? </code>
+ */
+public class SqlSelectDividendHandler extends AbstractSelectDividendHandler {
+
+    public SqlSelectDividendHandler(Database database) {
+        super(SQL_QUERY, "SELECT p.* FROM AP_DIVIDEND p WHERE PORTFOLIO_CODE = ? and ... ? ", database);
+    }
+
+
+    public String getId() {
+        return "sqlSelectDividend";
+    }
+
+
+    @Override
+    protected void fillSqlQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
+        query.setString(1, XMLUtils.convertFromStringValue(String.class, (String) pks.get("my_string")));
+        query.setBigDecimal(2, XMLUtils.convertFromStringValue(java.math.BigDecimal.class, (String) pks.get("my_bigDecimal")));
+        query.setTimestamp(3, XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("my_Timestamp")));
+        query.setBoolean(4, (XMLUtils.convertFromStringValue(Boolean.class, (String) pks.get("my_boolean"))).booleanValue());
+        query.setObject(5, XMLUtils.convertFromStringValue(Integer.class, (String) pks.get("my_integer")), java.sql.Types.INTEGER);
+        query.setDate(6, XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("date")));
+    }
+ }
+

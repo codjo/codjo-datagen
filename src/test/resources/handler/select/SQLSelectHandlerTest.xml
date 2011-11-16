@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <entity name="generated.Dividend" table="AP_DIVIDEND" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <handler-select id="sqlSelectDividend">
+            <query type='SQL'>
+                    SELECT p.* FROM AP_DIVIDEND p
+                    WHERE PORTFOLIO_CODE = ? and ... ?
+            </query>
+            <arg type="string">my_string</arg>
+            <arg type="big-decimal">my_bigDecimal</arg>
+            <arg type="java.sql.Timestamp">my_Timestamp</arg>
+            <arg type="boolean">my_boolean</arg>
+            <arg type="integer">my_integer</arg>
+            <arg type="java.sql.Date">date</arg>
+        </handler-select>
+    </feature>
+
+    <primary-key>
+        <field name="portfolioCode" />
+    </primary-key>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+    </properties>
+  </entity>
+
+</data>
+

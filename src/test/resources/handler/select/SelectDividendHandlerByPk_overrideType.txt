@@ -1,0 +1,29 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.mad.server.handler.*;
+import java.util.*;
+import org.exolab.castor.jdo.*;
+/**
+ *  Classe Handler de selection pour generated.Dividend. <p>
+ *
+ *  Query : <code>SELECT p FROM generated.Dividend p WHERE portfolioCode = $1 </code>
+ */
+public class SelectDividendHandlerByPk_overrideTypeHandler extends AbstractSelectDividendHandler {
+
+    public SelectDividendHandlerByPk_overrideTypeHandler(Database database) {
+        super(OQL_QUERY, "SELECT p FROM generated.Dividend p WHERE portfolioCode = $1 ", database);
+    }
+
+
+    public String getId() {
+        return "SelectDividendHandlerByPk_overrideType";
+    }
+
+
+    @Override
+    protected void fillOqlQuery(OQLQuery query, Map<String, String> pks) {
+        query.bind(XMLUtils.convertFromStringValue(String.class, (String) pks.get("toto")));
+    }
+
+ }
+

@@ -1,0 +1,229 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+import net.codjo.control.common.ControlException;
+import net.codjo.control.common.manager.ControlManager;
+import net.codjo.mad.server.handler.*;
+import net.codjo.mad.server.util.*;
+import java.util.*;
+import org.exolab.castor.jdo.*;
+import org.w3c.dom.*;
+import java.sql.*;
+import net.codjo.mad.server.handler.util.QueryUtil;
+/**
+ * Handler de création pour generated.Dividend.
+ */
+public class NewDividendHandler extends AbstractHandler {
+    private ControlManager controlManager;
+    Map setters = new HashMap();
+
+    public NewDividendHandler(ControlManager controlManager) {
+        this.controlManager = controlManager;
+
+        setters.put("dividendId",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setDividendId(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+        setters.put("dividendCode",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setDividendCode(XMLUtils.convertFromStringValue(String.class, xmlValue));
+                }
+            });
+        setters.put("openDate",
+            new Setter() {
+                public void set(Dividend dv, String xmlValue) {
+                    dv.setOpenDate(XMLUtils.convertFromStringValue(java.sql.Date.class, xmlValue));
+                }
+            });
+    }
+
+    public String getId() {
+        return "newDividend";
+    }
+
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Dividend obj = new Dividend();
+            Map fields = XMLUtils.getRowFields(node);
+
+            for (Iterator i = fields.entrySet().iterator(); i.hasNext();) {
+                Map.Entry item = (Map.Entry)i.next();
+                String name = item.getKey().toString();
+                String value = (String)item.getValue();
+
+                Setter props = (Setter)setters.get(name);
+                try {
+                    props.set(obj, value);
+                }
+                catch (Exception ex) {
+                    throw new HandlerException("Valeur '" + value + "' incorrecte pour "
+                        + name, ex);
+                }
+            }
+
+            obj.getAudit().setCreationDatetime(new java.sql.Timestamp(
+                    System.currentTimeMillis()));
+            obj.getAudit().setCreationBy(this.getContext().getUser());
+            obj.getAudit().setUpdateBy(null);
+            obj.getAudit().setUpdateDatetime(null);
+
+            executeControlForAdd(obj);
+
+            net.codjo.sif.data.DataAudit dataAudit = new net.codjo.sif.data.DataAudit();
+            HashMap keyMap = new HashMap();
+            StringTokenizer t = new StringTokenizer(getFunctionalKey(), ",");
+            String functionalKeyStr = "";
+
+            if (t.countTokens() == 1) {
+                functionalKeyStr =
+                    toSqlName(getFunctionalKey()) + "= '" + fields.get(getFunctionalKey().trim()) + "',";
+            }
+            else {
+
+                while (t.hasMoreElements()) {
+                    String fieldName = t.nextElement().toString().trim();
+                    keyMap.put(fieldName, fields.get(fieldName));
+                }
+                int i = 0;
+
+                Iterator iter = keyMap.keySet().iterator();
+                while (iter.hasNext()) {
+                    String fieldName = (String)iter.next();
+                    functionalKeyStr += toSqlName(fieldName) + "='" + (String)keyMap.get(fieldName) + "',";
+                }
+            }
+
+            dataAudit.setDbTableName(getDbTableName());
+            dataAudit.setFunctionalKey(functionalKeyStr.substring(0, functionalKeyStr.length() - 1));
+            dataAudit.setStatus(getStatus());
+            dataAudit.setUserName(this.getContext().getUser());
+            dataAudit.setInsertionDate(new java.sql.Timestamp(System.currentTimeMillis()));
+            createDataAudit(dataAudit);
+
+            createBean(obj);
+
+            String requestId = XMLUtils.getAttribute(node, "request_id");
+
+            String expected =
+                "<result request_id=\"" + requestId + "\"><primarykey>"
+                + "<field name=\"dividendId\"/>" + "<field name=\"dividendCode\"/>"
+                + "</primarykey><row>" + "<field name=\"dividendId\">"
+                + XMLUtils.convertToStringValue(obj.getDividendId()) + "</field>"
+                + "<field name=\"dividendCode\">"
+                + XMLUtils.convertToStringValue(obj.getDividendCode()) + "</field>"
+                + "</row></result>";
+
+            return expected;
+        }
+        catch (HandlerException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+
+    protected void createBean(Dividend obj) throws PersistenceException {
+        PreparedStatement query = null;
+        Connection connection = null;
+        try {
+            connection = getContext().getTxConnection();
+            query =
+                connection.prepareStatement(
+                    QueryUtil.replaceUser("exec sp_Mint_CreateNewDividend(@DIVIDEND_ID=?,@DIVIDEND_CODE=?,@OPEN_DATE=?)"
+                    , getContext().getUser()));
+
+            query.setString(1, obj.getDividendId());
+            query.setString(2, obj.getDividendCode());
+            query.setDate(3, obj.getOpenDate());
+
+            ResultSet rs = query.executeQuery();
+
+            if (rs.next()) {
+                obj.setDividendId(rs.getString(1));
+                obj.setDividendCode(rs.getString(2));
+            }
+
+            rs.close();
+        }
+        catch (SQLException exception) {
+            throw new PersistenceException(exception.getLocalizedMessage(), exception);
+        }
+        finally {
+            try {
+                query.close();
+                connection.close();
+            }
+            catch (SQLException exception) {
+                throw new PersistenceException(exception.getLocalizedMessage(), exception);
+            }
+        }
+    }
+
+    protected void createDataAudit(net.codjo.sif.data.DataAudit obj) throws PersistenceException {
+        Database db = getContext().getDatabase();
+        try {
+            db.create(obj);
+        }
+        finally {
+            db.close();
+        }
+    }
+
+    private void executeControlForAdd(Dividend obj)
+            throws ControlException {
+        controlManager.controlNewEntity(obj);
+    }
+
+
+    private static interface Setter {
+        public void set(Dividend dv, String xmlValue);
+    }
+
+   private String getDbTableName(){
+        return "AP_UNE_TABLE";
+   }
+   private String getFunctionalKey(){
+        return "dividendId,dividendCode";
+   }
+
+    private String getStatus() {
+        return "INSERT";
+    }
+
+
+    public static String toSqlName(String propertyName) {
+        String sqlName = toSqlUpper(propertyName);
+        if (sqlName.length() > 28) {
+            throw new IllegalArgumentException("La colonne pour le field " + propertyName
+                + " dépasse 28 caractères ! C'est pas bien !! "
+                + " Et quand je dis que c'est pas bien, c'est que c'est vraiment pas bien !"
+                + " m'enfin, il faut relativiser quand meme, c'est pas le bout du monde "
+                + " je vais tout simplement bloquer la génération jusqu'a ce que vous "
+                + " corrigiez le probleme !");
+        }
+        return sqlName;
+    }
+
+
+    public static String toSqlUpper(String propertyName) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < propertyName.length(); i++) {
+            if (Character.isUpperCase(propertyName.charAt(i))) {
+                buffer.append('_');
+            }
+            buffer.append(propertyName.charAt(i));
+        }
+
+        String sqlName = buffer.toString().toUpperCase();
+        return sqlName;
+    }
+}

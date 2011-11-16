@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://datagen.xsd">
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <generate-all/>
+            <sql-constraint/>
+            <multi-select handler="selectBcpDeTrucs" selection-table="#SELECTION">
+                <parameters>
+                    <arg type="string" sql-name="ACTION_CODE" sql-type="varchar"
+                         precision="20">actionCode</arg>
+                    <arg type="integer" sql-name="CODE_NUM" sql-type="numeric"
+                         precision="2,5">codeNum</arg>
+                    <arg type="string" sql-name="TEST" sql-type="varchar" precision="5">
+                        errorTest</arg>
+                </parameters>
+            </multi-select>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContentsTer" table="AP_MANAGEMENT">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <features-for-characteristic/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="beginDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+
+            <field name="beginDate" type="java.sql.Date">
+                <description>Code portefeuille du coupon</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="accountManager" type="java.lang.Integer">
+                <description>Chargé de compte</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Person" family="AccountMgr"/>
+            </field>
+
+            <field name="geographicArea" type="java.lang.Integer">
+                <description>Zone géographique</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Referential" family="GeographArea"/>
+            </field>
+
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </structure>
+
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContentsBisRepetita" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+            <user-quarantine name="net.codjo.pims.data.MeiRealManagA" table="AP_MEI_A"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagB" table="AP_MEI_B"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagC" table="AP_MEI_C"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="EntityCaractNotControlable" table="TABLE_CARAC">
+        <description>Tables de Characteristic mais non controllable</description>
+        <feature>
+            <features-for-characteristic controlable="false"/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="big-decimal">
+                <description>Id de la table</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <add-field to="net.codjo.broadcast.common.data.BroadcastFileContentsTer">
+        <field name="generated.Management" type="string">
+            <description>Juste pour tester le addField dans entities</description>
+            <sql required="true" type="varchar"/>
+        </field>
+    </add-field>
+</entities>

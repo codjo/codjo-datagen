@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Changes</title>
+    </properties>
+    <body>
+         <release version="2.0" date="svn" description="Evolution">
+            <action dev="villard, catteao" type="add">
+                Ajout de la possiblité d'avoir l'héritage sur les entités.
+                Ajout de la balise referential.
+                Ajout de la possibilité d'avoir des variables au niveau des handlers. 
+            </action>
+        </release>
+         <release version="1.29" date="2007-05-02" description="Evolution cosmétique">
+            <action dev="boissie" type="add">
+                Correction mineure : Ajout d'une méthode generate prenant un fichier en paramètre.
+            </action>
+        </release>
+         <release version="1.28" date="2007-04-05" description="Correction">
+            <action dev="gonnot, bezault" type="fix">
+                Correction du NullPointerException lors de l'envoie d'un entier null au handler.
+            </action>
+        </release>
+         <release version="1.27" date="2007-03-19" description="Correction">
+            <action dev="blazart" type="fix">
+                Correction du code historic-audit sur tout les handler.
+            </action>
+        </release>
+         <release version="1.26" date="2007-02-19" description="Correction">
+            <action dev="duclosm" type="fix">
+                Modification de la génération des handlers factories en vue de leur migration vers Jade.
+                Nécessite obligatoirement agf-mad 2.30
+            </action>
+        </release>
+         <release version="1.25" date="2007-01-15" description="Correction">
+            <action dev="gaudef" type="fix">
+                Correction de la génération des handler new non générés par castor pour qu'ils
+                fonctionnent avec un connection transactionnelle.
+            </action>
+        </release>
+        <release version="1.24" date="2006-12-08" description="Correction">
+            <action dev="duclosm" type="fix">
+                Correction d'un bug lors de la génération des handlers Delete lors de l'utilisation
+                de 'controlable' et de 'historic-audit-trail' lors de la définition de tables.
+            </action>
+        </release>
+        <release version="1.23" date="2006-12-01" description="Correction">
+            <action dev="galabert, gonnot" type="update">
+                Changement du nom de fichier d'un GAP : "GAP AP_TABLE.sql" devient "AP_TABLE-gap.sql".
+            </action>
+            <action dev="salboch, gonnot" type="fix">
+                Correction BUG sur la generation du handler-new avec une requete SQL dans une entite ayant une
+                table.
+            </action>
+        </release>
+        <release version="1.22" date="2006-11-07" description="Evolutions">
+            <action dev="catteao, lopezla" type="add">
+                Surcharge de la requête d'insertion par défaut du handler-new. Maintenant on a la
+                possibilité d'ajouter une requête sql customisé et d'avoir des contrôles IHM.
+            </action>
+            <action dev="catteao" type="fix">
+                Changement des fichiers xsl pour la génération des handlers new, update et delete de façon à
+                ce qu'ils prennent un ContolerManager en paramètre dans leur constructeur.
+            </action>
+            <action dev="catteao" type="add">
+                Evolution empêchant l'exécution de datagen si cela ne s'avère pas nécessaire (c'est à dire si
+                le fichier final.xml n'a pas évolué). Si la génération ne se fait pas alors l'utilisateur est
+                prévenu avec un message d'avertissement.
+            </action>
+        </release>
+        <release version="1.21" date="2006-06-13" description="Correction">
+            <action dev="duclosm" type="fix">
+                Correction d'un problème de fuite mémoire lors d'un generate-all.
+            </action>
+            <action dev="duclosm" type="fix">
+                Correction de l'absence dans le fichier structure.xml de la
+                propriétés 'sql-type' pour certains 'field', lors de l'utilisation de
+                structure avec des champs dont le 'type' est autre que 'varchar' ou 'text'.
+            </action>
+        </release>
+        <release version="1.20" date="2006-05-19" description="Mise en place du xsd">
+            <action dev="lopezla" type="fix">
+                Correction du bug qui empêchait de remplacer les propriétés ${propertyName}
+                dans les fichiers datagen.
+            </action>
+            <action dev="torrent" type="add">
+                Mise en place du xsd.
+            </action>
+        </release>
+        <release version="1.19" date="2006-04-05" description="Patch correctif 1.18">
+            <action dev="duclosm" type="fix">
+                Correction d'un problème de fuite mémoire lors d'un generate-all.
+            </action>
+            <action dev="gonnot" type="fix">
+                Patch correctif de la version 1.18 : Les handlers 'archive' étaient
+                générés avec un nom de classe et un nom de fichier incohérent.
+            </action>
+            <action dev="gonnot" type="update">
+                Refactoring pour supprimer le code doublon.
+            </action>
+        </release>
+        <release version="1.18" date="2006-03-06" description="Ajout">
+            <action dev="duclosm" type="add">
+                Les noms de classe des handlers générés se terminent maintenant toujours par
+                "Handler" afin de faciliter leur récupération avec les ResourceCollector
+                (à cause des nouvelles stratégies de chargement des Handlers).
+            </action>
+            <action dev="duclosm" type="fix">
+                Mise en majuscule de la première lettre des noms de classe des Handlers Command.
+            </action>
+        </release>
+        <release version="1.17" date="2006-01-02" description="Ajout">
+            <action dev="blazart" type="fix">
+                Lors d'un select en transaction et des insert/update/delete hors transaction,
+                si le force-transaction-mode n'est pas à true, la génération du handler est
+                interrompue. L'erreur est affichée.
+            </action>
+            <action dev="blazart" type="add">
+                Ajout de l'attribut force-transaction-mode sur le handler-sql pour pouvoir
+                executer des select en transaction et des insert/update/delete hors transaction.
+                Un warning est affiché à la génération
+            </action>
+            <action dev="blazart" type="add">
+                Ajout du type de handler multi-select : genere trois handler-sql ( drop create et insert)
+                sur une table temporaire dans le but de gerer les multi séléction.
+            </action>
+            <action dev="torrent" type="add">
+                Il n'y a plus de message d'erreur lorsque l'on veut faire un select dans un handler
+                contenant une mise à jour en transaction.
+                A l'inverse, il y a un message d'erreur si on veut faire une mise à jour or transaction.
+            </action>
+        </release>
+        <release version="1.16" date="2005-10-10" description="Préparation GABI">
+            <action dev="blazart" type="fix">
+                Suppression de l'import avec '$' dans SqlHandler.xsl car incomptabile JDK 1.4.2.02
+                (marchait sur le JDK 1.4.1 b21 et 1.3.1.0.1)
+            </action>
+            <action dev="gonnot" type="fix">
+                Suppression de l'utilisation du ServiceLocator
+                (ATTENTION : nécessite agf-mad 2.12).
+            </action>
+        </release>
+        <release version="1.15" date="2005-07-04" description="Ajout">
+            <action dev="blazart" type="add">
+                Ajout de la possibilité d'utiliser une commande delete dans un handler-sql
+                en ajoutant 'select @@rowcount' à la fin de la requête.
+            </action>
+        </release>
+        <release version="1.14" date="2005-05-23" description="Ajout">
+            <action dev="blazart" type="add">
+                Ajout du calcul du nombre de ligne retournées par la requête.
+                Il faut upgrader vers mad 2.09
+            </action>
+        </release>
+        <release version="1.13" date="2005-03-04" description="Correction">
+            <action dev="bernaju" type="fix">
+                Creation des repertoires pour la creation des handlers.
+            </action>
+        </release>
+        <release version="1.12" date="2004-11-30" description="Correction">
+            <action dev="jcouvreur" type="fix">
+                Correction du bug : remontée de l'erreur d'un trigger dans le Handler Delete.
+            </action>
+            <action dev="gonnot" type="add">
+                balise handler-sql : ajout d'un attribut transaction permettant d'indiquer si le handler
+                participe à la transaction ou non.
+            </action>
+        </release>
+        <release version="1.11" date="2004-11-04" description="Evolution">
+            <action dev="lajmi" type="add">
+                Retour aux Triggers UI.
+            </action>
+            <action dev="lajmi" type="fix">
+                on troncate le nom de l'index si la concatenation du prefix et le nom de la table depasse 30
+                caracs.
+            </action>
+            <action dev="palmont" type="fix">
+                Ajout d'un parametre controlable(boolean par défaut true) pour features-for-characteristic.
+            </action>
+        </release>
+        <release version="1.10" date="2004-08-23" description="Evolution">
+            <action dev="gonnot" type="fix">
+                Modification du handler-sql pour éviter de parcourir tous le résultat avant de renvoyer la
+                page.
+            </action>
+            <action dev="coteg" type="fix">
+                Modification de la balise handler-sql pour ajouter un attribut 'type' sur le noeud
+                'attributes/name'.
+            </action>
+        </release>
+        <release version="1.09" date="2004-06-23" description="Evolution">
+            <action dev="levequt" type="fix">
+                Ajout de la génération de l'index clé primaire pour les tables quarantaines utilisateur.
+            </action>
+            <action dev="marcona" type="add">
+                Ajout de l'audit des données. Balise
+                <code>historic-audit-trail</code>
+                .
+            </action>
+            <action dev="abouelf" type="fix">
+                Génération des contraintes optionnelle(Foreign keys).La balise n'étant plus obligatoire.
+            </action>
+            <action dev="palmont" type="add">
+                Ajout de la génération des contraintes (Foreign keys).
+                Suppression de la clé primaire en contrainte lors de la génération de la table.
+                Modification de la génération des indexes (la clé primaire devient un indexe unique).
+                Définition des jointures (pas encore implémentée).
+            </action>
+        </release>
+        <release version="1.08" date="2004-04-01" description="Correction">
+            <action dev="gonnot" type="fix">
+                Correction du bug empechant d'ajouter des 'fied' apres un 'field' de type
+                structure.
+            </action>
+        </release>
+        <release version="1.07" date="2004-02-10" description="Evolution">
+            <action dev="gonnot" type="add">
+                Ajout d'un attribut 'factory' sur 'handler-sql'.
+            </action>
+        </release>
+        <release version="1.06" date="2004-02-10" description="Evolution">
+            <action dev="gonnot" type="add">
+                Ajout d'un nouvel attribut 'return-pk' sur la feature 'handler-sql'.
+            </action>
+            <action dev="gonnot" type="add">
+                Création des méthodes createBean(), removeBean() et updateBean()
+                dans les handlers insert, delete et update.
+            </action>
+            <action dev="spinae" type="add">
+                Ajout de la feature 'copy-entity'.
+            </action>
+        </release>
+        <release version="1.05" date="2003-12-12" description="Evolution">
+            <action dev="gonnot" type="add">
+                Ajout d'attribut pour la feature 'user-quarantine'.
+                Il est possible de preciser la generation ou non des handlers par defaut
+            </action>
+        </release>
+        <release version="1.04" date="2003-10-20" description="Gestion des droits d'acces">
+            <action dev="gonnot" type="add">
+                Ajout d'un nouveau generateur pour la gestion des droits d'acces.
+            </action>
+            <action dev="gonnot" type="fix">
+                Corrections mineures.
+            </action>
+        </release>
+        <release version="1.03" date="2003-09-15" description="Correction BUG">
+            <action dev="gonnot" type="fix">
+                La generation des handlers delete sur les entitees non controlables
+                sont implante avec des requetes jdbc (plus rapide).
+            </action>
+        </release>
+        <release version="1.02" date="2003-09-05" description="Stabilisation">
+            <action dev="gonnot" type="fix">
+                Stabilisation des SNAPSHOT.
+            </action>
+        </release>
+        <release version="1.01" date="2003-04-22" description="Amelioration">
+            <action dev="spinae" type="add" due-to="RED">
+                Ajout d'un noeud 'configuration' permettant de configurer la generation.
+                Pour lancer la generation il suffit d'appeler kernel.Main en passant le
+                nom du fichier.
+            </action>
+            <action dev="gonnot" type="add">
+                Ajout de la generation pour le requeteur.
+            </action>
+            <action dev="gonnot" type="fix">
+                Modification de la gestion de la feature controlable (remonté au niveau
+                des handler et non plus dans le bean).
+            </action>
+        </release>
+        <release version="1.00" date="2003-04-22" description="Version initiale">
+            <action dev="gonnot" type="add" due-to="RED">
+                Extraction de l'application PIMS en librairie autonome.
+            </action>
+        </release>
+    </body>
+</document>

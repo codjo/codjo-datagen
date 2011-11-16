@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="net.codjo.mint.ref.Country" table="REF_COUNTRY">
+        <description>Référentiel de pays</description>
+
+        <feature>
+            <sql name="REF_COUNTRY"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteCountry"/>
+            <handler-update id="updateCountry"/>
+            <handler-select id="selectCountryById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCountry" type="All"/>
+            <handler-new id="newCountry"/>
+            <handler-requetor id="allCountry"/>
+            <handler-sql id="selectAllCountryWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_COUNTRY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Currency" table="REF_CURRENCY">
+        <description>Référentiel des devises de souscription</description>
+        <feature>
+            <sql name="REF_CURRENCY"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteCurrency"/>
+            <handler-update id="updateCurrency"/>
+            <handler-select id="selectCurrencyById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCurrency" type="All"/>
+            <handler-new id="newCurrency"/>
+            <handler-requetor id="allCurrency"/>
+            <handler-sql id="selectAllCurrencyWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>currencyCountry</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, CURRENCY_COUNTRY
+                    from REF_CURRENCY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="refCode"/>
+            <field name="refLabel"/>
+            <field name="currencyCountry"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+            <field name="refLabel"/>
+            <field name="currencyCountry"/>
+        </functional-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="currencyCountry" type="string">
+                <description>Pays devise</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Family" table="REF_FAMILY">
+        <feature>
+            <sql name="REF_FAMILY"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteFamily"/>
+            <handler-update id="updateFamily"/>
+            <handler-select id="selectFamilyById" type="By_Primary-Key"/>
+            <handler-select id="selectAllFamily" type="All"/>
+            <handler-new id="newFamily"/>
+            <handler-requetor id="allFamily"/>
+            <audit-trail/>
+            <handler-sql id="selectAllFamilyWithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL
+                    from REF_FAMILY
+                    where CLOSED_DATE &gt; ? OR CLOSED_DATE = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code famille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
+        <description>Poulet</description>
+        <feature>
+            <sql name="REF_POULET"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deletePoulet"/>
+            <handler-update id="updatePoulet"/>
+            <handler-select id="selectPouletById" type="By_Primary-Key"/>
+            <handler-select id="selectAllPoulet" type="All"/>
+            <handler-new id="newPoulet"/>
+            <handler-requetor id="allPoulet"/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <methods>
+            <method name="computeAnnualPerf" type="big-decimal">
+                <description>Calcul de la perf annuelle.</description>
+                <throws>net.codjo.pims.calculation.ComputeException</throws>
+                <body>return net.codjo.pims.calculation.fundprice.AnnualPerformanceFiller.compute(this);</body>
+            </method>
+        </methods>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Canard" table="REF_CANARD">
+        <description>Canard</description>
+        <feature>
+            <sql name="REF_CANARD"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteCanard"/>
+            <handler-update id="updateCanard"/>
+            <handler-select id="selectCanardById" type="By_Primary-Key"/>
+            <handler-select id="selectAllCanard" type="All"/>
+            <handler-new id="newCanard"/>
+            <handler-requetor id="allCanard"/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <methods>
+            <method name="computeAnnualPerf" type="big-decimal">
+                <description>Calcul de la perf annuelle.</description>
+                <throws>net.codjo.pims.calculation.ComputeException</throws>
+                <body>return net.codjo.pims.calculation.fundprice.AnnualPerformanceFiller.compute(this);</body>
+            </method>
+        </methods>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.UpperCase" table="REF_UPPER_CASE">
+        <description>UPPER CASE</description>
+        <feature>
+            <sql name="REF_UPPER_CASE"/>
+            <referential/>
+            <bean/>
+            <castor/>
+            <doc-structure/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+            </sql-index>
+
+            <handler-delete id="deleteUpperCase"/>
+            <handler-update id="updateUpperCase"/>
+            <handler-select id="selectUpperCaseById" type="By_Primary-Key"/>
+            <handler-select id="selectAllUpperCase" type="All"/>
+            <handler-new id="newUpperCase"/>
+            <handler-requetor id="allUpperCase"/>
+            <handler-sql id="selectAllUpperCaseSpecific">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>FLAG_ACTIF_STATUT_PRIM</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, FLAG_ACTIF_STATUT_PRIM
+                    from REF_UPPER_CASE
+                </query>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="flag_actif_statut_prim" type="boolean">
+                <description>Flag</description>
+                <sql type="bit"/>
+            </field>
+        </properties>
+    </entity>
+</data>

@@ -1,0 +1,104 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+
+import net.codjo.mad.server.handler.*;
+import net.codjo.mad.server.util.*;
+import java.util.*;
+import org.exolab.castor.jdo.*;
+import org.w3c.dom.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+/**
+ * Handler de destruction pour
+        generated.Dividend.
+ *
+ */
+public class DeleteDividendHandler extends AbstractHandler {
+
+    private final static String oql = "SELECT p FROM "+
+        " generated.Dividend p WHERE portfolioCode = $1 and dividendDate = $2";
+
+
+
+    public String getId() {
+        return "deleteDividend";
+    }
+
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Map pks = XMLUtils.getPrimaryKeys(node);
+
+            Connection con = getContext().getTxConnection();
+            Database db = getContext().getDatabase();
+
+        try {
+                OQLQuery query = db.getOQLQuery(oql);
+        query.bind(XMLUtils.convertFromStringValue(String.class, (String) pks.get("portfolioCode")));
+            query.bind(XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("dividendDate")));
+
+
+                QueryResults results = query.execute();
+                if (results.hasMore() == false) {
+                    throw new IllegalArgumentException("ligne non trouvée");
+                }
+        Dividend obj = (Dividend) results.next();
+
+
+
+                removeBean(db, obj);
+
+
+                String requestId = XMLUtils.getAttribute(node, "request_id");
+
+                String expected = "<result request_id=\"" + requestId + "\"><primarykey>"
+
+     + "<field name=\"portfolioCode\"/>"
+
+     + "<field name=\"dividendDate\"/>"
+
+                          + "</primarykey><row>"
+
+     + "<field name=\"portfolioCode\">" + XMLUtils.convertToStringValue(obj.getPortfolioCode()) + "</field>"
+
+     + "<field name=\"dividendDate\">" + XMLUtils.convertToStringValue(obj.getDividendDate()) + "</field>"
+
+                         + "</row></result>";
+
+                return expected;
+            }
+            finally {
+                con.close();
+                db.close();
+            }
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+    private void fillSqlQuery(final PreparedStatement query, final Map pks)
+        throws SQLException {
+
+            query.setString(1, XMLUtils.convertFromStringValue(String.class, (String) pks.get("portfolioCode")));
+
+            query.setTimestamp(2, XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("dividendDate")));
+
+        }
+
+
+
+    protected void removeBean(Database db,
+        Dividend obj) throws PersistenceException {
+        db.remove(obj);
+    }
+
+}

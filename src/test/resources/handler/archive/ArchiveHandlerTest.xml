@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="generated.PortfolioCodification" table="AP_PORTFOLIO_CODIFICATION">
+        <description>Codification des portefeuilles</description>
+
+        <feature>
+            <handler-archive id="archivePortfolioCodification" beginDateVarName="beginDate"/>
+            <controlable/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="branch"/>
+            <field name="dateBegin"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+
+            <field name="cD" type="string">
+                <description>Capitalisant et/ou Distributif</description>
+                <sql type="varchar" precision="4" required="true"
+                     in="'C','D','CouD','CetD', 'NONE'"/>
+            </field>
+
+            <field name="branch" type="string">
+                <description>Code branche</description>
+                <sql type="varchar" precision="22" required="true"/>
+            </field>
+
+            <field name="portfolioType" type="string">
+                <description>Type portefeuille</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+
+            <field name="label" type="string">
+                <description>Libellé ptf</description>
+                <sql type="varchar" precision="50"/>
+            </field>
+
+            <field name="dateBegin" type="java.sql.Date">
+                <description>Date de début</description>
+                <sql type="timestamp" required="true"/>
+            </field>
+
+            <field name="dateEnd" type="java.sql.Date">
+                <description>Date de fin</description>
+                <sql type="timestamp" required="true"/>
+            </field>
+
+            <field name="sicovamCode" type="string">
+                <description>Code Sicovam</description>
+                <sql type="varchar" precision="8"/>
+            </field>
+
+            <field name="attachedSicovamCode" type="string">
+                <description>Code Sicovam de rattachement</description>
+                <sql type="varchar" precision="8"/>
+            </field>
+
+            <field name="isinCode" type="string">
+                <description>Code ISIN</description>
+                <sql type="varchar" precision="12"/>
+            </field>
+
+            <field name="externalValuation" type="boolean">
+                <description>Valorisation externe</description>
+                <sql type="bit" required="true"/>
+            </field>
+
+            <field name="audit" structure="net.codjo.pims.data.Audit"/>
+        </properties>
+    </entity>
+    <entity name="generated.CommercialData" table="AP_COMMERCIAL">
+        <description>Codification des portefeuilles</description>
+
+        <feature>
+            <handler-archive id="archiveCommercial" helper="net.codjo.test.TestHelper"/>
+            <controlable/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="branch"/>
+            <field name="dateBegin"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+
+            <field name="cD" type="string">
+                <description>Capitalisant et/ou Distributif</description>
+                <sql type="varchar" precision="4" required="true"
+                     in="'C','D','CouD','CetD', 'NONE'"/>
+            </field>
+
+            <field name="branch" type="string">
+                <description>Code branche</description>
+                <sql type="varchar" precision="22" required="true"/>
+            </field>
+
+            <field name="portfolioType" type="string">
+                <description>Type portefeuille</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+
+            <field name="label" type="string">
+                <description>Libellé ptf</description>
+                <sql type="varchar" precision="50"/>
+            </field>
+
+            <field name="dateBegin" type="java.sql.Date">
+                <description>Date de début</description>
+                <sql type="timestamp" required="true"/>
+            </field>
+
+            <field name="dateEnd" type="java.sql.Date">
+                <description>Date de fin</description>
+                <sql type="timestamp" required="true"/>
+            </field>
+
+            <field name="sicovamCode" type="string">
+                <description>Code Sicovam</description>
+                <sql type="varchar" precision="8"/>
+            </field>
+
+            <field name="attachedSicovamCode" type="string">
+                <description>Code Sicovam de rattachement</description>
+                <sql type="varchar" precision="8"/>
+            </field>
+
+            <field name="isinCode" type="string">
+                <description>Code ISIN</description>
+                <sql type="varchar" precision="12"/>
+            </field>
+
+            <field name="externalValuation" type="boolean">
+                <description>Valorisation externe</description>
+                <sql type="bit" required="true"/>
+            </field>
+
+            <field name="audit" structure="net.codjo.pims.data.Audit"/>
+        </properties>
+    </entity>
+    <structure name="net.codjo.pims.data.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="creationBy" type="string">
+                <description>Création par</description>
+                <sql type="varchar" precision="30"/>
+            </field>
+
+            <field name="creationDatetime" type="java.sql.Timestamp">
+                <description>Date et Heure de création</description>
+                <sql type="timestamp"/>
+            </field>
+
+            <field name="updateBy" type="string">
+                <description>Maj par</description>
+                <sql type="varchar" precision="30"/>
+            </field>
+
+            <field name="updateDatetime" type="java.sql.Timestamp">
+                <description>Date et Heure de maj</description>
+                <sql type="timestamp"/>
+            </field>
+
+            <field name="comment" type="string">
+                <description>Commentaires</description>
+                <sql type="varchar" precision="255"/>
+            </field>
+        </properties>
+    </structure>
+</data>
+

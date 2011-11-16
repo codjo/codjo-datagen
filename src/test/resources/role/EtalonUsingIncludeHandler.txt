@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<roles>
+    <role id="el-deletor">
+        <include>deleteCountry</include>
+        <include>deleteDividend</include>
+    </role>
+
+    <role id="consultation">
+        <include>select*</include>
+        <include>updateCountry</include>
+        <include>selectCountryById</include>
+        <include>selectAllCountry</include>
+        <include>newCountry</include>
+        <include>allCountry</include>
+        <include>selectAllCountryWithClosedDate</include>
+        <include>updateDividend</include>
+        <include>selectDividendById</include>
+        <include>selectAllDividend</include>
+        <include>newDividend</include>
+        <include>allDividend</include>
+        <include>selectAllDividendWithClosedDate</include>
+    </role>
+
+ </roles>

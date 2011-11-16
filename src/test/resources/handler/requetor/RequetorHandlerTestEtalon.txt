@@ -1,0 +1,27 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.mad.server.handler.requetor.AbstractRequetorHandler;
+/**
+ *  Classe Handler de requete pour generated.Dividend. <p>
+ */
+public class DividendRequetorHandler extends AbstractRequetorHandler {
+    private static final String[] PK = {"portfolioCode" , "dividendDate"};
+
+
+    public DividendRequetorHandler(Database database) {
+        super("AP_DIVIDEND", PK, database);
+
+        wrappers.put("portfolioCode", new SqlWrapper("PORTFOLIO_CODE"));
+        wrappers.put("netDividend", new SqlWrapper("NET_DIVIDEND"));
+        wrappers.put("dividendDate", new SqlWrapper("DIVIDEND_DATE", java.sql.Types.DATE));
+        wrappers.put("automaticUpdate", new SqlWrapper("AUTOMATIC_UPDATE"));
+        wrappers.put("comment", new SqlWrapper("COMMENT"));
+        wrappers.put("createdBy", new SqlWrapper("CREATED_BY"));
+    }
+
+
+    public String getId() {
+        return "dividendRequetor";
+    }
+}
+

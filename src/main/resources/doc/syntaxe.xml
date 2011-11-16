@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="syntaxe.xsl"?>
+<syntaxe>
+
+    <tag id="data" name="data">
+        <description>Balise principale contenant la definition.</description>
+
+        <sub-tag>
+            <tag refId="structure"/>
+            <tag refId="entity"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="entities" name="entities">
+        <description>
+            Definition des entités.
+        </description>
+
+        <sub-tag>
+            <tag refId="entity"/>
+            <tag refId="structure"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="structure" name="structure">
+        <description>
+            Definition d'une structure (non represente
+            dans la couche de persistence).
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de la structure (java)</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="description"/>
+            <tag refId="feature"/>
+            <tag refId="methods"/>
+            <tag refId="properties"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="entity" name="entity">
+        <description>
+            Definition d'une entite (represente dans la couche de persistence).
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de l'objet java.</description>
+            </attribute>
+            <attribute name="table" use="optionnal">
+                <description>Nom de la table en BD (Valeur par défaut pour
+                    la balise SQL).
+                </description>
+            </attribute>
+            <attribute name="type">
+                <description>Type de la table (sert pour reunir semantiquement l'entite
+                    dans une famille).</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="description"/>
+            <tag refId="feature"/>
+            <tag refId="primary-key"/>
+            <tag refId="foreign-keys"/>
+            <tag refId="links"/>
+            <tag refId="methods"/>
+            <tag refId="properties"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="description" name="description">
+        <description>
+            Description de l'entite
+        </description>
+    </tag>
+
+    <tag id="feature" name="feature">
+        <description>
+            Definitions des caracteristique de l'entite. Indique les generation a
+            effectuer, ou les contraintes a verifier lors d'une generation.
+        </description>
+
+        <attributes-tag/>
+
+        <sub-tag>
+            <tag refId="generate-all"/>
+            <tag refId="generate-all-withoutDelete"/>
+            <tag refId="features-for-characteristic"/>
+            <tag refId="user-quarantine"/>
+            <tag refId="copy-entity"/>
+            <tag refId="doc-structure"/>
+            <tag refId="view"/>
+            <tag refId="sql"/>
+            <tag refId="sql-constraint"/>
+            <tag refId="sql-index"/>
+            <tag refId="bean"/>
+            <tag refId="castor"/>
+            <tag refId="trigger-delete"/>
+            <tag refId="handler-select"/>
+            <tag refId="handler-update"/>
+            <tag refId="handler-new"/>
+            <tag refId="handler-delete"/>
+            <tag refId="handler-archive"/>
+            <tag refId="handler-sql"/>
+            <tag refId="multi-select"/>
+            <tag refId="historic-audit-trail"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="bean" name="bean">
+        <description>
+            Generation de la classe (de type java bean) representant l'entité ou la
+            structure.
+        </description>
+
+        <attributes-tag>
+            <attribute name="implements" use="optionnal">
+                <description>Les interfaces que le bean implante.</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+    </tag>
+
+    <tag id="sql-constraint" name="sql-constraint">
+        <description>
+            Generation des contraintes (clés étrangères) pour la table principal de
+            l'entité.
+        </description>
+    </tag>
+
+    <tag id="sql-index" name="sql-index">
+        <description>
+            Generation des index pour la table principal de l'entité.
+        </description>
+
+        <attributes-tag/>
+
+        <sub-tag>
+            <tag refId="sql-index.idx"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="sql-index.idx" name="idx">
+        <description>
+            Generation des indexes pour l'entité.
+        </description>
+
+        <attributes-tag>
+            <attribute name="type" use="required">
+                <description>
+                    Type de l'indexe.
+                </description>
+                <enumeration>
+                    <value val="primary-key"
+                           description="Indexe correspondant à la clé primaire"/>
+                    <value val="index" description="Autre indexe"/>
+                </enumeration>
+            </attribute>
+            <attribute name="name-prefix" use="required">
+                <description>Prefixe de l'indexe.</description>
+            </attribute>
+            <attribute name="unique">
+                <description>
+                    Unicité des valeurs.
+                </description>
+                <enumeration>
+                    <value val="true"
+                           description="Unique (par defaut pour la clé primaire)"/>
+                    <value val="false"
+                           description="Non unique (par defaut pour les autres indexes)"/>
+                </enumeration>
+            </attribute>
+            <attribute name="clustered">
+                <description>
+                    Tri des valeurs.
+                </description>
+                <enumeration>
+                    <value val="true" description="Trié"/>
+                    <value val="false" description="Non trié (par defaut)"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="idx.field"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="idx.field" name="field">
+        <description>
+            Definition des champs indéxés.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Donne le nom du champ indéxé de l'entite.</description>
+            </attribute>
+        </attributes-tag>
+    </tag>
+
+    <tag id="sql" name="sql">
+        <description>
+            Generation d'une structure XML.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name" use="optionnal">
+                <description>Nom de la table en base.</description>
+            </attribute>
+            <attribute name="gap" use="optionnal">
+                <description>Gap des colonnes identity de la table.</description>
+            </attribute>
+            <attribute name="pk-generator" use="optionnal">
+                <description>
+                    Indique si le script de table doit tenir compte des
+                    generateur de PK (IDENTITY).
+                </description>
+                <enumeration>
+                    <value val="no"
+                           description="Le generateur de PK n'est pas pris en compte"/>
+                    <value val="yes" description="Avec generateur de PK"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+    </tag>
+
+    <tag id="user-quarantine" name="user-quarantine">
+        <description>
+            Generation d'une structure pour une quarantaine utilisateur.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de l'entite pour la quarantaine
+                    utilisateur.</description>
+            </attribute>
+            <attribute name="table">
+                <description>Nom de la table de la quarantaine utilisateur.</description>
+            </attribute>
+            <attribute name="delete" use="optionnal">
+                <description>Generation ou non du handler delete.</description>
+                <enumeration>
+                    <value val="true" description="Generation du handler (par defaut)"/>
+                    <value val="false" description="Pas de generation"/>
+                </enumeration>
+            </attribute>
+            <attribute name="update" use="optionnal">
+                <description>Generation ou non du handler update.</description>
+                <enumeration>
+                    <value val="true" description="Generation du handler (par defaut)"/>
+                    <value val="false" description="Pas de generation"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+
+        <samples>
+            <sample>
+                <description>Création de la table de quarantaine
+                    Q_AP_USER_ISSUER.</description>
+                <code> <![CDATA[
+<user-quarantine name="net.codjo.QUserIssuer"
+    table="Q_AP_USER_ISSUER"
+    delete="false"/>
+ ]]> </code>
+            </sample>
+        </samples>
+
+    </tag>
+    <tag id="copy-entity" name="copy-entity">
+        <description>
+            Generation d'une entite copie conforme.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de l'entite.</description>
+            </attribute>
+            <attribute name="table">
+                <description>Nom de la table.</description>
+            </attribute>
+            <attribute name="delete" use="optionnal">
+                <description>Generation ou non du handler delete.</description>
+                <enumeration>
+                    <value val="true" description="Generation du handler (par defaut)"/>
+                    <value val="false" description="Pas de generation"/>
+                </enumeration>
+            </attribute>
+            <attribute name="update" use="optionnal">
+                <description>Generation ou non du handler update.</description>
+                <enumeration>
+                    <value val="true" description="Generation du handler (par defaut)"/>
+                    <value val="false" description="Pas de generation"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+    </tag>
+
+    <tag id="methods" name="methods">
+        <description>
+            Definition des methodes d'une entite.
+        </description>
+
+        <attributes-tag/>
+
+        <sub-tag>
+            <tag refId="method"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="properties" name="properties">
+        <description>
+            Definition des attributs d'une entite.
+        </description>
+
+        <attributes-tag/>
+
+        <sub-tag>
+            <tag refId="field"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="field" name="field">
+        <description>
+            Definition d'un attribut d'une entite.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de la proprietee.</description>
+            </attribute>
+            <attribute name="type" use="optionnal">
+                <description>type java ou lien vers une entite (obligatoire sauf si
+                    structure)</description>
+                <enumeration>
+                    <value val="nom" description="nom de classe complet"/>
+                    <value val="boolean" description="le type boolean"/>
+                    <value val="integer" description="le type int"/>
+                    <value val="double" description="le type double"/>
+                    <value val="string" description="le type String"/>
+                    <value val="big-decimal" description="le type java.math.BigDecimal"/>
+                </enumeration>
+            </attribute>
+            <attribute name="structure" use="optionnal">
+                <description>type de la structure interne de l'entite (obligatoire sauf si
+                    structure)</description>
+            </attribute>
+            <attribute name="link" use="optionnal">
+                <description>type de lien.</description>
+                <enumeration>
+                    <value val="single" description="lien de type 1-1 vers l'entite"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="description"/>
+            <tag refId="field.sql"/>
+            <tag refId="referential"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="field.sql" name="sql">
+        <description>
+            Definition des caracteristiques SQL d'une proprietee.
+        </description>
+
+        <attributes-tag>
+            <attribute name="type">
+                <description>type en base.</description>
+                <enumeration>
+                    <value val="varchar" description="type sql VARCHAR"/>
+                    <value val="timestamp" description="le type DATETIME"/>
+                    <value val="numeric" description="le type NUMERICA"/>
+                    <value val="bit" description="le type BIT"/>
+                </enumeration>
+            </attribute>
+            <attribute name="required" use="optionnal">
+                <description>Contrainte de presence en Base</description>
+                <enumeration>
+                    <value val="true" description="obligatoire en base"/>
+                </enumeration>
+            </attribute>
+            <attribute name="precision" use="optionnal">
+                <description>Precision du type en base (pour type varchar ou
+                    numeric)</description>
+            </attribute>
+            <attribute name="in" use="optionnal">
+                <description>Contrainte d'enumeration en Base (pour type
+                    varchar)</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag/>
+    </tag>
+
+    <tag id="primary-key" name="primary-key">
+        <description>
+            Definition de la clef primaire d'une entite.
+        </description>
+
+        <attributes-tag>
+            <attribute name="key-generator" use="optionnal">
+                <description>Donne le generateur de clef.</description>
+                <enumeration>
+                    <value val="IDENTITY" description="generation faite par la BD"/>
+                    <value val="MAX" description="recupere l'index max + 1"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="fieldNameOnly"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="foreign-keys" name="foreign-keys">
+        <description>
+            Definition des clés étrangères d'une entite.
+        </description>
+
+        <sub-tag>
+            <tag refId="link"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="links" name="links">
+        <description>
+            Definition des clés de jointure d'une entite.
+        </description>
+
+        <sub-tag>
+            <tag refId="link"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="link" name="link">
+        <description>
+            Definition d'une clé étrangère ou de jointure d'une entite.
+        </description>
+
+        <attributes-tag>
+            <attribute name="id">
+                <description>Donne le nom de la clé.</description>
+            </attribute>
+            <attribute name="table">
+                <description>Donne le nom de la table de référence.</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="link.field"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="link.field" name="field">
+        <description>
+            Definition des champs de jointure.
+        </description>
+
+        <attributes-tag>
+            <attribute name="from">
+                <description>Donne le nom du champ de l'entite.</description>
+            </attribute>
+            <attribute name="to">
+                <description>Donne le nom du champ de la table de référence (table
+                    mère).</description>
+            </attribute>
+        </attributes-tag>
+    </tag>
+
+    <tag id="referential" name="referential">
+        <description>
+            Indique qu'un attribut pointe sur une table de type referentiel.
+        </description>
+
+        <attributes-tag>
+            <attribute name="name">
+                <description>Nom de l'entite du referentiel.</description>
+                <enumeration>
+                    <value val="[entity-name]"
+                           description="Nom de l'entite definissant un referentiel"/>
+                    <value val="net.codjo.pims.ref.Referential"
+                           description="Pointe sur le referentiel global"/>
+                    <value val="net.codjo.pims.ref.Person"
+                           description="Pointe sur le referentiel personne"/>
+                </enumeration>
+            </attribute>
+
+            <attribute name="family">
+                <description>Famille de valeur possible definie dans le
+                    referentiel.</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag/>
+    </tag>
+
+    <tag id="features-for-characteristic" name="features-for-characteristic">
+        <description>
+            Definition des handler pour une entité de type caractéristiques. Une
+            caractéristiques
+            posséde (ou à ) : (1) table BD, (2) Persistance castor, (3) objet
+            implemantant l'interface Characteristic, (4) Controllable, (5) handler
+            d'insertion, de mise-à-jours, de selection par Id, (6) handler de
+            selection par date de validité, (7) handler de selection par
+            Portefeuille, et (8) generation de la doc-structure.
+        </description>
+
+        <attributes-tag>
+            <attribute name="sql-gap" use="optionnal">
+                <description>Gap des colonnes identity de la table.</description>
+            </attribute>
+            <attribute name="controlable" use="optionnal">
+                <description>boolean (true or false) par défaut 'true' qui permet de ne
+                    pas générer la balise controlable si mis à false.</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+    </tag>
+
+    <!--****************************************************************************
+        PISTE D'AUDIT DES DONNEES HISTORISEES
+    -->
+    <tag id="historic-audit-trail" name="historic-audit-trail">
+        <description>
+            Permet d'effectuer l'audit des données pour la table courante. Elle permet de
+            suivre l'insertion, la suppression
+            et la modification des enregistrements. cf librairie agf-historic-audit.
+            Cette balise permet de générer des handlers permettant d'alimenter la table
+            AP_ARNO.
+        </description>
+
+        <attributes-tag>
+            <attribute name="functionalKey" use="mandatory">
+                <description>Clé fonctionnelle pour l'audit. Ex :
+                    portfolioCode,netDividend</description>
+            </attribute>
+            <attribute name="auditClass" use="mandatory">
+                <description>Value Object de la table d'audit. En dur.</description>
+            </attribute>
+        </attributes-tag>
+    </tag>
+
+    <tag id="key" name="key">
+        <description>Definition d'une jointure entre deux tables.</description>
+        <attributes-tag>
+            <attribute name="from" use="required">
+                <description>Nom du champ de jointure dans la table from.</description>
+            </attribute>
+            <attribute name="to" use="required">
+                <description>Nom du champ de jointure dans la table to.</description>
+            </attribute>
+        </attributes-tag>
+    </tag>
+
+    <tag id="cascade" name="cascade">
+        <description>Definition d'une cascade.</description>
+        <attributes-tag>
+            <attribute name="entity" use="required">
+                <description>Nom de la classe de l'entite concernee.</description>
+            </attribute>
+        </attributes-tag>
+        <sub-tag>
+            <tag refId="key"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="trigger-delete" name="trigger-delete">
+        <description>Generation d'un trigger de suppression.</description>
+
+        <attributes-tag>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="cascade"/>
+        </sub-tag>
+    </tag>
+
+    <!--****************************************************************************
+        HANDLER DELETE
+    -->
+    <tag id="handler-delete" name="handler-delete">
+        <description>
+            Generation d'un handler de suppression.
+        </description>
+
+        <attributes-tag>
+            <attribute name="use-bean" use="optionnal">
+                <description>Force l'utilisation du bean par le handler delete
+                    généré.</description>
+                <enumeration>
+                    <value val="true" description="force l'utilisation du bean"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+        </sub-tag>
+    </tag>
+
+    <!--****************************************************************************
+        HANDLER SQL
+    -->
+    <tag id="handler-sql" name="handler-sql">
+        <description>
+            Generation d'un handler de selection de type SQL. La requete doit ramener
+            au minimum les champs pour construire la PK de l'entite.
+        </description>
+
+        <attributes-tag>
+            <attribute name="return-pk" use="optionnal">
+                <description>Indique si le handler doit retourner la PK de
+                    l'entité.</description>
+                <enumeration>
+                    <value val="true" description="cas par défaut"/>
+                    <value val="false"
+                           description="la PK ne se trouve pas dans le result"/>
+                </enumeration>
+            </attribute>
+            <attribute name="transaction" use="optionnal">
+                <description>Indique si le handler participe à la transaction ou
+                    non.</description>
+                <enumeration>
+                    <value val="true" description="participe à la transaction"/>
+                    <value val="false" description="cas par défaut"/>
+                </enumeration>
+            </attribute>
+            <attribute name="force-transaction-mode" use="optionnal">
+                <description>Permet de forcer un type de transaction normalement
+                    deconseillé exemple un insert/delete/update hors transaction ou un
+                    select en transaction.</description>
+                <enumeration>
+                    <value val="true" description="forcage du mode de transaction"/>
+                    <value val="false" description="cas par défaut, pas de forcage"/>
+                </enumeration>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="attributes"/>
+            <tag refId="handler-sql.query"/>
+            <tag refId="arg"/>
+        </sub-tag>
+
+        <samples>
+            <sample>
+                <description>Création d'un handler SQL appelant une proc modifiant la
+                    BD.</description>
+                <code> <![CDATA[
+<handler-sql id="duplicateBranch" transaction="true">
+    <attributes>
+        <name>portfolioCode</name>
+    </attributes>
+    <query>
+        exec sp_PIMS_Duplicate_Code @DATE = ?
+    </query>
+    <arg type="java.sql.Date">date</arg>
+</handler-sql>
+ ]]> </code>
+            </sample>
+            <sample>
+                <description>Création d'un handler SQL utilisant une
+                    factory.</description>
+                <code> <![CDATA[
+<handler-sql id="duplicateBranch" transaction="true">
+    <attributes>
+        <name>portfolioCode</name>
+    </attributes>
+    <query factory="net.codjo.truc.QueryBidule"/>
+    <arg type="java.sql.Date">date</arg>
+</handler-sql>
+ ]]> </code>
+            </sample>
+        </samples>
+    </tag>
+    <!--****************************************************************************
+        Multi select
+    -->
+    <tag id="multi-select" name="multi-select">
+        <description>
+            <p>
+                Le multi select permet de créer une table qui contiendra les pk d'une
+                séléction.
+                La resultat devra être utilisé par un second handler (normal) dans la
+                table fille.
+                Voir le multiDataLink.
+            </p>
+            <p>
+                Il génére 3 handler-sql :
+                <ul>
+                    <li>Un create de la table.</li>
+                    <li>Un drop de la table.</li>
+                    <li>Un insert dans la table.</li>
+                </ul>
+            </p>
+        </description>
+        <attributes-tag>
+            <attribute name="handler" use="required">
+                <description>Prefixe des noms des handlers générés.</description>
+            </attribute>
+            <attribute name="selection-table" use="required">
+                <description>Nom de la table temporaire crée.</description>
+            </attribute>
+        </attributes-tag>
+
+        <sub-tag>
+            <tag refId="ms.parameters"/>
+            <tag refId="ms.arg"/>
+        </sub-tag>
+
+        <samples>
+            <sample>
+                <description>Ecriture :</description>
+                <code><![CDATA[
+                <multi-select handler="selectBcpDeTrucs" selection-table="#SELECTION">
+                    <parameters>
+                        <arg type="string" sql-name="ACTION_CODE" sql-type="varchar" precision="20">actionCode</arg>
+                        <arg type="BigDecimal" sql-name="CODE_NUM" sql-type="numeric" precision="2,5">codeNum</arg>
+                    </parameters>
+                </multi-select>
+                ]]>
+                </code>
+            </sample>
+            <sample>
+                <description>Le résultat généré donne :</description>
+                <code><![CDATA[
+                <handler-sql return-pk="false" transaction="false" id="selectBcpDeTrucs_TempCreate">
+                    <query>
+                        create table #SELECTION (
+                            ACTION_CODE varchar(20) not null,
+                            CODE_NUM numeric(2,5) not null,
+                        )
+                    </query>
+                </handler-sql>
+                <handler-sql return-pk="false" transaction="false" id="selectBcpDeTrucs_TempDrop">
+                    <query>
+                        drop table #SELECTION
+                    </query>
+                </handler-sql>
+                <handler-sql force-transaction-mode="true" return-pk="false" transaction="false" id="selectBcpDeTrucs_TempFill">
+                    <query>
+                        insert into #SELECTION values (
+                            ?
+                            ,?
+                        )
+                    </query>
+                    <arg type="string">actionCode</arg>
+                    <arg type="BigDecimal">codeNum</arg>
+                </handler-sql>
+                ]]>
+                </code>
+            </sample>
+        </samples>
+    </tag>
+
+    <tag id="attributes" name="attributes">
+        <description>
+            Declaration des attributs ramener par la requete SQL.
+        </description>
+        <attributes-tag/>
+        <sub-tag>
+            <tag refId="handler-sql.attributes.name"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="handler-sql.attributes.name" name="name">
+        <description>
+            Nom de l'attribut ramene par la requete.
+        </description>
+        <attributes-tag>
+            <attribute name="type" use="optionnal">
+                <description>
+                    Nom de la classe de l'argument de sortie (par défaut
+                    java.lang.String). Par exemple pour une date
+                    il faut préciser 'java.sql.Date'.
+                </description>
+            </attribute>
+        </attributes-tag>
+        <sub-tag/>
+    </tag>
+
+    <tag id="handler-sql.query" name="query">
+        <description>
+            Requete SQL. Elle doit ramener au minimum les champs pour construire
+            la PK de l'entite (sauf si l'option return-pk est positionné à faux).
+        </description>
+        <attributes-tag>
+            <attribute name="factory" use="optionnal">
+                <description>
+                    Nom de la classe de factory (la classe doit implémenter l'interface
+                    net.codjo.mad.server.handler.sql.QueryBuilder)
+                </description>
+            </attribute>
+        </attributes-tag>
+        <sub-tag/>
+    </tag>
+
+    <tag id="arg" name="arg">
+        <description>
+            Nom de l'argument pour la requete SQL.
+        </description>
+        <attributes-tag>
+            <attribute name="type" use="optionnal">
+                <description>Type de l'argument.</description>
+            </attribute>
+        </attributes-tag>
+        <sub-tag/>
+    </tag>
+
+    <tag id="ms.parameters" name="parameters">
+        <description>
+            Liste des arguments pour la requete Sql
+        </description>
+        <attributes-tag/>
+        <sub-tag>
+            <tag refId="ms.arg"/>
+        </sub-tag>
+    </tag>
+
+    <tag id="ms.arg" name="arg">
+        <description>
+            Nom de l'argument pour la requete SQL.
+        </description>
+        <attributes-tag>
+            <attribute name="type" use="required">
+                <description>Type de l'argument.</description>
+            </attribute>
+            <attribute name="sql-name" use="required">
+                <description>Nom Sql de la colonne associée.</description>
+            </attribute>
+            <attribute name="sql-type" use="required">
+                <description>Type de la colonne associée.</description>
+            </attribute>
+            <attribute name="precision" use="required">
+                <description>Précision de la colonne associée.</description>
+            </attribute>
+        </attributes-tag>
+        <sub-tag/>
+    </tag>
+
+    <tag id="castor" name="castor">
+        <description/>
+        <sub-tag/>
+    </tag>
+
+    <tag id="view" name="view">
+        <description/>
+        <sub-tag/>
+    </tag>
+
+    <tag id="doc-structure" name="doc-structure">
+        <description/>
+        <sub-tag/>
+    </tag>
+
+    <tag id="handler-select" name="handler-select">
+        <description>
+            Generation d'un handler de selection.
+        </description>
+        <sub-tag/>
+    </tag>
+
+    <tag id="handler-update" name="handler-update">
+        <description>
+            Generation d'un handler de mise à jour.
+        </description>
+        <sub-tag/>
+    </tag>
+
+    <tag id="handler-new" name="handler-new">
+        <description>
+            Generation d'un handler de création.
+        </description>
+        <sub-tag>
+            <tag refId="handler-new.sql"/>
+        </sub-tag>
+        <samples>
+            <sample>
+                <description>
+                    Surcharge par une procedure stockée.
+                </description>
+                <code>
+                    <![CDATA[
+                    <handler-new id="newDividend">
+                        <query>
+                            exec sp_Mint_CreateNewDividend(@DIVIDEND_ID=?,@DIVIDEND_CODE=?,@OPEN_DATE=?)
+                        </query>
+                    </handler-new>
+                    ]]>
+                </code>
+            </sample>
+        </samples>
+    </tag>
+    <tag id="handler-new.sql" name="sql">
+        <description>
+            Surcharge de la requete d'insertion par defaut.
+            Input de la requete  : tous les properties de l'entité.
+            Output de la requete : la clé primaire (attention, si on fait la requete via
+            une procedure stockée il faut renvoyer la valeur de la clé primaire).
+        </description>
+        <sub-tag/>
+    </tag>
+
+    <tag id="handler-archive" name="handler-archive">
+        <description/>
+        <sub-tag/>
+    </tag>
+
+    <tag id="generate-all-withoutDelete" name="generate-all-withoutDelete">
+        <description/>
+        <sub-tag/>
+    </tag>
+    <tag id="generate-all" name="generate-all">
+        <description/>
+        <sub-tag/>
+    </tag>
+
+    <tag id="fieldNameOnly" name="fieldNameOnly">
+        <description/>
+        <sub-tag/>
+    </tag>
+    <tag id="method" name="method">
+        <description/>
+        <sub-tag/>
+    </tag>
+</syntaxe>

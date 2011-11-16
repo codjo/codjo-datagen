@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+        <feature>
+            <generate-all/>
+            <sql-constraint/>
+            <handler-sql id="selectClassificationWithReInvoice" return-pk="false">
+                <attributes>
+                    <name>classificationId</name>
+                </attributes>
+                <query>
+                    select CLASSIFICATION_ID
+                    from PM_CLASSIFICATION
+                    where CLASSIFICATION_ID != ?
+                          and RE_INVOICE = 1
+                </query>
+                <arg>classificationId</arg>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="portfolioCode"/>
+        </primary-key>
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+</data>

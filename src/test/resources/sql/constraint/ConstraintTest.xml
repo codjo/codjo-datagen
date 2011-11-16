@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+    <entity name="net.codjo.Meretoto" table="AP_MERETOTO"/>
+    <entity name="net.codjo.Meretoto2" table="AP_MERETOTO2"/>
+    <entity name="gen.Dividend" table="AP_TOTO">
+        <description>Mon dividend a moi</description>
+
+        <!--
+         | Definition des features
+        -->
+        <feature>
+            <sql-constraint/>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+                <idx type="index" name-prefix="X2_" unique="true" clustered="false">
+                    <field name="portfolioCode"/>
+                    <field name="dividendDate"/>
+                </idx>
+                <idx type="index" name-prefix="X3_" unique="false" clustered="false">
+                    <field name="portfolioCode"/>
+                    <field name="dividendDate"/>
+                </idx>
+            </sql-index>
+        </feature>
+
+        <!--
+         | Definition de la PK
+        -->
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <!--
+         | Definition des FK
+        -->
+        <foreign-keys>
+            <link id="FK_MERETOTO_TOTO" table="net.codjo.Meretoto">
+                <field from="portfolioCode" to="isinCode"/>
+                <field from="automaticUpdate" to="automaticUpdate"/>
+            </link>
+            <link id="FK_MERETOTO2_TOTO" table="net.codjo.Meretoto2">
+                <field from="portfolioCode" to="isinCode"/>
+                <field from="totoDate" to="automaticUpdate"/>
+            </link>
+        </foreign-keys>
+
+        <!--
+         | Definition des jointures
+        -->
+        <links>
+            <link id="MERETOTO_TOTO" table="net.codjo.Titi">
+                <field from="portfolioCode" to="isinCode"/>
+                <field from="automaticUpdate" to="automaticUpdate"/>
+            </link>
+        </links>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon.</description>
+                <sql precision="6" required="true" type="varchar"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql required="true" type="timestamp"/>
+            </field>
+            <field name="automaticUpdate" type="boolean">
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+</data>

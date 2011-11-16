@@ -1,0 +1,170 @@
+package generated;
+
+/**
+
+* Mon dividend a moi. <p>
+
+*
+
+* Cette classe est genere automatiquement.
+
+*/
+
+public class Dividend implements net.codjo.data.Characteristic {
+
+
+
+    /**
+
+     * Constructeur.
+
+     */
+
+    public Dividend() {}
+
+
+    /**
+     * Calcul truc muche
+     * @return na
+     */
+    public java.math.BigDecimal computeAnnualPerf() throws Exception, Error{
+        return FundPriceHelper.compute(this);
+    }
+
+
+
+    private String portfolioCode;
+
+
+
+    /**
+
+     * Positionne le Code portefeuille du coupon.
+
+     * @param portfolioCode na
+
+     */
+
+    public void setPortfolioCode(String portfolioCode) {
+
+      this.portfolioCode = portfolioCode;
+
+    }
+
+
+
+     /**
+
+     * Retourne le Code portefeuille du coupon.
+
+     * @return portfolioCode
+
+     */
+
+    public String getPortfolioCode() {
+
+      return portfolioCode;
+
+    }
+
+
+
+    private java.math.BigDecimal netDividend;
+
+
+
+
+
+    public void setNetDividend(java.math.BigDecimal netDividend) {
+
+      this.netDividend = netDividend;
+
+    }
+
+
+
+
+
+    public java.math.BigDecimal getNetDividend() {
+
+      return netDividend;
+
+    }
+
+
+
+    private java.sql.Timestamp dividendDate;
+
+
+
+
+
+    public void setDividendDate(java.sql.Timestamp dividendDate) {
+
+      this.dividendDate = dividendDate;
+
+    }
+
+
+
+
+
+    public java.sql.Timestamp getDividendDate() {
+
+      return dividendDate;
+
+    }
+
+
+
+    private boolean automaticUpdate;
+
+
+
+
+
+    public void setAutomaticUpdate(boolean automaticUpdate) {
+
+      this.automaticUpdate = automaticUpdate;
+
+    }
+
+
+
+
+
+    public boolean getAutomaticUpdate() {
+
+      return automaticUpdate;
+
+    }
+
+
+
+    private generated.Audit audit= new generated.Audit();
+
+
+
+
+
+    public void setAudit(generated.Audit audit) {
+
+      this.audit = audit;
+
+    }
+
+
+
+
+
+    public generated.Audit getAudit() {
+
+      return audit;
+
+    }
+
+
+
+}
+
+

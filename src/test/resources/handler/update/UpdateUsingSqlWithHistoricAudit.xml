@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity name="generated.Dividend" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <handler-update id="updateDividend">
+                <query>{call sp_UpdateDividend(@PORTFOLIO_CODE=?,@NET_DIVIDEND=?, etc.)}</query>
+            </handler-update>
+            <controlable/>
+            <audit-trail/>
+            <historic-audit-trail functionalKey="portfolioCode,dividendDate" auditClass="net.codjo.log.data.DataAudit"/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="netDividend" type="big-decimal">
+                <sql type="numeric" precision="17,2" required="true"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql type="timestamp" required="true"/>
+            </field>
+            <field name="automaticUpdate" type="boolean">
+                <sql type="bit" required="true"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar" precision="6"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar" precision="6"/>
+            </field>
+        </properties>
+    </structure>
+</data>
+

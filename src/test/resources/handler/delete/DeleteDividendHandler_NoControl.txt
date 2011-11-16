@@ -1,0 +1,142 @@
+/*
+ * Team : AGF AM / OSI / SI / BO
+ *
+ * Copyright (c) 2001 AGF Asset Management.
+ */
+package generated;
+import net.codjo.mad.server.handler.AbstractHandler;
+import net.codjo.mad.server.handler.HandlerException;
+import net.codjo.mad.server.handler.XMLUtils;
+import org.w3c.dom.Node;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+/**
+ * Handler de destruction pour generated.Dividend.
+ */
+public class DeleteDividendHandler extends AbstractHandler {
+    private static final String SQL =
+        "delete from AP_DIVIDEND where PORTFOLIO_CODE = ? and DIVIDEND_DATE = ?";
+    private static final String SELECT_SQL = "select * from AP_DIVIDEND where PORTFOLIO_CODE = ? and  DIVIDEND_DATE = ?";
+    private static final String AUDIT_SQL = "insert into AP_DATA_AUDIT (DB_TABLE_NAME,FUNCTIONAL_KEY,STATUS,USER_NAME,INSERTION_DATE)" +
+            "values (?,?,'DELETE',?,?)";
+
+    public String getId() {
+        return "deleteDividend";
+    }
+
+    private String getDbTableName() {
+        return "AP_DIVIDEND";
+    }
+
+    private String getFunctionalKey() {
+        return "PORTFOLIO_CODE,NET_DIVIDEND";
+    }
+
+    public String proceed(Node node) throws HandlerException {
+        try {
+            Map pks = XMLUtils.getPrimaryKeys(node);
+
+            Connection con = getContext().getTxConnection();
+            try {
+                PreparedStatement stmt = con.prepareStatement(SQL);
+                fillSqlQuery(stmt, pks);
+
+               PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
+
+                PreparedStatement selectStmt = con.prepareStatement(SELECT_SQL);
+                fillSqlQuery(selectStmt, pks);
+                ResultSet rs = selectStmt.executeQuery();
+
+                if (!rs.next()) {
+                    throw new IllegalArgumentException("Erreur audit handler delete : pas de ligne à détruire!");
+                }
+
+                auditStmt.setString(1, getDbTableName());
+                auditStmt.setString(2, buildFunctionKey(rs, getFunctionalKey()));
+                auditStmt.setString(3, getContext().getUser());
+                auditStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
+                 try {
+                    auditStmt.executeUpdate();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    throw new HandlerException("Erreur lors de l'audit de la suppression de la table "+getDbTableName());
+                }
+
+                stmt.executeUpdate();
+
+                String requestId = XMLUtils.getAttribute(node, "request_id");
+                String expected =
+                    "<result request_id=\"" + requestId + "\"><primarykey>"
+                    + "<field name=\"portfolioCode\"/>"
+                    + "<field name=\"dividendDate\"/>" + "</primarykey><row>"
+                    + "<field name=\"portfolioCode\">"
+                    + XMLUtils.convertToStringValue(pks.get("portfolioCode"))
+                    + "</field>" + "<field name=\"dividendDate\">"
+                    + XMLUtils.convertToStringValue(pks.get("dividendDate")) + "</field>"
+                    + "</row></result>";
+
+                return expected;
+            }
+            finally {
+                con.close();
+            }
+        }
+        catch (Exception ex) {
+            throw new HandlerException(ex);
+        }
+    }
+
+
+    private void fillSqlQuery(final PreparedStatement query, final Map pks)
+        throws SQLException {
+        query.setString(1,
+            XMLUtils.convertFromStringValue(String.class,
+                (String) pks.get("portfolioCode")));
+        query.setTimestamp(2,
+            XMLUtils.convertFromStringValue(java.sql.Timestamp.class,
+                (String) pks.get("dividendDate")));
+    }
+
+    private String buildFunctionKey(ResultSet rs, String functionalKey) throws SQLException {
+        HashMap keyMap = new HashMap();
+        StringTokenizer t = new StringTokenizer(functionalKey, ",");
+        String functionalKeyStr = "";
+
+        if (t.countTokens() == 1) {
+            functionalKeyStr = functionalKey + "= '" + safeGetValueFromResultSet(rs,functionalKey)+"'";
+
+        } else {
+
+            while (t.hasMoreElements()) {
+                String fieldName = t.nextElement().toString().trim();
+                Object fieldValue = safeGetValueFromResultSet(rs,fieldName);
+                keyMap.put(fieldName, fieldValue.toString());
+            }
+            int i = 0;
+
+            Iterator iter = keyMap.keySet().iterator();
+            while (iter.hasNext()) {
+                String fieldName = (String) iter.next();
+                functionalKeyStr += fieldName + "='" + (String) keyMap.get(fieldName) + "',";
+            }
+        }
+
+        return functionalKeyStr.substring(0, functionalKeyStr.length() - 1);
+    }
+
+    private String safeGetValueFromResultSet(ResultSet rs, String fieldName) {
+        try {
+            return rs.getObject(fieldName).toString();
+        } catch (Exception ee) {
+            return "null";
+        }
+    }
+}

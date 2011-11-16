@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<data>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>../../Sql/table</sql>
+            <sql-view>../../Sql/view</sql-view>
+            <sql-index>../../Sql/index</sql-index>
+            <trigger>../../Sql/trigger</trigger>
+            <bean>../../DataLib/src</bean>
+            <handlers>../../HandlerLib/src</handlers>
+            <castor>../../ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>../../HandlerLib/src</cmdHandler>
+            <structure>../../ClientAPP/src</structure>
+            <requetor>../../ClientAPP/dest</requetor>
+            <referential>../../ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
+
+    <roles>
+        <role id="consultation">
+            <include>select*</include>
+        </role>
+
+        <role id="administration_vl">
+            <include>*FundPrice*</include>
+            <include>PortFolioCodification*</include>
+            <exclude>selectAllTruc</exclude>
+        </role>
+    </roles>
+
+    <entity name="generated.Dividend" table="AP_DIVIDEND">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <generate-all/>
+            <sql-constraint/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="generated.Management" table="AP_MANAGEMENT">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <features-for-characteristic/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="beginDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+
+            <field name="beginDate" type="java.sql.Date">
+                <description>Code portefeuille du coupon</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="accountManager" type="java.lang.Integer">
+                <description>Chargé de compte</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Person" family="AccountMgr"/>
+            </field>
+
+            <field name="geographicArea" type="java.lang.Integer">
+                <description>Zone géographique</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Referential" family="GeographArea"/>
+            </field>
+
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </structure>
+
+    <entity name="TEMPLATE" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+            <user-quarantine name="net.codjo.pims.data.MeiRealManagA" table="AP_MEI_A"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagB" table="AP_MEI_B"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagC" table="AP_MEI_C"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+        </properties>
+    </entity>
+
+</data>
+

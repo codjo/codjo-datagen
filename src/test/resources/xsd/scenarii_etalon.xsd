@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="AP_TEST">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="row">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element ref="field" minOccurs="0" maxOccurs="1"/>
+                                <xs:element name="ID" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="REF" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:all>
+                            <xs:attribute name="id" type="xs:ID"/>
+                            <xs:attribute name="comment" type="xs:string" use="optional"/>
+                            <xs:attribute name="inheritId" type="xs:IDREF" use="optional"/>
+                            <xs:attribute name="autoComplete" type="xs:boolean" use="optional"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attributeGroup ref="table"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="AP_MORE_TYPES">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="row">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element ref="field" minOccurs="0" maxOccurs="1"/>
+                                <xs:element name="ID" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="DATE" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="DOUBLE" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="BOOLEAN" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+                                        <xs:attribute name="value"/>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:all>
+                            <xs:attribute name="id" type="xs:ID"/>
+                            <xs:attribute name="comment" type="xs:string" use="optional"/>
+                            <xs:attribute name="inheritId" type="xs:IDREF" use="optional"/>
+                            <xs:attribute name="autoComplete" type="xs:boolean" use="optional"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attributeGroup ref="table"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="input">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:choice maxOccurs="unbounded">
+                    <xs:group ref="groupContent"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="etalon">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:element ref="comparators" minOccurs="0"/>
+                <xs:sequence>
+                    <xs:choice maxOccurs="unbounded">
+                        <xs:group ref="groupContent"/>
+                    </xs:choice>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:group name="groupContent">
+        <xs:choice>
+            <xs:element ref="table"/>
+            <xs:element ref="AP_TEST"/>
+            <xs:element ref="AP_MORE_TYPES"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:element name="Scenarii">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Scenario" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Scenario">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="properties" minOccurs="0"/>
+                <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="input" minOccurs="0"/>
+                <xs:element ref="etalon" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="comment">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="comparator">
+        <xs:complexType>
+            <xs:attribute name="precision" type="xs:string" use="optional"/>
+            <xs:attribute name="assert" type="xs:string" use="optional"/>
+            <xs:attribute name="field" type="xs:string" use="required"/>
+            <xs:attribute name="param" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="comparators">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="comparator" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="field_attributes">
+        <xs:group ref="generators" minOccurs="0" maxOccurs="1"/>
+        <xs:attribute name="value"/>
+    </xs:complexType>
+
+    <xs:element name="field">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="field_attributes">
+                    <xs:attribute name="name" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:group name="generators">
+        <xs:choice>
+            <xs:element name="generateString">
+                <xs:complexType>
+                    <xs:attribute name="precision" type="xs:integer" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="generateNumeric">
+                <xs:complexType>
+                    <xs:attribute name="precision" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="generateInt">
+                <xs:complexType>
+                    <xs:attribute name="precision" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="generateBoolean"/>
+            <xs:element name="generateDate"/>
+            <xs:element name="generateDateTime"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:element name="properties">
+        <xs:complexType>
+            <xs:attribute name="filename" type="xs:string" use="optional"/>
+            <xs:attribute name="overwrite" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="property">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="row">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="field" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="comment" type="xs:string" use="optional"/>
+            <xs:attribute name="inheritId" type="xs:IDREF" use="optional"/>
+            <xs:attribute name="id" type="xs:ID" use="optional"/>
+            <xs:attribute name="autoComplete" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="table">
+        <xs:attribute name="orderClause" type="xs:string" use="optional"/>
+        <xs:attribute name="identityInsert" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="on"/>
+                    <xs:enumeration value="off"/>
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:element name="table">
+        <xs:complexType>
+            <xs:sequence minOccurs="0">
+                <xs:element ref="row" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="temporary" type="xs:string" use="optional"/>
+            <xs:attributeGroup ref="table"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

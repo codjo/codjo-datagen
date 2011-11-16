@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:appinfo>Schema XML des fichiers datagen de test a supprimer quand le xsd final
+            sera bon
+        </xs:appinfo>
+        <xs:documentation xml:lang="fr">
+            Ce schéma définit le format des fichiers XML permettant de générer les
+            handlers et les scripts sql.
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- description des fichiers de définition de datagen ApplicationGenDef -->
+    <!-- ==================== ROOT ELEMENT ==================== -->
+
+    <xs:element name="data">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="configuration"/>
+                    <xs:element ref="roles"/>
+                    <xs:element ref="add-field"/>
+                    <xs:element ref="add-handler-sql"/>
+                    <xs:element name="append-to-trigger-delete" type="append-to-trigger"/>
+                    <xs:element name="append-to-trigger-insert" type="append-to-trigger"/>
+                    <xs:element name="append-to-trigger-update" type="append-to-trigger"/>
+                    <xs:element ref="include"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ==================== 2nd LEVEL ELEMENTS ==================== -->
+
+    <xs:element name="configuration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="project"/>
+                <xs:element ref="path"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="roles">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="role"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="add-field">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element name="field" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="description" type="xs:string" minOccurs="0"/>
+                            <xs:element name="comment" type="xs:string" minOccurs="0"/>
+                            <xs:element ref="sql"/>
+                        </xs:all>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="type" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="to" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="add-handler-sql">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element name="handler-sql" type="handler-with-request" minOccurs="1"
+                            maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="to" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="append-to-trigger">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="sql" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="include">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ==================== 3rd LEVEL ELEMENTS ==================== -->
+
+    <xs:element name="project">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="path">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="bean" type="xs:string"/>
+                <xs:element name="requetor" type="xs:string"/>
+                <xs:element name="trigger" type="xs:string"/>
+                <xs:element name="sql-index" type="xs:string"/>
+                <xs:element name="sql" type="xs:string"/>
+                <xs:element name="structure" type="xs:string"/>
+                <xs:element name="handlers" type="xs:string"/>
+                <xs:element name="cmdHandler" type="xs:string"/>
+                <xs:element name="castor" type="xs:string"/>
+                <xs:element name="sql-constraint" type="xs:string"/>
+                <xs:element name="glob" type="xs:string"/>
+                <xs:element name="referential" type="xs:string"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="role">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="include" type="xs:string"/>
+                <xs:element name="exclude" type="xs:string"/>
+                <xs:element name="description" type="xs:string"/>
+                <xs:element ref="include-handler"/>
+            </xs:choice>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="include-handler">
+        <xs:annotation>
+            <xs:documentation xml:lang="fr">
+                Permet d'ajouter les handlers d'une 'entity' filtré par un pattern.
+                <br>
+                    <u>Exemple :</u>
+                </br>
+                <pre>&lt;include-handler entity="/data/entity[starts-with(@type,'quarantine')]"
+                    pattern="(new|update)*"/&gt;</pre>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="entity" type="xs:string" use="required"/>
+            <xs:attribute name="pattern" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ==================== 4rth LEVEL ELEMENTS ==================== -->
+
+    <xs:element name="sql">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="precision" type="xs:string"/>
+            <xs:attribute name="required" type="xs:string"/>
+            <xs:attribute name="default" type="xs:string"/>
+            <xs:attribute name="identity" type="xs:string"/>
+            <xs:attribute name="in" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- description des fichiers de définition des structures et entités -->
+    <!-- ==================== ROOT ELEMENT ==================== -->
+
+    <xs:element name="entities">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element ref="structure" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="entity" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ==================== 2nd LEVEL ELEMENTS ==================== -->
+
+    <xs:element name="structure">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entity-type">
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="entity">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entity-type">
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="table" type="xs:string"/>
+                    <xs:attribute name="type" type="xs:string"/>
+                    <xs:attribute name="extends" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ==================== COMMON ELEMENT ==================== -->
+    <xs:complexType name="entity-type">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="feature"/>
+            <xs:element ref="primary-key" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="functional-key" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="foreign-keys" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="methods" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="properties" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="primary-key">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="field" minOccurs="1"
+                            maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="key-generator" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+     <xs:element name="functional-key">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="field" minOccurs="1"
+                            maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="foreign-keys">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="link" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="link">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="field" type="key" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="name" type="xs:string" use="optional"/>
+            <xs:attribute name="table" type="xs:string" use="required"/>
+            <xs:attribute name="required" type="xs:boolean" use="optional">
+                <xs:annotation>
+                    <xs:documentation xml:lang="fr">
+                        namespace globs : Indique que le lien doit référencer un objet existant.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="primary-key.field">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="audit.field">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="structure" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="methods">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="method" minOccurs="1"
+                            maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="method">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description" type="xs:string"/>
+                <xs:element name="throws" type="xs:string"/>
+                <xs:element name="body" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="handler-requetor">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="link">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="key" type="key" minOccurs="1"
+                                        maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="to" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="historic-audit-trail">
+        <xs:complexType>
+            <xs:attribute name="functionalKey" type="xs:string" use="required"/>
+            <xs:attribute name="auditClass" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="key">
+        <xs:attribute name="from" type="xs:string" use="required"/>
+        <xs:attribute name="to" type="xs:string" use="required"/>
+        <xs:attribute name="operator" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="properties">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="field" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:all minOccurs="0">
+                            <xs:element name="description" type="xs:string" minOccurs="0"/>
+                            <xs:element name="comment" type="xs:string" minOccurs="0"/>
+                            <xs:element ref="sql"/>
+                            <xs:element name="referential" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="fr">
+                                        Permet d'indiquer que le champ est alimenté par une entité référentiel externe.
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="fr">
+                                                La valeur doit être le nom complet de l'entité du référentiel vers lequel le champ pointe.
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:all>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="type" type="xs:string"/>
+                        <xs:attribute name="structure" type="xs:string"/>
+                        <xs:attribute name="namingField" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="fr">
+                                    namespace globs : Définit le label utilisé dans globs lors de
+                                    la stringification automatique.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="encrypted" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="fr">
+                                    namespace globs : Indique que ce field sera encrypté en base (utilisation
+                                    de StringEncrypter via agf-globs). Attention : la représentation BDD
+                                    du champ doit être "string".
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="multiLineText" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="fr">
+                                    namespace globs : Indique que ce field est multi-ligne. Cette information
+                                    est utilisée par globs lors de la création des formulaires.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="feature">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="glob" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="referential" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sql-index" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="generate-all-withoutDelete" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="bean" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:attribute name="extends" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="castor" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="generate-all" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="doc-structure" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="audit-trail" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="controlable" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="user-quarantine" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="handler-sql" type="handler-with-request" minOccurs="0"
+                            maxOccurs="unbounded"/>
+                <xs:element ref="handler-requetor" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="handler-select" type="handler-select-type"
+                            minOccurs="0"
+                            maxOccurs="unbounded"/>
+                <xs:element name="sql" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:attribute name="gap" type="xs:integer"/>
+                        <xs:attribute name="name" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="handler-new" type="handler-new-type"
+                            minOccurs="0"
+                            maxOccurs="1"/>
+                <xs:element name="handler-update" type="handler-update-type"
+                            minOccurs="0"
+                            maxOccurs="1"/>
+                <xs:element name="handler-delete" type="handler-delete-type"
+                            minOccurs="0"
+                            maxOccurs="1"/>
+                <xs:element name="handler-archive" type="handler-archive-without-request"
+                            minOccurs="0"
+                            maxOccurs="1"/>
+                <xs:element ref="trigger-delete" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="trigger-update" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="trigger-insert" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="sql-constraint" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="view" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="id" type="xs:string"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="historic-audit-trail" minOccurs="0" maxOccurs="1"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="trigger-insert">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="sql" minOccurs="1" maxOccurs="1" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="trigger-update">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cascade" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="trigger-delete">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="cascade" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sql" minOccurs="0" maxOccurs="1"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="cascade">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="key" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="entity" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="key">
+        <xs:complexType>
+            <xs:attribute name="from" type="xs:string" use="required"/>
+            <xs:attribute name="to" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="controlable">
+        <xs:complexType>
+            <xs:attribute name="jndi" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="user-quarantine">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="table" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="typeAttribute">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="typeAttributeQuery">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string"/>
+                <xs:attribute name="factory" type="xs:string"/>
+                <xs:attribute name="with-handler" type="xs:boolean"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="handler-with-request">
+        <xs:sequence>
+            <xs:element ref="attributes" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="query" type="typeAttributeQuery"/>
+            <xs:element name="arg" type="typeAttribute" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="return-pk" type="xs:boolean"/>
+        <xs:attribute name="transaction" type="xs:boolean"/>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="handler-without-request">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="use-bean" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="handler-update-type">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element name="query" type="typeAttributeQuery"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="handler-new-type">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element name="query" type="typeAttributeQuery"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="handler-delete-type">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element name="query" type="typeAttributeQuery"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="use-bean" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="handler-select-type">
+        <xs:annotation>
+            <xs:documentation xml:lang="fr">
+                Permet de créer un handler de selection.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element name="query">
+                <xs:annotation>
+                    <xs:documentation xml:lang="fr">
+                        Définit la requête utilisée par le handler.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="handler-select-type-query-type-node"
+                                          use="optional">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="fr">
+                                        Définit le type de language utilisé par la requete : SQL ou OQL (Par
+                                        défaut SQL)
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="arg" type="typeAttribute" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="type" use="optional">
+            <xs:annotation>
+                <xs:documentation xml:lang="fr">
+                    Permet de définir un type de handler select standard.
+                    <br/>
+                    <ul>
+                        <li>All : Sélectionne toutes les lignes de la table</li>
+                        <li>By_Primary-Key : Sélectionne une le ligne unique (utilise la PK)</li>
+                    </ul>
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="All"/>
+                    <xs:enumeration value="By_Primary-Key"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:simpleType name="handler-select-type-query-type-node">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SQL"/>
+            <xs:enumeration value="OQL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="handler-archive-without-request">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="use-bean" type="xs:string"/>
+        <xs:attribute name="beginDateVarName" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="attributes">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="typeAttribute" minOccurs="1"
+                            maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sql-index">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="idx" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="idx">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="field" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="name-prefix" type="xs:string" use="required"/>
+            <xs:attribute name="clustered" type="xs:boolean"/>
+            <xs:attribute name="unique" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="referential">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="fill" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="field" type="xs:string" use="required"/>
+                        <xs:attribute name="handlerId" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="generateHandler" type="xs:boolean" use="optional">
+                <xs:annotation>
+                    <xs:documentation xml:lang="fr">
+                        Indique si les handlers (new, delete, select, requetor) doivent être
+                        automatiquement construit.
+                        <br/>
+                        Par défaut la valeur est 'true'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

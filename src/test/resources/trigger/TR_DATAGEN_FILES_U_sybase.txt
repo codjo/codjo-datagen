@@ -1,0 +1,40 @@
+if exists (select 1
+            from  sysobjects
+            where id = object_id('TR_DATAGEN_FILES_U')
+            and   type = 'TR')
+begin
+   drop trigger TR_DATAGEN_FILES_U
+   print 'Trigger TR_DATAGEN_FILES_U dropped'
+end
+go
+
+
+/*  Update trigger "TR_DATAGEN_FILES_U" for table "DATAGEN_FILES"  */
+create trigger TR_DATAGEN_FILES_U on DATAGEN_FILES for update as
+begin
+    declare
+       @numrows  int,
+       @errno    int,
+       @errmsg   varchar(255)
+
+    select  @numrows = @@rowcount
+    if @numrows = 0
+       return
+
+    -- Additional sql code update
+
+    return
+
+/*  Errors handling  */
+error:
+    raiserror @errno @errmsg
+    rollback  transaction
+end
+go
+
+if exists (select 1
+            from  sysobjects
+            where id = object_id('TR_DATAGEN_FILES_U')
+            and   type = 'TR')
+   print 'Trigger TR_DATAGEN_FILES_U created'
+go

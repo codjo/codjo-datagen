@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="test" table="AP_TEST">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="id" type="integer"/>
+            <field name="ref" type="string"/>
+        </properties>
+    </entity>
+    <entity name="moreTypes" table="AP_MORE_TYPES">
+        <feature>
+            <sql/>
+        </feature>
+        <properties>
+            <field name="id" type="string"/>
+            <field name="date" type="java.sql.Date"/>
+            <field name="double" type="big-decimal"/>
+            <field name="boolean" type="boolean"/>
+        </properties>
+    </entity>
+</data>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <entity name="generated.Dividend" table="AP_DIVIDEND" >
+    <description>Mon dividend a moi</description>
+
+    <feature>
+        <handler-select id="SelectDividendHandlerByPk_overrideType">
+            <query type="OQL">SELECT p FROM generated.Dividend p
+                    WHERE portfolioCode = $1
+            </query>
+            <arg type="string">toto</arg>
+        </handler-select>
+    </feature>
+
+    <primary-key>
+        <field name="portfolioCode" />
+        <field name="dividendDate" />
+    </primary-key>
+
+    <properties>
+        <field name="portfolioCode" type="string">
+          <description >Code portefeuille du coupon</description>
+          <sql type="varchar" precision="6" required="true"/>
+        </field>
+        <field name="netDividend" type="big-decimal">
+          <sql type="numeric" precision="17,2" required="true"/>
+        </field>
+        <field name="dividendDate" type="java.sql.Timestamp">
+          <sql type="timestamp" required="true" />
+        </field>
+        <field name="automaticUpdate" type="boolean" >
+          <sql type="bit" required="true"/>
+        </field>
+    </properties>
+  </entity>
+
+</data>
+

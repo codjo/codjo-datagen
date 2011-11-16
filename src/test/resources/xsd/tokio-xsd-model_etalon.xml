@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<tokio>
+    <table name="AP_TEST">
+        <field name="ID"/>
+        <field name="REF"/>
+        <field name="COMMENT"/>
+        <field name="CREATED_BY"/>
+    </table>
+    <table name="AP_MORE_TYPES">
+        <field name="DATE"/>
+        <field name="DOUBLE"/>
+        <field name="BOOLEAN"/>
+    </table>
+    <table name="REF_COUNTRY">
+        <field name="REF_CODE"/>
+        <field name="REF_VALUE"/>
+    </table>
+    <table name="MY_REFERENTIAL">
+        <field name="REF_VALUE"/>
+        <field name="REF_OPT"/>
+        <field name="REF_CODE"/>
+    </table>
+    <table name="Q_AP_TEST_QUARANTINE">
+        <field name="ID_QUARANTINE"/>
+        <field name="REF_QUARANTINE"/>
+    </table>
+    <table name="Q_AP_USER_TEST_QUARANTINE">
+        <field name="ID_QUARANTINE"/>
+        <field name="REF_QUARANTINE"/>
+    </table>
+</tokio>
+      

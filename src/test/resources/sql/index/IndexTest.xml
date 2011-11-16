@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data>
+    <entity name="gen.Dividend" table="AP_TOTO">
+        <description>Mon dividend a moi</description>
+        <!--
+         | Definition des features
+        -->
+        <feature>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="true"/>
+                <idx type="index" name-prefix="X2_" unique="true" clustered="false">
+                    <field name="portfolioCode"/>
+                </idx>
+                <idx type="index" name-prefix="X3_" unique="false" clustered="false">
+                    <field name="portfolioCode"/>
+                    <field name="automaticUpdate"/>
+                </idx>
+            </sql-index>
+        </feature>
+
+        <!--
+         | Definition de la PK
+        -->
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon.</description>
+                <sql precision="6" required="true" type="varchar"/>
+            </field>
+            <field name="dividendDate" type="java.sql.Timestamp">
+                <sql required="true" type="timestamp"/>
+            </field>
+            <field name="automaticUpdate" type="boolean">
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+</data>
+

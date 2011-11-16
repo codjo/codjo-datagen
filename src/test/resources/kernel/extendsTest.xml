@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<data>
+    <entity name="net.codjo.mint.ref.Country" table="REF_COUNTRY">
+        <description>Référentiel de pays</description>
+
+        <feature>
+
+            <referential/>
+            <handler-sql id="selectAll${className}WithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                </attributes>
+                <query>
+                    select ${SQLAttributes}
+                    from ${table}
+                    where ${SQLName:closedDate} &gt; ? OR ${SQLName:closedDate} = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Currency" table="REF_CURRENCY" extends="net.codjo.mint.ref.Country">
+        <description>Référentiel des devises de souscription</description>
+        <feature>
+            <referential/>
+            <handler-sql id="selectAll${className}WithClosedDate">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>currencyCountry</name>
+                </attributes>
+                <query>
+                    select ${SQLAttributes}
+                    from ${table}
+                    where ${SQLName:closedDate} &gt; ? OR ${SQLName:closedDate} = '9999-12-31'
+                </query>
+                <arg>closedDate</arg>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="refCode"/>
+            <field name="refLabel"/>
+            <field name="currencyCountry"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+            <field name="refLabel"/>
+            <field name="currencyCountry"/>
+        </functional-key>
+
+        <properties>
+            <field name="currencyCountry" type="string">
+                <description>Pays devise</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Family" table="REF_FAMILY" extends="net.codjo.mint.ref.Country">
+        <feature>
+            <referential/>
+            <audit-trail/>
+        </feature>
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code famille</description>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
+        <description>Poulet</description>
+        <feature>
+            <referential/>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <methods>
+            <method name="computeAnnualPerf" type="big-decimal">
+                <description>Calcul de la perf annuelle.</description>
+                <throws>net.codjo.pims.calculation.ComputeException</throws>
+                <body>return net.codjo.pims.calculation.fundprice.AnnualPerformanceFiller.compute(this);</body>
+            </method>
+        </methods>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Canard" table="REF_CANARD" extends="net.codjo.mint.ref.Poulet">
+        <description>Canard</description>
+        <feature>
+            <referential/>
+        </feature>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.UpperCase" table="REF_UPPER_CASE">
+        <description>UPPER CASE</description>
+        <feature>
+            <referential/>
+            <handler-sql id="selectAll${className}Specific">
+                <attributes>
+                    <name>refCode</name>
+                    <name>refLabel</name>
+                    <name>FLAG_ACTIF_STATUT_PRIM</name>
+                </attributes>
+                <query>
+                    select REF_CODE, REF_LABEL, FLAG_ACTIF_STATUT_PRIM
+                    from ${table}
+                </query>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+        <functional-key>
+            <field name="refCode"/>
+        </functional-key>
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="flag_actif_statut_prim" type="boolean">
+                <description>Flag</description>
+                <sql type="bit"/>
+            </field>
+        </properties>
+    </entity>
+</data>
