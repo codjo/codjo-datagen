@@ -165,9 +165,11 @@
 
     <xsl:template match="entity" mode="userQ">
         <xsl:param name="className" select="java:bean.Util.extractClassName(feature/user-quarantine/@name)"/>
+        <xsl:param name="requetorName" select="java:bean.Util.lowerize(java:bean.Util.extractClassName(feature/user-quarantine/@name))"/>
 
         <entity name="{feature/user-quarantine/@name}" table="{feature/user-quarantine/@table}">
             <feature>
+                <doc-structure/>
                 <sql name="{feature/user-quarantine/@table}" pk-generator="no"/>
                 <sql-index>
                     <idx type="primary-key" name-prefix="X1_"/>
@@ -179,6 +181,9 @@
                 </xsl:if>
                 <xsl:if test="not(feature/user-quarantine/@update='false')">
                     <handler-update id="update{$className}"/>
+                </xsl:if>
+                <xsl:if test="(feature/user-quarantine/@requetor='true')">
+                    <handler-requetor id="{$requetorName}RequetorHandler"/>
                 </xsl:if>
                 <handler-select id="select{$className}ById" type="By_Primary-Key"/>
                 <handler-select id="selectAll{$className}" type="All"/>

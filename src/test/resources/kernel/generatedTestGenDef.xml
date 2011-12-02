@@ -213,6 +213,7 @@
             <castor/>
             <handler-delete id="deleteMeiRealManagA"/>
             <handler-update id="updateMeiRealManagA"/>
+            <handler-requetor id="meiRealManagARequetorHandler"/>
             <handler-select type="By_Primary-Key" id="selectMeiRealManagAById"/>
             <handler-select type="All" id="selectAllMeiRealManagA"/>
             <handler-sql id="selectAllMeiRealManagAWithParameters">
