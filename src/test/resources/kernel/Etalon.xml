@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <data>
-  <configuration>
-    <project>
-        <name>Red</name>
-    </project>
-    <path>
-        <sql>target/MainTest/Sql/table</sql>
-        <sql-view>target/MainTest/Sql/view</sql-view>
-        <sql-index>target/MainTest/Sql/index</sql-index>
-        <sql-constraint>target/MainTest/Sql/constraint</sql-constraint>
-        <trigger>target/MainTest/Sql/trigger</trigger>
-        <bean>target/MainTest/DataLib/src</bean>
-        <handlers>target/MainTest/HandlerLib/src</handlers>
-        <castor>target/MainTest/ServerLib/src/net/codjo/red/util</castor>
-        <cmdHandler>target/MainTest/HandlerLib/src</cmdHandler>
-        <structure>target/MainTest/ClientAPP/src</structure>
-        <requetor>target/MainTest/ClientAPP/dest</requetor>
-        <referential>target/MainTest/ClientAPP/dest/conf</referential>
-    </path>
-  </configuration>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>target/MainTest/Sql/table</sql>
+            <sql-view>target/MainTest/Sql/view</sql-view>
+            <sql-index>target/MainTest/Sql/index</sql-index>
+            <sql-constraint>target/MainTest/Sql/constraint</sql-constraint>
+            <trigger>target/MainTest/Sql/trigger</trigger>
+            <bean>target/MainTest/DataLib/src</bean>
+            <handlers>target/MainTest/HandlerLib/src</handlers>
+            <castor>target/MainTest/ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>target/MainTest/HandlerLib/src</cmdHandler>
+            <structure>target/MainTest/ClientAPP/src</structure>
+            <requetor>target/MainTest/ClientAPP/dest</requetor>
+            <referential>target/MainTest/ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
     <roles>
         <role id="consultation">
             <include>select*</include>
@@ -32,22 +32,22 @@
     </roles>
 
     <structure name="generated.Audit">
-      <description>Piste d'audit</description>
-      <feature>
-          <bean/>
-      </feature>
-      <properties>
-          <field name="comment" type="string">
-            <description>Commentaire de fiche</description>
-            <sql type="varchar"/>
-          </field>
-          <field name="createdBy" type="string">
-            <sql type="varchar"/>
-          </field>
-      </properties>
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar"/>
+            </field>
+        </properties>
     </structure>
 
-  <entity name="generated.Dividend" table="AP_DIVIDEND">
+    <entity name="generated.Dividend" table="AP_DIVIDEND">
         <description>Mon dividend a moi</description>
         <feature>
             <sql name="AP_DIVIDEND"/>
@@ -62,9 +62,9 @@
             <handler-sql return-pk="false" transaction="false" id="selectBcpDeTrucs_TempCreate">
                 <query>
                     create table #SELECTION (
-                        ACTION_CODE varchar ( 20 ) not null,
-                        CODE_NUM numeric ( 2,5 ) not null,
-                        TEST varchar ( 5 ) not null,
+                    ACTION_CODE varchar ( 20 ) not null,
+                    CODE_NUM numeric ( 2,5 ) not null,
+                    TEST varchar ( 5 ) not null,
                     )
                 </query>
             </handler-sql>
@@ -73,12 +73,13 @@
                     drop table #SELECTION
                 </query>
             </handler-sql>
-            <handler-sql force-transaction-mode="true" return-pk="false" transaction="false" id="selectBcpDeTrucs_TempFill">
+            <handler-sql force-transaction-mode="true" return-pk="false" transaction="false"
+                         id="selectBcpDeTrucs_TempFill">
                 <query>
                     insert into #SELECTION values (
-                        ?
-                        , ?
-                        , ?
+                    ?
+                    , ?
+                    , ?
                     )
                 </query>
                 <arg type="string">actionCode</arg>
@@ -87,185 +88,226 @@
             </handler-sql>
         </feature>
         <primary-key>
-        <field name="portfolioCode"/>
-        <field name="dividendDate"/>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
         </primary-key>
         <functional-key>
-        <field name="portfolioCode"/>
-        <field name="dividendDate"/>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
         </functional-key>
         <foreign-keys>
-               <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
-                   <field from="portfolioCode" to="portfolioCode"/>
-               </link>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
         </foreign-keys>
         <properties>
-        <field name="portfolioCode" type="string">
-          <description>Code portefeuille du coupon</description>
-          <sql type="varchar"/>
-        </field>
-    </properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+        </properties>
     </entity>
 
-  <entity name="generated.Management" table="AP_MANAGEMENT" >
-    <description>Mon dividend a moi</description>
+    <entity name="generated.Management" table="AP_MANAGEMENT">
+        <description>Mon dividend a moi</description>
 
-    <feature>
-        <sql name="AP_MANAGEMENT"/>
-        <castor/>
-        <audit-trail/>
-        <doc-structure/>
-        <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
-        <controlable jndi="java:comp/env/ejb/ControlManagerEJB" />
-        <handler-archive id="archiveManagementHandler"/>
-        <handler-new id="newManagement"/>
-        <handler-update id="updateManagement"/>
-        <handler-select type="By_Primary-Key" id="selectManagementById" />
+        <feature>
+            <sql name="AP_MANAGEMENT"/>
+            <castor/>
+            <audit-trail/>
+            <doc-structure/>
+            <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
+            <controlable jndi="java:comp/env/ejb/ControlManagerEJB"/>
+            <handler-archive id="archiveManagementHandler"/>
+            <handler-new id="newManagement"/>
+            <handler-update id="updateManagement"/>
+            <handler-select type="By_Primary-Key" id="selectManagementById"/>
 
-        <handler-select id="selectValidManagement">
-            <query type="SQL">
-                select  caract.*
-                from AP_MANAGEMENT caract
-                where caract.DATE_BEGIN &lt;= ?
-                and caract.DATE_END &gt; ?
-                and caract.PORTFOLIO_CODE = ?
-            </query>
-            <arg type="java.sql.Date">date</arg>
-            <arg type="java.sql.Date">date</arg>
-            <arg type="string">portfolioCode</arg>
-        </handler-select>
+            <handler-select id="selectValidManagement">
+                <query type="SQL">
+                    select caract.*
+                    from AP_MANAGEMENT caract
+                    where caract.DATE_BEGIN &lt;= ?
+                    and caract.DATE_END &gt; ?
+                    and caract.PORTFOLIO_CODE = ?
+                </query>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
 
-        <handler-select id="selectAllManagementByPtfCode">
-            <query type="SQL">
-                select  caract.*
-                from AP_MANAGEMENT caract
-                where caract.PORTFOLIO_CODE = ?
-                order by caract.DATE_END desc
-            </query>
-            <arg type="string">portfolioCode</arg>
-        </handler-select>
+            <handler-select id="selectAllManagementByPtfCode">
+                <query type="SQL">
+                    select caract.*
+                    from AP_MANAGEMENT caract
+                    where caract.PORTFOLIO_CODE = ?
+                    order by caract.DATE_END desc
+                </query>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
 
-    </feature>
+        </feature>
 
-    <primary-key>
-        <field name="portfolioCode" />
-        <field name="beginDate" />
-    </primary-key>
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="beginDate"/>
+        </primary-key>
 
-    <properties>
-        <field name="portfolioCode" type="string">
-          <description >Code portefeuille du coupon</description>
-          <sql type="varchar" />
-        </field>
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
 
-        <field name="beginDate" type="java.sql.Date">
-          <description >Code portefeuille du coupon</description>
-          <sql type="timestamp" />
-        </field>
-        <field name="accountManager" type="java.lang.Integer">
-            <description >Chargé de compte</description>
-            <sql type="integer"/>
-            <referential family="AccountMgr" name="net.codjo.pims.ref.Person"/>
-        </field>
+            <field name="beginDate" type="java.sql.Date">
+                <description>Code portefeuille du coupon</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="accountManager" type="java.lang.Integer">
+                <description>Chargé de compte</description>
+                <sql type="integer"/>
+                <referential family="AccountMgr" name="net.codjo.pims.ref.Person"/>
+            </field>
 
-        <field name="geographicArea" type="java.lang.Integer">
-          <description >Zone géographique</description>
-          <sql type="integer"/>
-          <referential family="GeographArea" name="net.codjo.pims.ref.Referential"/>
-        </field>
+            <field name="geographicArea" type="java.lang.Integer">
+                <description>Zone géographique</description>
+                <sql type="integer"/>
+                <referential family="GeographArea" name="net.codjo.pims.ref.Referential"/>
+            </field>
 
-        <field name="audit" structure="generated.Audit"/>
+            <field name="audit" structure="generated.Audit"/>
 
-    </properties>
-  </entity>
+        </properties>
+    </entity>
 
-<entity name="TEMPLATE" table="NO">
-    <description>Tables de quarantaine des taux de FDG</description>
-    <feature>
-    </feature>
+    <entity name="TEMPLATE" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+        </feature>
 
-    <primary-key>
-        <field name="quarantineId"/>
-    </primary-key>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
 
-    <properties>
-        <field name="quarantineId" type="big-decimal">
-            <description>Id de quarantaine</description>
-            <sql identity="true" precision="23" required="true" type="numeric"/>
-        </field>
-        <field name="sourceFile" type="string">
-            <description>Fichier source</description>
-            <sql type="varchar" precision="10" required="true"/>
-        </field>
-        <field name="errorType" type="integer">
-            <description>Type d'erreur</description>
-            <sql type="integer" required="true"/>
-        </field>
-        <field name="invoiceDate" type="java.sql.Date">
-            <description>Date de facture</description>
-            <sql type="timestamp"/>
-        </field>
-        <field name="invoiceAmount" type="big-decimal">
-            <description>Montant de la facture</description>
-            <sql type="numeric" precision="23,4"/>
-        </field>
-        <field name="creationDate" type="java.sql.Date">
-            <description>Date de création</description>
-            <sql type="datetime"/>
-        </field>
-        <field name="doNotCreate" type="string">
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
                 <description>Les text sont interdits dans les filtres BD</description>
                 <sql type="text"/>
-        </field>
-        <field name="audit" structure="generated.Audit"/>
-    </properties>
-</entity>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity name="TEMPLATE_WITHOUT_REQUETOR" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+        </feature>
 
-<entity name="EntityCaractNotControlable" table="TABLE_CARAC">
-    <description>Tables de Characteristic mais non controllable</description> <feature>
-    <sql name="TABLE_CARAC"/>
-    <castor/>
-    <audit-trail/>
-    <doc-structure/>
-    <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
-    <handler-archive id="archiveEntityCaractNotControlableHandler"/>
-    <handler-new id="newEntityCaractNotControlable"/>
-    <handler-update id="updateEntityCaractNotControlable"/>
-    <handler-select type="By_Primary-Key" id="selectEntityCaractNotControlableById"/>
-    <handler-select id="selectValidEntityCaractNotControlable">
-    <query type="SQL">
-                select  caract.*
-                from TABLE_CARAC caract
-                where caract.DATE_BEGIN &lt;= ?
-                and caract.DATE_END &gt; ?
-                and caract.PORTFOLIO_CODE = ?
-            </query>
-    <arg type="java.sql.Date">date</arg>
-    <arg type="java.sql.Date">date</arg>
-    <arg type="string">portfolioCode</arg>
-    </handler-select>
-    <handler-select id="selectAllEntityCaractNotControlableByPtfCode">
-    <query type="SQL">
-                select  caract.*
-                from TABLE_CARAC caract
-                where caract.PORTFOLIO_CODE = ?
-                order by caract.DATE_END desc
-            </query>
-    <arg type="string">portfolioCode</arg>
-    </handler-select>
-            </feature>
-    <primary-key>
-                <field name="id"/>
-            </primary-key>
-    <properties>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity name="EntityCaractNotControlable" table="TABLE_CARAC">
+        <description>Tables de Characteristic mais non controllable</description>
+        <feature>
+            <sql name="TABLE_CARAC"/>
+            <castor/>
+            <audit-trail/>
+            <doc-structure/>
+            <bean extends="net.codjo.pims.data.AbstractCharacteristic"/>
+            <handler-archive id="archiveEntityCaractNotControlableHandler"/>
+            <handler-new id="newEntityCaractNotControlable"/>
+            <handler-update id="updateEntityCaractNotControlable"/>
+            <handler-select type="By_Primary-Key" id="selectEntityCaractNotControlableById"/>
+            <handler-select id="selectValidEntityCaractNotControlable">
+                <query type="SQL">
+                    select caract.*
+                    from TABLE_CARAC caract
+                    where caract.DATE_BEGIN &lt;= ?
+                    and caract.DATE_END &gt; ?
+                    and caract.PORTFOLIO_CODE = ?
+                </query>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="java.sql.Date">date</arg>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+            <handler-select id="selectAllEntityCaractNotControlableByPtfCode">
+                <query type="SQL">
+                    select caract.*
+                    from TABLE_CARAC caract
+                    where caract.PORTFOLIO_CODE = ?
+                    order by caract.DATE_END desc
+                </query>
+                <arg type="string">portfolioCode</arg>
+            </handler-select>
+        </feature>
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+        <properties>
             <field name="id" type="big-decimal">
                 <description>Id de la table</description>
                 <sql identity="true" precision="23" required="true" type="numeric"/>
             </field>
         </properties>
-</entity>
+    </entity>
 
-<entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
         <description>Référentiel poulets</description>
         <feature>
             <sql name="REF_POULET"/>
@@ -347,32 +389,33 @@
         </properties>
     </entity>
 
-<entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA" >
-    <feature>
-		<sql pk-generator="no" name="AP_MEI_A"/>
-		<sql-index>
-            <idx name-prefix="X1_" type="primary-key"/>
-        </sql-index>
-	    <bean/>
-        <castor/>
-        <handler-delete id="deleteMeiRealManagA"/>
-	    <handler-update id="updateMeiRealManagA"/>
-	    <handler-requetor id="meiRealManagARequetorHandler"/>
-        <handler-select type="By_Primary-Key" id="selectMeiRealManagAById"/>
-        <handler-select type="All" id="selectAllMeiRealManagA"/>
-        <handler-sql id="selectAllMeiRealManagAWithParameters">
-            <attributes>
-                <name>quarantineId</name>
-                <name>sourceFile</name>
-                <name>errorType</name>
-                <name>invoiceDate</name>
-                <name>invoiceAmount</name>
-                <name>creationDate</name>
-                <name>doNotCreate</name>
-                <name>comment</name>
-                <name>createdBy</name>
-            </attributes>
-            <query><![CDATA[
+    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA">
+        <feature>
+            <doc-structure/>
+            <sql pk-generator="no" name="AP_MEI_A"/>
+            <sql-index>
+                <idx name-prefix="X1_" type="primary-key"/>
+            </sql-index>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagA"/>
+            <handler-update id="updateMeiRealManagA"/>
+            <handler-requetor id="meiRealManagARequetorHandler"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagAById"/>
+            <handler-select type="All" id="selectAllMeiRealManagA"/>
+            <handler-sql id="selectAllMeiRealManagAWithParameters">
+                <attributes>
+                    <name>quarantineId</name>
+                    <name>sourceFile</name>
+                    <name>errorType</name>
+                    <name>invoiceDate</name>
+                    <name>invoiceAmount</name>
+                    <name>creationDate</name>
+                    <name>doNotCreate</name>
+                    <name>comment</name>
+                    <name>createdBy</name>
+                </attributes>
+                <query><![CDATA[
 
             declare @SOURCE_FILE varchar(255)
             select @SOURCE_FILE = ?
@@ -446,145 +489,292 @@
                and (COMMENT = @COMMENT or @COMMENT = 'Tout')
                and (CREATED_BY = @CREATED_BY or @CREATED_BY = 'Tout')
             ]]>
-            </query>
-            <arg type="string">sourceFile</arg>
-            <arg type="string">errorType</arg>
-            <arg type="string">invoiceDate</arg>
-            <arg type="string">invoiceAmount</arg>
-            <arg type="string">creationDate</arg>
-            <arg type="string">comment</arg>
-            <arg type="string">createdBy</arg>
-        </handler-sql>
-    </feature>
+                </query>
+                <arg type="string">sourceFile</arg>
+                <arg type="string">errorType</arg>
+                <arg type="string">invoiceDate</arg>
+                <arg type="string">invoiceAmount</arg>
+                <arg type="string">creationDate</arg>
+                <arg type="string">comment</arg>
+                <arg type="string">createdBy</arg>
+            </handler-sql>
+        </feature>
 
-    <primary-key>
-        <field name="quarantineId"/>
-    </primary-key>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
 
-    <properties>
-        <field name="quarantineId" type="big-decimal">
-            <description>Id de quarantaine</description>
-            <sql identity="true" precision="23" required="true" type="numeric"/>
-        </field>
-        <field name="sourceFile" type="string">
-            <description>Fichier source</description>
-            <sql type="varchar" precision="10" required="true"/>
-        </field>
-        <field name="errorType" type="integer">
-            <description>Type d'erreur</description>
-            <sql type="integer" required="true"/>
-        </field>
-        <field name="invoiceDate" type="java.sql.Date">
-            <description>Date de facture</description>
-            <sql type="timestamp"/>
-        </field>
-        <field name="invoiceAmount" type="big-decimal">
-            <description>Montant de la facture</description>
-            <sql type="numeric" precision="23,4"/>
-        </field>
-        <field name="creationDate" type="java.sql.Date">
-            <description>Date de création</description>
-            <sql type="datetime"/>
-        </field>
-        <field name="doNotCreate" type="string">
-            <description>Les text sont interdits dans les filtres BD</description>
-            <sql type="text"/>
-        </field>
-        <field name="audit" structure="generated.Audit"/>
-    </properties>
-</entity>
-<entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB" >
-    <feature>
-		<sql pk-generator="no" name="AP_MEI_B"/>
-	    <bean/>
-        <castor/>
-        <handler-delete id="deleteMeiRealManagB"/>
-	    <handler-update id="updateMeiRealManagB"/>
-        <handler-select type="By_Primary-Key" id="selectMeiRealManagBById"/>
-        <handler-select type="All" id="selectAllMeiRealManagB"/>
-    </feature>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity table="AP_WITHOUT_REQUETOR" name="net.codjo.pims.data.WithoutRequetor">
+        <feature>
+            <doc-structure/>
+            <sql pk-generator="no" name="AP_WITHOUT_REQUETOR"/>
+            <sql-index>
+                <idx name-prefix="X1_" type="primary-key"/>
+            </sql-index>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteWithoutRequetor"/>
+            <handler-update id="updateWithoutRequetor"/>
+            <handler-select type="By_Primary-Key" id="selectWithoutRequetorById"/>
+            <handler-select type="All" id="selectAllWithoutRequetor"/>
+            <handler-sql id="selectAllWithoutRequetorWithParameters">
+                <attributes>
+                    <name>quarantineId</name>
+                    <name>sourceFile</name>
+                    <name>errorType</name>
+                    <name>invoiceDate</name>
+                    <name>invoiceAmount</name>
+                    <name>creationDate</name>
+                    <name>doNotCreate</name>
+                    <name>comment</name>
+                    <name>createdBy</name>
+                </attributes>
+                <query><![CDATA[
 
-    <primary-key>
-        <field name="quarantineId"/>
-    </primary-key>
+            declare @SOURCE_FILE varchar(255)
+            select @SOURCE_FILE = ?
 
-    <properties>
-        <field name="quarantineId" type="big-decimal">
-            <description>Id de quarantaine</description>
-            <sql identity="true" precision="23" required="true" type="numeric"/>
-        </field>
-        <field name="sourceFile" type="string">
-            <description>Fichier source</description>
-            <sql type="varchar" precision="10" required="true"/>
-        </field>
-        <field name="errorType" type="integer">
-            <description>Type d'erreur</description>
-            <sql type="integer" required="true"/>
-        </field>
-        <field name="invoiceDate" type="java.sql.Date">
-            <description>Date de facture</description>
-            <sql type="timestamp"/>
-        </field>
-        <field name="invoiceAmount" type="big-decimal">
-            <description>Montant de la facture</description>
-            <sql type="numeric" precision="23,4"/>
-        </field>
-        <field name="creationDate" type="java.sql.Date">
-            <description>Date de création</description>
-            <sql type="datetime"/>
-        </field>
-        <field name="doNotCreate" type="string">
-           <description>Les text sont interdits dans les filtres BD</description>
-           <sql type="text"/>
-         </field>
-        <field name="audit" structure="generated.Audit"/>
-    </properties>
-</entity>
-<entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC" >
-    <feature>
-		<sql pk-generator="no" name="AP_MEI_C"/>
-	    <bean/>
-        <castor/>
-        <handler-delete id="deleteMeiRealManagC"/>
-	    <handler-update id="updateMeiRealManagC"/>
-        <handler-select type="By_Primary-Key" id="selectMeiRealManagCById"/>
-        <handler-select type="All" id="selectAllMeiRealManagC"/>
-    </feature>
+            declare @ERROR_TYPE  integer
+            declare @ERROR_TYPE_S  varchar(255)
+            select @ERROR_TYPE_S = ?
 
-    <primary-key>
-        <field name="quarantineId"/>
-    </primary-key>
+            declare @INVOICE_DATE  datetime
+            declare @INVOICE_DATE_S  varchar(255)
+            select @INVOICE_DATE_S = ?
 
-    <properties>
-        <field name="quarantineId" type="big-decimal">
-            <description>Id de quarantaine</description>
-            <sql identity="true" precision="23" required="true" type="numeric"/>
-        </field>
-        <field name="sourceFile" type="string">
-            <description>Fichier source</description>
-            <sql type="varchar" precision="10" required="true"/>
-        </field>
-        <field name="errorType" type="integer">
-            <description>Type d'erreur</description>
-            <sql type="integer" required="true"/>
-        </field>
-        <field name="invoiceDate" type="java.sql.Date">
-            <description>Date de facture</description>
-            <sql type="timestamp"/>
-        </field>
-        <field name="invoiceAmount" type="big-decimal">
-            <description>Montant de la facture</description>
-            <sql type="numeric" precision="23,4"/>
-        </field>
-        <field name="creationDate" type="java.sql.Date">
-            <description>Date de création</description>
-            <sql type="datetime"/>
-        </field>
-        <field name="doNotCreate" type="string">
-            <description>Les text sont interdits dans les filtres BD</description>
-            <sql type="text"/>
-        </field>
-        <field name="audit" structure="generated.Audit"/>
-    </properties>
-</entity>
+            declare @INVOICE_AMOUNT  numeric(23,4)
+            declare @INVOICE_AMOUNT_S  varchar(255)
+            select @INVOICE_AMOUNT_S = ?
+
+            declare @CREATION_DATE  datetime
+            declare @CREATION_DATE_S  varchar(255)
+            select @CREATION_DATE_S = ?
+
+            declare @COMMENT varchar(255)
+            select @COMMENT = ?
+
+            declare @CREATED_BY  varchar(255)
+            select @CREATED_BY = ?
+
+            if (@SOURCE_FILE = 'null')
+                select @SOURCE_FILE = null
+
+            if (@ERROR_TYPE_S = 'null')
+                select @ERROR_TYPE = null
+            else if (@ERROR_TYPE_S = 'Tout')
+                select @ERROR_TYPE = -1
+            else
+                select @ERROR_TYPE = convert(int, @ERROR_TYPE_S)
+
+            if (@INVOICE_DATE_S = 'null')
+                select @INVOICE_DATE = null
+            else if (@INVOICE_DATE_S = 'Tout')
+                select @INVOICE_DATE = '9999-12-31'
+            else
+                select @INVOICE_DATE = convert(datetime, convert(varchar(23),@INVOICE_DATE_S))
+
+            if (@INVOICE_AMOUNT_S = 'null')
+                select @INVOICE_AMOUNT = null
+            else if (@INVOICE_AMOUNT_S = 'Tout')
+                select @INVOICE_AMOUNT = -1
+            else
+                select @INVOICE_AMOUNT = convert(numeric(23,4), @INVOICE_AMOUNT_S)
+
+            if (@CREATION_DATE_S = 'null')
+                select @CREATION_DATE = null
+            else if (@CREATION_DATE_S = 'Tout')
+                select @CREATION_DATE = '9999-12-31'
+            else
+                select @CREATION_DATE = convert(datetime, convert(varchar(23),@CREATION_DATE_S))
+
+           if (@COMMENT = 'null')
+                select @COMMENT = null
+
+            if (@CREATED_BY = 'null')
+                select @CREATED_BY = null
+
+             select QUARANTINE_ID,SOURCE_FILE,ERROR_TYPE,INVOICE_DATE,INVOICE_AMOUNT,CREATION_DATE,DO_NOT_CREATE ,COMMENT ,CREATED_BY
+             from AP_WITHOUT_REQUETOR
+             where (SOURCE_FILE = @SOURCE_FILE or @SOURCE_FILE = 'Tout')
+               and (ERROR_TYPE = @ERROR_TYPE or @ERROR_TYPE = -1)
+               and (INVOICE_DATE = @INVOICE_DATE or @INVOICE_DATE = '9999-12-31')
+               and (INVOICE_AMOUNT = @INVOICE_AMOUNT or @INVOICE_AMOUNT = -1)
+               and (CREATION_DATE = @CREATION_DATE or @CREATION_DATE = '9999-12-31')
+               and (COMMENT = @COMMENT or @COMMENT = 'Tout')
+               and (CREATED_BY = @CREATED_BY or @CREATED_BY = 'Tout')
+            ]]>
+                </query>
+                <arg type="string">sourceFile</arg>
+                <arg type="string">errorType</arg>
+                <arg type="string">invoiceDate</arg>
+                <arg type="string">invoiceAmount</arg>
+                <arg type="string">creationDate</arg>
+                <arg type="string">comment</arg>
+                <arg type="string">createdBy</arg>
+            </handler-sql>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB">
+        <feature>
+            <sql pk-generator="no" name="AP_MEI_B"/>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagB"/>
+            <handler-update id="updateMeiRealManagB"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagBById"/>
+            <handler-select type="All" id="selectAllMeiRealManagB"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC">
+        <feature>
+            <sql pk-generator="no" name="AP_MEI_C"/>
+            <bean/>
+            <castor/>
+            <handler-delete id="deleteMeiRealManagC"/>
+            <handler-update id="updateMeiRealManagC"/>
+            <handler-select type="By_Primary-Key" id="selectMeiRealManagCById"/>
+            <handler-select type="All" id="selectAllMeiRealManagC"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
 </data>
