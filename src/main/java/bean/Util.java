@@ -25,6 +25,11 @@ public final class Util {
     }
 
 
+    public static String lowerize(String str) {
+        return Character.toLowerCase(str.charAt(0)) + str.substring(1);
+    }
+
+
     public static boolean containsIgnoreCase(String stringToLook, String stringToFind) {
         return stringToLook.toUpperCase().contains(stringToFind.toUpperCase());
     }
