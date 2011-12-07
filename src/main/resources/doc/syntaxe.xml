@@ -261,6 +261,13 @@
                     <value val="false" description="Pas de generation"/>
                 </enumeration>
             </attribute>
+            <attribute name="requetor" use="optionnal">
+                <description>Generation ou non du handler requetor.</description>
+                <enumeration>
+                    <value val="true" description="Generation du handler (par defaut)"/>
+                    <value val="false" description="Pas de generation"/>
+                </enumeration>
+            </attribute>
         </attributes-tag>
 
         <sub-tag>

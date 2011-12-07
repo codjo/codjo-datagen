@@ -135,9 +135,52 @@
     <entity name="TEMPLATE" table="NO">
         <description>Tables de quarantaine des taux de FDG</description>
         <feature>
-            <user-quarantine name="net.codjo.pims.data.MeiRealManagA" table="AP_MEI_A"/>
+            <user-quarantine name="net.codjo.pims.data.MeiRealManagA" requetor="true" table="AP_MEI_A"/>
             <copy-entity name="net.codjo.pims.data.MeiRealManagB" table="AP_MEI_B"/>
             <copy-entity name="net.codjo.pims.data.MeiRealManagC" table="AP_MEI_C"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+     <entity name="TEMPLATE_WITHOUT_REQUETOR" table="NO">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+            <user-quarantine name="net.codjo.pims.data.WithoutRequetor" table="AP_WITHOUT_REQUETOR"/>
         </feature>
 
         <primary-key>
