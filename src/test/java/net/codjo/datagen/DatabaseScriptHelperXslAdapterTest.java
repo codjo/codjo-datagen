@@ -1,4 +1,5 @@
 package net.codjo.datagen;
+import kernel.DomUtil;
 import net.codjo.database.common.api.DatabaseScriptHelper;
 import net.codjo.database.common.api.structure.SqlConstraint;
 import net.codjo.database.common.api.structure.SqlIndex;
@@ -6,6 +7,11 @@ import net.codjo.database.common.api.structure.SqlTable;
 import net.codjo.database.common.api.structure.SqlTableDefinition;
 import net.codjo.database.common.api.structure.SqlTrigger;
 import net.codjo.database.common.api.structure.SqlView;
+import net.codjo.test.common.LogString;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
+
 import static net.codjo.datagen.DatagenXmlUtil.getConstraintNode;
 import static net.codjo.datagen.DatagenXmlUtil.getIndexNode;
 import static net.codjo.datagen.DatagenXmlUtil.getTableNode;
@@ -14,11 +20,6 @@ import static net.codjo.datagen.DatagenXmlUtil.getTriggerInsertNode;
 import static net.codjo.datagen.DatagenXmlUtil.getTriggerInsertUpdateNode;
 import static net.codjo.datagen.DatagenXmlUtil.getTriggerUpdateNode;
 import static net.codjo.datagen.DatagenXmlUtil.getViewNode;
-import net.codjo.test.common.LogString;
-import kernel.DomUtil;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
 public class DatabaseScriptHelperXslAdapterTest {
     private DatabaseScriptHelperXslAdapter databaseScriptHelperXslAdapter;
     private Document source;
@@ -171,6 +172,16 @@ public class DatabaseScriptHelperXslAdapterTest {
 
         private DatabaseScriptHelperMock(LogString logString) {
             this.logString = logString;
+        }
+
+
+        public void setLegacyMode(boolean legacyMode) {
+            logString.call("setLegacyMode", legacyMode);
+        }
+
+
+        public void setLegacyPrefix(String legacyPrefix) {
+            logString.call("setLegacyPrefix", legacyPrefix);
         }
 
 

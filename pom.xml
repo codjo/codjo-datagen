@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -8,7 +9,7 @@
 
     <parent>
         <groupId>net.codjo.pom</groupId>
-        <artifactId>codjo-pom-library</artifactId>
+        <artifactId>codjo-pom-external</artifactId>
         <version>SNAPSHOT</version>
     </parent>
     <groupId>net.codjo.datagen</groupId>
@@ -39,7 +40,23 @@
         </dependency>
         <dependency>
             <groupId>net.codjo.database</groupId>
-            <artifactId>codjo-database-main</artifactId>
+            <artifactId>codjo-database-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.database</groupId>
+            <artifactId>codjo-database-${databaseType}-api</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.database</groupId>
+            <artifactId>codjo-database-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.database</groupId>
+            <artifactId>codjo-database-${databaseType}</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>net.codjo.util</groupId>
@@ -52,7 +69,7 @@
     -->
 
     <name>Lib &gt; Datagen</name>
-    <description>Librairie pour un generateur multi-fonction</description>
+    <description>Tool used to generate text artifact (database, java code, etc.)</description>
     <inceptionYear>2002</inceptionYear>
 
     <!--
@@ -92,9 +109,10 @@
                         <configuration>
                             <tasks>
                                 <tstamp>
-                                    <format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss" />
+                                    <format property="timestamp" pattern="yyyy/MM/dd HH:mm:ss"/>
                                 </tstamp>
-                                <echo message="${timestamp}" file="${project.build.directory}/classes/lib-datagen-lastBuild.timestamp" />
+                                <echo message="${timestamp}"
+                                      file="${project.build.directory}/classes/lib-datagen-lastBuild.timestamp"/>
                             </tasks>
                         </configuration>
                         <goals>
@@ -116,5 +134,4 @@
         <developerConnection>scm:git:https://github.com/codjo/codjo-datagen.git</developerConnection>
         <url>https://github.com/codjo/codjo-datagen</url>
     </scm>
-
 </project>

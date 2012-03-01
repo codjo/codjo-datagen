@@ -6,9 +6,6 @@
 package kernel;
 import bean.BeanGenerator;
 import castor.CastorGenerator;
-import net.codjo.taskpool.Task;
-import net.codjo.taskpool.TaskManager;
-import net.codjo.util.file.FileUtil;
 import globs.GlobGenerator;
 import handler.archive.ArchiveHandlerGenerator;
 import handler.command.CommandHandlerGenerator;
@@ -41,6 +38,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import kernel.Generator.GeneratorType;
+import net.codjo.taskpool.Task;
+import net.codjo.taskpool.TaskManager;
+import net.codjo.util.file.FileUtil;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -66,7 +66,6 @@ public class Main {
     static final boolean DEBUG = false;
     public static final String ALL_GENERATOR = "ALL";
     private static final Logger LOG = Logger.getLogger(Main.class);
-    public static final String DB_TYPE_PARAMETER = "databaseType";
     public static final String DB_TYPE_SYBASE = "sybase";
     public static final String DB_TYPE_ORACLE = "oracle";
     public static final Object DB_TYPE_MYSQL = "mysql";
@@ -74,8 +73,8 @@ public class Main {
     public static final String ADD_FIELD_TRANSFORMER_FILENAME = "addField.xsl";
     public static final String ADD_HANDLER_TRANSFORMER_FILENAME = "addHandler.xsl";
     public static final String PRE_GENERATOR_TRANSFORMER_FILENAME = "PreGenerator.xsl";
-    private static final LastBuildTimestamp lastBuildTimestamp = new LastBuildTimestamp(
-          "/lib-datagen-lastBuild.timestamp");
+    private static final LastBuildTimestamp lastBuildTimestamp
+          = new LastBuildTimestamp("/lib-datagen-lastBuild.timestamp");
     private ArchiveHandlerGenerator archiveHandlerGenerator;
     private BeanGenerator beanGenerator;
     private String beanPath;
@@ -334,7 +333,7 @@ public class Main {
 
 
     private void doGenerate(String document) throws Exception {
-        LOG.info("Debut de generation....");
+        LOG.info("Debut de generation pour " + databaseType + "....");
         long startTime = System.currentTimeMillis();
 
         this.documentAsString = document;

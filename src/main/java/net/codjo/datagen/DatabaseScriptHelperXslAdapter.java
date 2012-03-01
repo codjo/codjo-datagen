@@ -1,23 +1,20 @@
 package net.codjo.datagen;
-import net.codjo.database.common.api.DatabaseFactory;
-import net.codjo.database.common.api.DatabaseScriptHelper;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import kernel.DomUtil;
+import net.codjo.database.common.api.DatabaseFactory;
+import net.codjo.database.common.api.DatabaseScriptHelper;
 import org.w3c.dom.Node;
-import sql.LegacyDatabaseScriptHelper;
 public class DatabaseScriptHelperXslAdapter extends XslAdapter {
     private final DatabaseScriptHelper databaseScriptHelper;
     private final NodeConverter nodeConverter = new NodeConverter();
 
 
     public DatabaseScriptHelperXslAdapter() {
-        if (sql.Util.legacyMode) {
-            this.databaseScriptHelper = new LegacyDatabaseScriptHelper();
-        }
-        else {
-            this.databaseScriptHelper = new DatabaseFactory().createDatabaseScriptHelper();
-        }
+        databaseScriptHelper = new DatabaseFactory().createDatabaseScriptHelper();
+
+        databaseScriptHelper.setLegacyMode(sql.Util.legacyMode);
+        databaseScriptHelper.setLegacyPrefix(sql.Util.legacyPrefix);
     }
 
 
