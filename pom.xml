@@ -31,12 +31,10 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.codjo.database</groupId>
