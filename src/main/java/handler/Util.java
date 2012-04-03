@@ -14,6 +14,10 @@ public class Util {
             return "java.sql.Types.TIMESTAMP";
         }
 
+        if ("String".equals(type)) {
+            return "java.sql.Types.VARCHAR";
+        }
+
         return "";
     }
 }
