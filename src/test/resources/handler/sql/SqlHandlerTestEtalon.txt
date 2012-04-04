@@ -18,7 +18,7 @@ public class NeoSelectHandler extends SqlHandler {
     public NeoSelectHandler(Database database) {
         super(PK, "select d.PORTFOLIO_CODE as portfolioCode , codif.LABEL as label  from AP_DIVIDEND d inner join CODIF ... ", true, database);
 
-        addGetter("portfolioCode", new Getter(1));
+        addGetter("portfolioCode", new Getter(1, java.sql.Types.VARCHAR));
         addGetter("dividendDate", new Getter(2, java.sql.Types.DATE));
         addGetter("label", new Getter(3));
     }
