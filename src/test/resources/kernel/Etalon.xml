@@ -416,87 +416,31 @@
                     <name>createdBy</name>
                 </attributes>
                 <query><![CDATA[
-
-            declare @SOURCE_FILE varchar(255)
-            select @SOURCE_FILE = ?
-
-            declare @ERROR_TYPE  integer
-            declare @ERROR_TYPE_S  varchar(255)
-            select @ERROR_TYPE_S = ?
-
-            declare @INVOICE_DATE  datetime
-            declare @INVOICE_DATE_S  varchar(255)
-            select @INVOICE_DATE_S = ?
-
-            declare @INVOICE_AMOUNT  numeric(23,4)
-            declare @INVOICE_AMOUNT_S  varchar(255)
-            select @INVOICE_AMOUNT_S = ?
-
-            declare @CREATION_DATE  datetime
-            declare @CREATION_DATE_S  varchar(255)
-            select @CREATION_DATE_S = ?
-
-            declare @COMMENT varchar(255)
-            select @COMMENT = ?
-
-            declare @CREATED_BY  varchar(255)
-            select @CREATED_BY = ?
-
-            if (@SOURCE_FILE = 'null')
-                select @SOURCE_FILE = null
-
-            if (@ERROR_TYPE_S = 'null')
-                select @ERROR_TYPE = null
-            else if (@ERROR_TYPE_S = 'Tout')
-                select @ERROR_TYPE = -1
-            else
-                select @ERROR_TYPE = convert(int, @ERROR_TYPE_S)
-
-            if (@INVOICE_DATE_S = 'null')
-                select @INVOICE_DATE = null
-            else if (@INVOICE_DATE_S = 'Tout')
-                select @INVOICE_DATE = '9999-12-31'
-            else
-                select @INVOICE_DATE = convert(datetime, convert(varchar(23),@INVOICE_DATE_S))
-
-            if (@INVOICE_AMOUNT_S = 'null')
-                select @INVOICE_AMOUNT = null
-            else if (@INVOICE_AMOUNT_S = 'Tout')
-                select @INVOICE_AMOUNT = -1
-            else
-                select @INVOICE_AMOUNT = convert(numeric(23,4), @INVOICE_AMOUNT_S)
-
-            if (@CREATION_DATE_S = 'null')
-                select @CREATION_DATE = null
-            else if (@CREATION_DATE_S = 'Tout')
-                select @CREATION_DATE = '9999-12-31'
-            else
-                select @CREATION_DATE = convert(datetime, convert(varchar(23),@CREATION_DATE_S))
-
-           if (@COMMENT = 'null')
-                select @COMMENT = null
-
-            if (@CREATED_BY = 'null')
-                select @CREATED_BY = null
-
              select QUARANTINE_ID,SOURCE_FILE,ERROR_TYPE,INVOICE_DATE,INVOICE_AMOUNT,CREATION_DATE,DO_NOT_CREATE ,COMMENT ,CREATED_BY
              from AP_MEI_A
-             where (SOURCE_FILE = @SOURCE_FILE or @SOURCE_FILE = 'Tout')
-               and (ERROR_TYPE = @ERROR_TYPE or @ERROR_TYPE = -1)
-               and (INVOICE_DATE = @INVOICE_DATE or @INVOICE_DATE = '9999-12-31')
-               and (INVOICE_AMOUNT = @INVOICE_AMOUNT or @INVOICE_AMOUNT = -1)
-               and (CREATION_DATE = @CREATION_DATE or @CREATION_DATE = '9999-12-31')
-               and (COMMENT = @COMMENT or @COMMENT = 'Tout')
-               and (CREATED_BY = @CREATED_BY or @CREATED_BY = 'Tout')
+             where (SOURCE_FILE = ? or ? = 'Tout')
+               and (ERROR_TYPE = ? or ? = -1)
+               and (INVOICE_DATE = ? or ? = '9999-12-31')
+               and (INVOICE_AMOUNT = ? or ? = -1)
+               and (CREATION_DATE = ? or ? = '9999-12-31')
+               and (COMMENT = ? or ? = 'Tout')
+               and (CREATED_BY = ? or ? = 'Tout')
             ]]>
                 </query>
-                <arg type="string">sourceFile</arg>
-                <arg type="string">errorType</arg>
-                <arg type="string">invoiceDate</arg>
-                <arg type="string">invoiceAmount</arg>
-                <arg type="string">creationDate</arg>
-                <arg type="string">comment</arg>
-                <arg type="string">createdBy</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
+                <arg type="integer" converter="net.codjo.control.server.handler.FilterValueConverter">errorType</arg>
+                <arg type="integer" converter="net.codjo.control.server.handler.FilterValueConverter">errorType</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceDate</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceDate</arg>
+                <arg type="big-decimal" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceAmount</arg>
+                <arg type="big-decimal" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceAmount</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">creationDate</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">creationDate</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">comment</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">comment</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">createdBy</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">createdBy</arg>
             </handler-sql>
         </feature>
 
@@ -562,87 +506,31 @@
                     <name>createdBy</name>
                 </attributes>
                 <query><![CDATA[
-
-            declare @SOURCE_FILE varchar(255)
-            select @SOURCE_FILE = ?
-
-            declare @ERROR_TYPE  integer
-            declare @ERROR_TYPE_S  varchar(255)
-            select @ERROR_TYPE_S = ?
-
-            declare @INVOICE_DATE  datetime
-            declare @INVOICE_DATE_S  varchar(255)
-            select @INVOICE_DATE_S = ?
-
-            declare @INVOICE_AMOUNT  numeric(23,4)
-            declare @INVOICE_AMOUNT_S  varchar(255)
-            select @INVOICE_AMOUNT_S = ?
-
-            declare @CREATION_DATE  datetime
-            declare @CREATION_DATE_S  varchar(255)
-            select @CREATION_DATE_S = ?
-
-            declare @COMMENT varchar(255)
-            select @COMMENT = ?
-
-            declare @CREATED_BY  varchar(255)
-            select @CREATED_BY = ?
-
-            if (@SOURCE_FILE = 'null')
-                select @SOURCE_FILE = null
-
-            if (@ERROR_TYPE_S = 'null')
-                select @ERROR_TYPE = null
-            else if (@ERROR_TYPE_S = 'Tout')
-                select @ERROR_TYPE = -1
-            else
-                select @ERROR_TYPE = convert(int, @ERROR_TYPE_S)
-
-            if (@INVOICE_DATE_S = 'null')
-                select @INVOICE_DATE = null
-            else if (@INVOICE_DATE_S = 'Tout')
-                select @INVOICE_DATE = '9999-12-31'
-            else
-                select @INVOICE_DATE = convert(datetime, convert(varchar(23),@INVOICE_DATE_S))
-
-            if (@INVOICE_AMOUNT_S = 'null')
-                select @INVOICE_AMOUNT = null
-            else if (@INVOICE_AMOUNT_S = 'Tout')
-                select @INVOICE_AMOUNT = -1
-            else
-                select @INVOICE_AMOUNT = convert(numeric(23,4), @INVOICE_AMOUNT_S)
-
-            if (@CREATION_DATE_S = 'null')
-                select @CREATION_DATE = null
-            else if (@CREATION_DATE_S = 'Tout')
-                select @CREATION_DATE = '9999-12-31'
-            else
-                select @CREATION_DATE = convert(datetime, convert(varchar(23),@CREATION_DATE_S))
-
-           if (@COMMENT = 'null')
-                select @COMMENT = null
-
-            if (@CREATED_BY = 'null')
-                select @CREATED_BY = null
-
              select QUARANTINE_ID,SOURCE_FILE,ERROR_TYPE,INVOICE_DATE,INVOICE_AMOUNT,CREATION_DATE,DO_NOT_CREATE ,COMMENT ,CREATED_BY
              from AP_WITHOUT_REQUETOR
-             where (SOURCE_FILE = @SOURCE_FILE or @SOURCE_FILE = 'Tout')
-               and (ERROR_TYPE = @ERROR_TYPE or @ERROR_TYPE = -1)
-               and (INVOICE_DATE = @INVOICE_DATE or @INVOICE_DATE = '9999-12-31')
-               and (INVOICE_AMOUNT = @INVOICE_AMOUNT or @INVOICE_AMOUNT = -1)
-               and (CREATION_DATE = @CREATION_DATE or @CREATION_DATE = '9999-12-31')
-               and (COMMENT = @COMMENT or @COMMENT = 'Tout')
-               and (CREATED_BY = @CREATED_BY or @CREATED_BY = 'Tout')
+             where (SOURCE_FILE = ? or ? = 'Tout')
+               and (ERROR_TYPE = ? or ? = -1)
+               and (INVOICE_DATE = ? or ? = '9999-12-31')
+               and (INVOICE_AMOUNT = ? or ? = -1)
+               and (CREATION_DATE = ? or ? = '9999-12-31')
+               and (COMMENT = ? or ? = 'Tout')
+               and (CREATED_BY = ? or ? = 'Tout')
             ]]>
                 </query>
-                <arg type="string">sourceFile</arg>
-                <arg type="string">errorType</arg>
-                <arg type="string">invoiceDate</arg>
-                <arg type="string">invoiceAmount</arg>
-                <arg type="string">creationDate</arg>
-                <arg type="string">comment</arg>
-                <arg type="string">createdBy</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
+                <arg type="integer" converter="net.codjo.control.server.handler.FilterValueConverter">errorType</arg>
+                <arg type="integer" converter="net.codjo.control.server.handler.FilterValueConverter">errorType</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceDate</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceDate</arg>
+                <arg type="big-decimal" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceAmount</arg>
+                <arg type="big-decimal" converter="net.codjo.control.server.handler.FilterValueConverter">invoiceAmount</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">creationDate</arg>
+                <arg type="java.sql.Date" converter="net.codjo.control.server.handler.FilterValueConverter">creationDate</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">comment</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">comment</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">createdBy</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">createdBy</arg>
             </handler-sql>
         </feature>
 

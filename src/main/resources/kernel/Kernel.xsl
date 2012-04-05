@@ -68,27 +68,33 @@
     <xsl:param name="name" />
     <xsl:param name="type" />
     <xsl:param name="idx"><xsl:value-of select="position()"/></xsl:param>
+    <xsl:param name="converter">
+        <xsl:choose>
+            <xsl:when test="string-length(@converter)!=0"><xsl:value-of select="@converter"/></xsl:when>
+            <xsl:otherwise>XMLUtils</xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
     <xsl:choose>
         <xsl:when test="$type='boolean'">
-            query.setBoolean(<xsl:value-of select="$idx"/>, (XMLUtils.convertFromStringValue(Boolean.class, (String) pks.get("<xsl:value-of select="$name"/>"))).booleanValue());
+            query.setBoolean(<xsl:value-of select="$idx"/>, (<xsl:value-of select="$converter"/>.convertFromStringValue(Boolean.class, (String) pks.get("<xsl:value-of select="$name"/>"))).booleanValue());
         </xsl:when>
         <xsl:when test="$type='string'">
-            query.setString(<xsl:value-of select="$idx"/>, XMLUtils.convertFromStringValue(String.class, (String) pks.get("<xsl:value-of select="$name"/>")));
+            query.setString(<xsl:value-of select="$idx"/>,  <xsl:value-of select="$converter"/>.convertFromStringValue(String.class, (String) pks.get("<xsl:value-of select="$name"/>")));
         </xsl:when>
         <xsl:when test="$type='big-decimal' or $type='java.math.BigDecimal'">
-            query.setBigDecimal(<xsl:value-of select="$idx"/>, XMLUtils.convertFromStringValue(java.math.BigDecimal.class, (String) pks.get("<xsl:value-of select="$name"/>")));
+            query.setBigDecimal(<xsl:value-of select="$idx"/>,  <xsl:value-of select="$converter"/>.convertFromStringValue(java.math.BigDecimal.class, (String) pks.get("<xsl:value-of select="$name"/>")));
         </xsl:when>
         <xsl:when test="$type='java.sql.Timestamp'">
-            query.setTimestamp(<xsl:value-of select="$idx"/>, XMLUtils.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("<xsl:value-of select="$name"/>")));
+            query.setTimestamp(<xsl:value-of select="$idx"/>,  <xsl:value-of select="$converter"/>.convertFromStringValue(java.sql.Timestamp.class, (String) pks.get("<xsl:value-of select="$name"/>")));
         </xsl:when>
         <xsl:when test="$type='java.sql.Date'">
-            query.setDate(<xsl:value-of select="$idx"/>, XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("<xsl:value-of select="$name"/>")));
+            query.setDate(<xsl:value-of select="$idx"/>,  <xsl:value-of select="$converter"/>.convertFromStringValue(java.sql.Date.class, (String) pks.get("<xsl:value-of select="$name"/>")));
         </xsl:when>
         <xsl:when test="$type='double'">
-            query.setDouble(<xsl:value-of select="$idx"/>, (XMLUtils.convertFromStringValue(Double.class, (String) pks.get("<xsl:value-of select="$name"/>"))).doubleValue());
+            query.setDouble(<xsl:value-of select="$idx"/>, ( <xsl:value-of select="$converter"/>.convertFromStringValue(Double.class, (String) pks.get("<xsl:value-of select="$name"/>"))).doubleValue());
         </xsl:when>
         <xsl:when test="$type='integer' or $type='int' or $type='java.lang.Integer' ">
-            query.setObject(<xsl:value-of select="$idx"/>, XMLUtils.convertFromStringValue(Integer.class, (String) pks.get("<xsl:value-of select="$name"/>")), java.sql.Types.INTEGER);
+            query.setObject(<xsl:value-of select="$idx"/>,  <xsl:value-of select="$converter"/>.convertFromStringValue(Integer.class, (String) pks.get("<xsl:value-of select="$name"/>")), java.sql.Types.INTEGER);
         </xsl:when>
         <xsl:otherwise>
             A faire :) Type inconnu <xsl:value-of select="$type"/>

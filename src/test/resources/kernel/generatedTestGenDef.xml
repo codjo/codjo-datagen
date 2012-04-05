@@ -222,17 +222,13 @@
                 <name>TEMPLATE</name>
             </attributes>
             <query><![CDATA[
-            declare @TEMPLATE  varchar(255)
-            select @TEMPLATE = ?
-            if (@TEMPLATE = 'null')
-                select @TEMPLATE = null
-
             select QUARANTINE_ID,TEMPLATE
             from AP_MEI_A
-            where (TEMPLATE = @TEMPLATE or @TEMPLATE = 'Tout')
+            where (TEMPLATE = ? or ? = 'Tout')
             ]]>
             </query>
-            <arg type="string">TEMPLATE</arg>
+            <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">TEMPLATE</arg>
+            <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">TEMPLATE</arg>
         </handler-sql>
         </feature>
         <primary-key>

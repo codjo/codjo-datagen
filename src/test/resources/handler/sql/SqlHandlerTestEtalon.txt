@@ -29,7 +29,7 @@ public class NeoSelectHandler extends SqlHandler {
 
     @Override
     protected void fillQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
-        query.setDate(1, XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("date")));
+        query.setDate(1, com.mycompany.MyConverter.convertFromStringValue(java.sql.Date.class, (String) pks.get("date")));
         query.setString(2, XMLUtils.convertFromStringValue(String.class, (String) pks.get("bidule")));
         query.setObject(3, XMLUtils.convertFromStringValue(Integer.class, (String) pks.get("quantity")), java.sql.Types.INTEGER);
     }

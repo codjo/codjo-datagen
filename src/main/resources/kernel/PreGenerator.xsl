@@ -220,41 +220,6 @@
             </attributes>
             <query>
             <xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text>
-            <xsl:for-each select="properties/field[not(@name='quarantineId')]">
-                <xsl:choose>
-                    <xsl:when test="@type">
-                        <xsl:call-template name="declareForSelectAllWithParameters">
-                            <xsl:with-param name="field" select="."/>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:when test="@structure">
-                        <xsl:variable name="structureName" select="@structure"/>
-                        <xsl:for-each select="/data/structure[@name=$structureName]/properties/field">
-                            <xsl:call-template name="declareForSelectAllWithParameters">
-                                <xsl:with-param name="field" select="."/>
-                            </xsl:call-template>
-                        </xsl:for-each>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:for-each>
-
-            <xsl:for-each select="properties/field[not(@name='quarantineId')]">
-                <xsl:choose>
-                    <xsl:when test="@type">
-                        <xsl:call-template name="initialisationForSelectAllWithParameters">
-                            <xsl:with-param name="field" select="."/>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:when test="@structure">
-                        <xsl:variable name="structureName" select="@structure"/>
-                        <xsl:for-each select="/data/structure[@name=$structureName]/properties/field">
-                            <xsl:call-template name="initialisationForSelectAllWithParameters">
-                                <xsl:with-param name="field" select="."/>
-                            </xsl:call-template>
-                        </xsl:for-each>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:for-each>
              select
              <xsl:for-each select="properties/field">
                  <xsl:choose>
@@ -303,12 +268,14 @@
                 <xsl:if test="not(sql/@type='text')">
                         <xsl:choose>
                                <xsl:when test="@type">
-                                       <arg type="string"><xsl:value-of select="@name"/></arg>
+                                       <arg converter="net.codjo.control.server.handler.FilterValueConverter" type="{@type}"><xsl:value-of select="@name"/></arg>
+                                       <arg converter="net.codjo.control.server.handler.FilterValueConverter" type="{@type}"><xsl:value-of select="@name"/></arg>
                                 </xsl:when>
                                 <xsl:when test="@structure">
                                     <xsl:variable name="structureName" select="@structure"/>
                                     <xsl:for-each select="/data/structure[@name=$structureName]/properties/field">
-                                        <arg type="string"><xsl:value-of select="@name"/></arg>
+                                        <arg type="{@type}" converter="net.codjo.control.server.handler.FilterValueConverter"><xsl:value-of select="@name"/></arg>
+                                        <arg type="{@type}" converter="net.codjo.control.server.handler.FilterValueConverter"><xsl:value-of select="@name"/></arg>
                                     </xsl:for-each>
                                 </xsl:when>
                         </xsl:choose>
@@ -317,78 +284,10 @@
         </handler-sql>
     </xsl:template>
 
-    <xsl:template name="declareForSelectAllWithParameters">
-        <xsl:param name="field"/>
-        <xsl:if test="not($field/sql/@type='text')">
-            declare @<xsl:value-of select="java:sql.Util.toSqlName($field/@name)"/>
-            <xsl:text> </xsl:text>
-            <xsl:choose>
-                <xsl:when test="$field/sql/@type='timestamp'">
-                    datetime
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$field/sql/@type"/>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="$field/@type='string'">(255)</xsl:when>
-                <xsl:otherwise>
-                    <xsl:if test="$field/sql/@precision">(<xsl:value-of select="$field/sql/@precision"/>)</xsl:if>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="$field/@type='string'">
-                    select @<xsl:value-of select="java:sql.Util.toSqlName($field/@name)"/> = ?
-                </xsl:when>
-                <xsl:otherwise>
-                    declare @<xsl:value-of select="java:sql.Util.toSqlName($field/@name)"/>_S varchar(255)
-                    select @<xsl:value-of select="java:sql.Util.toSqlName($field/@name)"/>_S = ?
-                </xsl:otherwise>
-           </xsl:choose>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template name="initialisationForSelectAllWithParameters">
-        <xsl:param name="field"/>
-        <xsl:if test="not($field/sql/@type='text')">
-            <xsl:variable name="columnName" select="java:sql.Util.toSqlName($field/@name)"/>
-            <xsl:choose>
-              <xsl:when test="$field/sql/@type='integer'">
-                if (@<xsl:value-of select="$columnName"/>_S = 'null')
-                    select @<xsl:value-of select="$columnName"/> = null
-                else if (@<xsl:value-of select="$columnName"/>_S = 'Tout')
-                    select @<xsl:value-of select="$columnName"/> = -1
-                else
-                    select @<xsl:value-of select="$columnName"/> = convert(int, @<xsl:value-of select="$columnName"/>_S)
-              </xsl:when>
-              <xsl:when test="$field/sql/@type='numeric'">
-                if (@<xsl:value-of select="$columnName"/>_S = 'null')
-                    select @<xsl:value-of select="$columnName"/> = null
-                else if (@<xsl:value-of select="$columnName"/>_S = 'Tout')
-                    select @<xsl:value-of select="$columnName"/> = -1
-                else
-                    select @<xsl:value-of select="$columnName"/> = convert(numeric(<xsl:value-of select="$field/sql/@precision"/>), @<xsl:value-of select="$columnName"/>_S)
-              </xsl:when>
-              <xsl:when test="($field/sql/@type='timestamp') or ($field/sql/@type='datetime')">
-                if (@<xsl:value-of select="$columnName"/>_S = 'null')
-                    select @<xsl:value-of select="$columnName"/> = null
-                else if (@<xsl:value-of select="$columnName"/>_S = 'Tout')
-                    select @<xsl:value-of select="$columnName"/> = '9999-12-31'
-                else
-                    select @<xsl:value-of select="$columnName"/> = convert(datetime, convert(varchar(23),@<xsl:value-of select="$columnName"/>_S))
-              </xsl:when>
-              <xsl:otherwise>
-                 if (@<xsl:value-of select="$columnName"/> = 'null')
-                    select @<xsl:value-of select="$columnName"/> = null
-              </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:template>
-
     <xsl:template name="resolveWhereClauseForSelectAllWithParameters">
         <xsl:param name="field"/>
             <xsl:variable name="columnName" select="java:sql.Util.toSqlName($field/@name)"/>
-            (<xsl:value-of select="$columnName"/> = @<xsl:value-of select="$columnName"/> or @<xsl:value-of select="$columnName"/> =
+            (<xsl:value-of select="$columnName"/> = ? or ? =
             <xsl:choose>
                 <xsl:when test="($field/sql/@type='integer') or $field/sql/@type='numeric'">-1</xsl:when>
                 <xsl:when test="($field/sql/@type='datetime') or ($field/sql/@type='timestamp')">'9999-12-31'</xsl:when>
