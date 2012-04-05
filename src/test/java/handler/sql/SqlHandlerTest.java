@@ -4,7 +4,6 @@
  * Copyright (c) 2001 AGF Asset Management.
  */
 package handler.sql;
-import static net.codjo.test.common.matcher.JUnitMatchers.*;
 import handler.HandlerTestCase;
 import java.io.StringWriter;
 import javax.xml.transform.TransformerException;
@@ -14,6 +13,8 @@ import kernel.DomUtil;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.*;
 /**
  */
 public class SqlHandlerTest extends HandlerTestCase {
@@ -183,6 +184,6 @@ public class SqlHandlerTest extends HandlerTestCase {
         transformer.setErrorListener(warningCollector);
         transformer.transform(new DOMSource(document),
                               new StreamResult(new StringWriter()));
-        assertThat(msg, is(warningCollector.getWarning()));
+        assertThat(msg.trim(), is(warningCollector.getWarning().trim()));
     }
 }
