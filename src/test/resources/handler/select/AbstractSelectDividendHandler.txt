@@ -1,5 +1,5 @@
 package generated;
-import net.codjo.database.api.Database;
+import net.codjo.database.api.Database; 
 import net.codjo.mad.server.handler.XMLUtils;
 import net.codjo.mad.server.handler.select.AbstractSelectHandler;
 import net.codjo.mad.server.handler.select.Getter;
