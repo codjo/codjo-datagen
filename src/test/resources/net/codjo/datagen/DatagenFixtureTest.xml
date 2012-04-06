@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <entities>
-    <entity name="common.test.net.codjo.test.common.data.PM_TEST_TABLE_DEF" table="PM_TEST_TABLE_DEF">
+    <entity name="com.mycompany.TestTableDef" table="PM_TEST_TABLE_DEF">
         <description>Fichier export</description>
         <feature>
             <generate-all/>
