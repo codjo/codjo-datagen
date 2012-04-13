@@ -1,0 +1,28 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.mad.server.handler.*;
+import java.util.*;
+import net.codjo.database.api.query.PreparedQuery;
+import java.sql.*;
+/**
+ *  Classe Handler de selection pour generated.Dividend. <p>
+ *
+ *  Query : <code>SELECT * FROM AP_DIVIDEND p</code>
+ */
+public class SelectAllDividendHandler extends AbstractSelectDividendHandler {
+
+    public SelectAllDividendHandler(Database database) {
+        super(SQL_QUERY, "SELECT * FROM AP_DIVIDEND p", database);
+    }
+
+
+    public String getId() {
+        return "selectAllDividend";
+    }
+
+
+    @Override
+    protected void fillSqlQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
+    }
+ }
+

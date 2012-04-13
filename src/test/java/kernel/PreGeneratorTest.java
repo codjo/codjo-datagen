@@ -4,8 +4,6 @@
  * Copyright (c) 2001 AGF Asset Management.
  */
 package kernel;
-import net.codjo.test.common.XmlUtil;
-import net.codjo.util.file.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,11 +14,20 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import junit.framework.TestCase;
+import net.codjo.test.common.XmlUtil;
+import net.codjo.util.file.FileUtil;
 import org.xml.sax.SAXException;
 /**
  * Classe de test de la phase de pre-generation.
  */
 public class PreGeneratorTest extends TestCase {
+
+    public void test_generationWithOrderClause() throws Exception {
+        assertTransform("src/test/resources/kernel/EtalonWithOrderClause.xml",
+                        "src/test/resources/kernel/ConfigurationWithOrderClauseFileTest.xml");
+    }
+
+
     public void test_generation() throws Exception {
         assertTransform("src/test/resources/kernel/Etalon.xml",
                         "src/test/resources/kernel/ConfigurationFileTest.xml");

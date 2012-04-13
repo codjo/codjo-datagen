@@ -168,6 +168,11 @@
         <xsl:param name="requetorName" select="java:bean.Util.lowerize(java:bean.Util.extractClassName(feature/user-quarantine/@name))"/>
 
         <entity name="{feature/user-quarantine/@name}" table="{feature/user-quarantine/@table}">
+            <xsl:if test="@order-clause">
+                <xsl:attribute name="order-clause">
+                    <xsl:value-of select="@order-clause"/>
+                </xsl:attribute>
+            </xsl:if>
             <feature>
                 <doc-structure/>
                 <sql name="{feature/user-quarantine/@table}" pk-generator="no"/>
@@ -305,6 +310,11 @@
         <xsl:param name="className" select="java:bean.Util.extractClassName(@name)"/>
 
         <entity name="{@name}" table="{@table}">
+            <xsl:if test="../../@order-clause">
+                <xsl:attribute name="order-clause">
+                    <xsl:value-of select="../../@order-clause"/>
+                </xsl:attribute>
+            </xsl:if>
             <feature>
                 <sql name="{@table}" pk-generator="no"/>
                 <bean/>
@@ -468,6 +478,11 @@
                     <xsl:value-of select="@type"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:if test="@order-clause">
+                <xsl:attribute name="order-clause">
+                    <xsl:value-of select="@order-clause"/>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:text></xsl:text>
             <xsl:copy-of select="description"/>
             <xsl:text></xsl:text>
@@ -491,6 +506,11 @@
         <xsl:param name="parentEntity"/>
 
         <entity name="{@name}" table="{@table}">
+            <xsl:if test="$parentEntity/@order-clause">
+                <xsl:attribute name="order-clause">
+                    <xsl:value-of select="$parentEntity/@order-clause"/>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:copy-of select="description"/>
             <xsl:variable name="child" select="."/>
             <feature>

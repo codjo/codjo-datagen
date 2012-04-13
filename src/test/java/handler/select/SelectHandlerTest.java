@@ -48,6 +48,19 @@ public class SelectHandlerTest extends TestCase {
     }
 
 
+    public void test_generation_sqlAllHandler() throws Exception {
+        transformAndCompare("src/test/resources/handler/select/SQLSelectHandlerTest.xml",
+                            "selectAllDividend",
+                            "src/test/resources/handler/select/SqlSelectAllDividendHandler.txt");
+    }
+
+   public void test_generation_sqlAllHandlerWithoutOrderClause() throws Exception {
+        transformAndCompare("src/test/resources/handler/select/SQLSelectHandlerWithoutOrderClauseTest.xml",
+                            "selectAllDividend",
+                            "src/test/resources/handler/select/SqlSelectAllDividendHandlerWithoutOrderClause.txt");
+    }
+
+
     /**
      * Test que la generation d'un handler de type Select Automatise marche qd on surcharge le type.
      */
