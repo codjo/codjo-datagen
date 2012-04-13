@@ -19,7 +19,7 @@
                ]]>
            </query>
 
-           <arg type="java.sql.Date">date</arg>
+           <arg type="java.sql.Date" converter="com.mycompany.MyConverter">date</arg>
            <arg type="string">bidule</arg>
            <arg type="integer">quantity</arg>
         </handler-sql>

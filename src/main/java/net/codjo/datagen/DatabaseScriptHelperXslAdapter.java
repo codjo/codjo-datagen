@@ -5,6 +5,7 @@ import kernel.DomUtil;
 import net.codjo.database.common.api.DatabaseFactory;
 import net.codjo.database.common.api.DatabaseScriptHelper;
 import org.w3c.dom.Node;
+import sql.Util;
 public class DatabaseScriptHelperXslAdapter extends XslAdapter {
     private final DatabaseScriptHelper databaseScriptHelper;
     private final NodeConverter nodeConverter = new NodeConverter();
@@ -117,6 +118,15 @@ public class DatabaseScriptHelperXslAdapter extends XslAdapter {
                   .buildCustomScript(customScriptName,
                                      nodeConverter.convertNodeToSqlTable(node),
                                      gap);
+        }
+        else if ("createSequence".equals(customScriptName)) {
+            script = databaseScriptHelper.buildCustomScript(customScriptName,
+                                                            nodeConverter.convertNodeToSqlTable(node));
+        }
+        else if ("createTriggerForSequence".equals(customScriptName)) {
+            String key = DomUtil.getAttributeValue(node, "properties/field[sql/@identity]", "name");
+            script = databaseScriptHelper.buildCustomScript(customScriptName,
+                                                            nodeConverter.convertNodeToSqlTable(node), Util.toSqlName(key));
         }
         else {
             script = databaseScriptHelper.buildCustomScript(customScriptName);

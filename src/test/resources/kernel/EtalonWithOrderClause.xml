@@ -47,7 +47,7 @@
         </properties>
     </structure>
 
-    <entity name="generated.Dividend" table="AP_DIVIDEND">
+    <entity name="generated.Dividend" table="AP_DIVIDEND" order-clause="portfolioCode">
         <description>Mon dividend a moi</description>
         <feature>
             <sql name="AP_DIVIDEND"/>
@@ -108,7 +108,7 @@
         </properties>
     </entity>
 
-    <entity name="generated.Management" table="AP_MANAGEMENT">
+    <entity name="generated.Management" table="AP_MANAGEMENT" order-clause="portfolioCode,beginDate">
         <description>Mon dividend a moi</description>
 
         <feature>
@@ -180,7 +180,7 @@
         </properties>
     </entity>
 
-    <entity name="TEMPLATE" table="NO">
+    <entity name="TEMPLATE" table="NO" order-clause="quarantineId">
         <description>Tables de quarantaine des taux de FDG</description>
         <feature>
         </feature>
@@ -221,7 +221,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity name="TEMPLATE_WITHOUT_REQUETOR" table="NO">
+    <entity name="TEMPLATE_WITHOUT_REQUETOR" table="NO" order-clause="quarantineId">
         <description>Tables de quarantaine des taux de FDG</description>
         <feature>
         </feature>
@@ -262,7 +262,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity name="EntityCaractNotControlable" table="TABLE_CARAC">
+    <entity name="EntityCaractNotControlable" table="TABLE_CARAC" order-clause="id">
         <description>Tables de Characteristic mais non controllable</description>
         <feature>
             <sql name="TABLE_CARAC"/>
@@ -307,7 +307,7 @@
         </properties>
     </entity>
 
-    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET">
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET" order-clause="refCode">
         <description>Référentiel poulets</description>
         <feature>
             <sql name="REF_POULET"/>
@@ -348,7 +348,7 @@
             <field name="Audit" structure="net.codjo.test.Audit"/>
         </properties>
     </entity>
-    <entity name="net.codjo.mint.ref.Canard" table="REF_CANARD">
+    <entity name="net.codjo.mint.ref.Canard" table="REF_CANARD" order-clause="refCode">
         <description>Référentiel anatidés</description>
         <feature>
             <sql name="REF_CANARD"/>
@@ -389,7 +389,7 @@
         </properties>
     </entity>
 
-    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA">
+    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA" order-clause="quarantineId">
         <feature>
             <doc-structure/>
             <sql pk-generator="no" name="AP_MEI_A"/>
@@ -480,7 +480,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity table="AP_WITHOUT_REQUETOR" name="net.codjo.pims.data.WithoutRequetor">
+    <entity table="AP_WITHOUT_REQUETOR" name="net.codjo.pims.data.WithoutRequetor" order-clause="quarantineId">
         <feature>
             <doc-structure/>
             <sql pk-generator="no" name="AP_WITHOUT_REQUETOR"/>
@@ -570,7 +570,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB">
+    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB" order-clause="quarantineId">
         <feature>
             <sql pk-generator="no" name="AP_MEI_B"/>
             <bean/>
@@ -617,7 +617,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC">
+    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC" order-clause="quarantineId">
         <feature>
             <sql pk-generator="no" name="AP_MEI_C"/>
             <bean/>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <configuration>
+        <project>
+            <name>Red</name>
+        </project>
+        <path>
+            <sql>target/MainTest/Sql/table</sql>
+            <sql-view>target/MainTest/Sql/view</sql-view>
+            <sql-index>target/MainTest/Sql/index</sql-index>
+            <sql-constraint>target/MainTest/Sql/constraint</sql-constraint>
+            <trigger>target/MainTest/Sql/trigger</trigger>
+            <bean>target/MainTest/DataLib/src</bean>
+            <handlers>target/MainTest/HandlerLib/src</handlers>
+            <castor>target/MainTest/ServerLib/src/net/codjo/red/util</castor>
+            <cmdHandler>target/MainTest/HandlerLib/src</cmdHandler>
+            <structure>target/MainTest/ClientAPP/src</structure>
+            <requetor>target/MainTest/ClientAPP/dest</requetor>
+            <referential>target/MainTest/ClientAPP/dest/conf</referential>
+        </path>
+    </configuration>
+
+    <roles>
+        <role id="consultation">
+            <include>select*</include>
+        </role>
+
+        <role id="administration_vl">
+            <include>*FundPrice*</include>
+            <include>PortFolioCodification*</include>
+            <exclude>selectAllTruc</exclude>
+        </role>
+    </roles>
+
+    <entity name="generated.Dividend" table="AP_DIVIDEND" order-clause="portfolioCode">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <generate-all/>
+            <sql-constraint/>
+            <multi-select handler="selectBcpDeTrucs" selection-table="#SELECTION">
+                <parameters>
+                    <arg type="string" sql-name="ACTION_CODE" sql-type="varchar"
+                         precision="20">actionCode
+                    </arg>
+                    <arg type="integer" sql-name="CODE_NUM" sql-type="numeric"
+                         precision="2,5">codeNum
+                    </arg>
+                    <arg type="string" sql-name="TEST" sql-type="varchar" precision="5">
+                        errorTest
+                    </arg>
+                </parameters>
+            </multi-select>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </primary-key>
+
+
+        <functional-key>
+            <field name="portfolioCode"/>
+            <field name="dividendDate"/>
+        </functional-key>
+
+        <foreign-keys>
+            <link id="FK_MANAGEMENT_DIVIDEND" table="generated.Management">
+                <field from="portfolioCode" to="portfolioCode"/>
+            </link>
+        </foreign-keys>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="generated.Management" table="AP_MANAGEMENT" order-clause="portfolioCode,beginDate">
+        <description>Mon dividend a moi</description>
+
+        <feature>
+            <features-for-characteristic/>
+        </feature>
+
+        <primary-key>
+            <field name="portfolioCode"/>
+            <field name="beginDate"/>
+        </primary-key>
+
+        <properties>
+            <field name="portfolioCode" type="string">
+                <description>Code portefeuille du coupon</description>
+                <sql type="varchar"/>
+            </field>
+
+            <field name="beginDate" type="java.sql.Date">
+                <description>Code portefeuille du coupon</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="accountManager" type="java.lang.Integer">
+                <description>Chargé de compte</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Person" family="AccountMgr"/>
+            </field>
+
+            <field name="geographicArea" type="java.lang.Integer">
+                <description>Zone géographique</description>
+                <sql type="integer"/>
+                <referential name="net.codjo.pims.ref.Referential" family="GeographArea"/>
+            </field>
+
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+    <structure name="generated.Audit">
+        <description>Piste d'audit</description>
+        <feature>
+            <bean/>
+        </feature>
+        <properties>
+            <field name="comment" type="string">
+                <description>Commentaire de fiche</description>
+                <sql type="varchar"/>
+            </field>
+            <field name="createdBy" type="string">
+                <sql type="varchar"/>
+            </field>
+        </properties>
+    </structure>
+
+    <entity name="TEMPLATE" table="NO" order-clause="quarantineId">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+            <user-quarantine name="net.codjo.pims.data.MeiRealManagA" requetor="true" table="AP_MEI_A"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagB" table="AP_MEI_B"/>
+            <copy-entity name="net.codjo.pims.data.MeiRealManagC" table="AP_MEI_C"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+     <entity name="TEMPLATE_WITHOUT_REQUETOR" table="NO" order-clause="quarantineId">
+        <description>Tables de quarantaine des taux de FDG</description>
+        <feature>
+            <user-quarantine name="net.codjo.pims.data.WithoutRequetor" table="AP_WITHOUT_REQUETOR"/>
+        </feature>
+
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Id de quarantaine</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+            <field name="sourceFile" type="string">
+                <description>Fichier source</description>
+                <sql type="varchar" precision="10" required="true"/>
+            </field>
+            <field name="errorType" type="integer">
+                <description>Type d'erreur</description>
+                <sql type="integer" required="true"/>
+            </field>
+            <field name="invoiceDate" type="java.sql.Date">
+                <description>Date de facture</description>
+                <sql type="timestamp"/>
+            </field>
+            <field name="invoiceAmount" type="big-decimal">
+                <description>Montant de la facture</description>
+                <sql type="numeric" precision="23,4"/>
+            </field>
+            <field name="creationDate" type="java.sql.Date">
+                <description>Date de création</description>
+                <sql type="datetime"/>
+            </field>
+            <field name="doNotCreate" type="string">
+                <description>Les text sont interdits dans les filtres BD</description>
+                <sql type="text"/>
+            </field>
+            <field name="audit" structure="generated.Audit"/>
+        </properties>
+    </entity>
+
+    <entity name="EntityCaractNotControlable" table="TABLE_CARAC" order-clause="id">
+        <description>Tables de Characteristic mais non controllable</description>
+        <feature>
+            <features-for-characteristic controlable="false"/>
+        </feature>
+
+        <primary-key>
+            <field name="id"/>
+        </primary-key>
+
+        <properties>
+            <field name="id" type="big-decimal">
+                <description>Id de la table</description>
+                <sql type="numeric" precision="23" required="true" identity="true"/>
+            </field>
+        </properties>
+    </entity>
+
+    <entity name="net.codjo.mint.ref.Poulet" table="REF_POULET" order-clause="refCode">
+        <description>Référentiel poulets</description>
+        <feature>
+            <referential generateHandler="true">
+                <fill field="refCode" handlerId="selectFoo"/>
+                <fill field="refLabel" handlerId="selectBar"/>
+            </referential>
+            <audit-trail/>
+        </feature>
+
+        <primary-key>
+            <field name="refCode"/>
+        </primary-key>
+
+        <properties>
+            <field name="refCode" type="string">
+                <description>Code</description>
+                <sql type="varchar" precision="6" required="true"/>
+            </field>
+            <field name="refLabel" type="string">
+                <description>Libellé</description>
+                <sql type="varchar" precision="255" required="true"/>
+            </field>
+            <field name="Audit" structure="net.codjo.test.Audit"/>
+        </properties>
+    </entity>
+    <entity name="net.codjo.mint.ref.Canard" table="REF_CANARD" extends="net.codjo.mint.ref.Poulet">
+        <description>Référentiel anatidés</description>
+        <feature>
+            <referential>
+                <fill field="refCode" handlerId="selectStuff"/>
+            </referential>
+        </feature>
+    </entity>
+</data>
+

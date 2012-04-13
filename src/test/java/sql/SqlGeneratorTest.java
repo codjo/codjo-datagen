@@ -55,14 +55,20 @@ public class SqlGeneratorTest extends GeneratorTestCase {
     public void test_generate() throws Exception {
         File tableApDividend = toFile("AP_DIVIDEND.tab");
         File gapApDividend = toFile("AP_DIVIDEND-gap.sql");
+        File sequenceApDividend = toFile("AP_DIVIDEND-sequence.sql");
+        File triggerForSequenceApDividend = toFile("TR_AP_DIVIDEND_SEQ_I.sql");
 
         tableApDividend.delete();
         gapApDividend.delete();
+        sequenceApDividend.delete();
+        triggerForSequenceApDividend.delete();
 
         super.test_generate();
 
         assertTrue("Définition de la table Dividend existe", tableApDividend.exists());
         assertTrue("Définition du gap Dividend existe", gapApDividend.exists());
+        assertTrue("Définition de la sequence Dividend existe", sequenceApDividend.exists());
+        assertTrue("Définition du trigger de la sequence Dividend existe", triggerForSequenceApDividend.exists());
     }
 
 

@@ -1,4 +1,4 @@
-package generated;
+package generated; 
 import net.codjo.database.api.Database;
 import net.codjo.mad.server.handler.XMLUtils;
 import net.codjo.mad.server.handler.select.AbstractSelectHandler;
@@ -18,7 +18,7 @@ public abstract class AbstractSelectDividendHandler extends AbstractSelectHandle
               database);
 
         addGetter("portfolioCode",
-            new Getter<Dividend>(1) {
+            new Getter<Dividend>(1, java.sql.Types.VARCHAR) {
                 @Override
                 public String get(Dividend dv) {
                     return XMLUtils.convertToStringValue(dv.getPortfolioCode());
@@ -50,7 +50,7 @@ public abstract class AbstractSelectDividendHandler extends AbstractSelectHandle
             });
 
         addGetter("createdBy",
-            new Getter<Dividend>(5) {
+            new Getter<Dividend>(5, java.sql.Types.VARCHAR) {
                 @Override
                 public String get(Dividend dv) {
                     return XMLUtils.convertToStringValue(dv.getAudit().getCreatedBy());
@@ -58,7 +58,7 @@ public abstract class AbstractSelectDividendHandler extends AbstractSelectHandle
             });
 
         addGetter("updatedBy",
-            new Getter<Dividend>(6) {
+            new Getter<Dividend>(6, java.sql.Types.VARCHAR) {
                 @Override
                 public String get(Dividend dv) {
                     return XMLUtils.convertToStringValue(dv.getAudit().getUpdatedBy());

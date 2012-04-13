@@ -14,6 +14,21 @@ public class Util {
             return "java.sql.Types.TIMESTAMP";
         }
 
+        if ("string".equalsIgnoreCase(type)) {
+            return "java.sql.Types.VARCHAR";
+        }
+
         return "";
+    }
+
+
+    public static String buildGetterConstructorParameter(int index, String sqlType) {
+        String indexAsString = "" + index;
+        if ("".equals(sqlType) || sqlType == null) {
+            return indexAsString;
+        }
+        else {
+            return indexAsString + ", " + sqlType;
+        }
     }
 }
