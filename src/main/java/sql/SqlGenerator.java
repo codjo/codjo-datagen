@@ -56,6 +56,8 @@ public class SqlGenerator implements Generator {
             Node sqlNode = sqlNodeList.item(i);
             generateTableScript(doc, root, entityName, sqlNode);
             generateGapScript(doc, root, entityName, sqlNode);
+            generateSequenceScript(doc, root, entityName, sqlNode);
+            generateTriggerForSequenceScript(doc, root, entityName, sqlNode);
         }
     }
 
@@ -77,6 +79,61 @@ public class SqlGenerator implements Generator {
             log("Generation de la definition SQL " + tableName);
             log("                           dans " + dest);
             generateTable(new DOMSource(doc), writer, entityName, tableName, pkGenerator);
+            log("                              Done ");
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la génération du script de table " + dest.getName(),
+                                       e);
+        }
+        finally {
+            writer.close();
+        }
+    }
+
+
+    private void generateSequenceScript(final Document doc, final File root,
+                                        final String entityName, Node sqlNode)
+          throws IOException, TransformerException {
+        String tableName = DomUtil.getAttributeValue(sqlNode, "../..", "table");
+
+        NodeList pkGenerator = DomUtil.getNodeList(sqlNode, "../../properties/field/sql/@identity");
+        if (pkGenerator.getLength() == 1) {
+            File dest = new File(root, tableName + "-sequence.sql");
+            dest.delete();
+            kernel.Util.mkdirs(dest.getParentFile());
+            FileWriter writer = new FileWriter(dest);
+            try {
+                log("Generation de la definition de la sequence SQL " + tableName);
+                log("                           dans " + dest);
+                generateSequence(new DOMSource(doc), writer, entityName, tableName);
+                log("                              Done ");
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Erreur lors de la génération du script de la sequence " + dest.getName(),
+                                           e);
+            }
+            finally {
+                writer.close();
+            }
+        }
+    }
+
+    private void generateTriggerForSequenceScript(Document doc, File root, String entityName, Node sqlNode)
+          throws TransformerException, IOException {
+        String tableName = DomUtil.getAttributeValue(sqlNode, "../..", "table");
+
+        String pkGenerator = "yes";
+        if (DomUtil.hasAttribute(sqlNode, "pk-generator")) {
+            pkGenerator = DomUtil.getAttributeValue(sqlNode, "pk-generator");
+        }
+        File dest = new File(root, "TR_" +tableName+"_SEQ_I.sql");
+        dest.delete();
+        kernel.Util.mkdirs(dest.getParentFile());
+        FileWriter writer = new FileWriter(dest);
+        try {
+            log("Generation de la definition SQL " + tableName);
+            log("                           dans " + dest);
+            generateTriggerForSequence(new DOMSource(doc), writer, entityName, tableName, pkGenerator);
             log("                              Done ");
         }
         catch (Exception e) {
@@ -112,6 +169,28 @@ public class SqlGenerator implements Generator {
         finally {
             writer.close();
         }
+    }
+
+
+    private void generateTriggerForSequence(DOMSource source, FileWriter writer, String entityName, String tableName,
+                                            String pkGenerator) throws TransformerException {
+        StreamResult result = new StreamResult(writer);
+        Transformer sequenceXsl =
+              DomUtil.toTransformer(SqlGenerator.class.getResourceAsStream("SQLTableTriggerForSequence.xsl"));
+        sequenceXsl.setParameter("entityName", entityName);
+        sequenceXsl.setParameter("tableName", tableName);
+        sequenceXsl.transform(source, result);
+    }
+
+
+    private void generateSequence(DOMSource source, FileWriter writer, String entityName, String tableName
+    ) throws TransformerException {
+        StreamResult result = new StreamResult(writer);
+        Transformer sequenceXsl =
+              DomUtil.toTransformer(SqlGenerator.class.getResourceAsStream("SQLTableSequence.xsl"));
+        sequenceXsl.setParameter("entityName", entityName);
+        sequenceXsl.setParameter("tableName", tableName);
+        sequenceXsl.transform(source, result);
     }
 
 

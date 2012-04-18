@@ -21,7 +21,7 @@ public class NeoSelectHandler extends SqlHandler {
     public NeoSelectHandler(Database database) throws Exception {
         super(PK, "", database);
 
-        addGetter("portfolioCode", new Getter(1));
+        addGetter("portfolioCode", new Getter(1, java.sql.Types.VARCHAR));
         addGetter("dividendDate", new Getter(2, java.sql.Types.DATE));
         addGetter("label", new Getter(3));
 

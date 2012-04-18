@@ -5,6 +5,8 @@
  */
 package sql;
 import java.util.StringTokenizer;
+import kernel.DomUtil;
+import org.w3c.dom.Node;
 /**
  * Classe utilitaire pour la génération SQL
  */
@@ -28,8 +30,7 @@ public final class Util {
      *
      * @return nom SQL
      *
-     * @throws IllegalArgumentException If the length of <code>propertyName</code> is greater than 28
-     *                                  caracters.
+     * @throws IllegalArgumentException If the length of <code>propertyName</code> is greater than 28 caracters.
      */
     public static String toSqlName(String propertyName) {
         if (legacyMode && legacyPrefix == null) {
@@ -47,6 +48,17 @@ public final class Util {
             }
         }
         return sqlName;
+    }
+
+
+    public static String orderByWith(Node entityNode) {
+        try {
+            String orderClause = DomUtil.getAttributeValue(entityNode, "order-clause");
+            return " ORDER BY " + toSqlUpper(orderClause);
+        }
+        catch (NullPointerException ex) {
+            return "";
+        }
     }
 
 

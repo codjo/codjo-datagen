@@ -11,7 +11,7 @@
 -->
 <xsl:template match="feature/handler-select[@type='All']" priority="1">
     <handler-select id="{@id}">
-             <query type='SQL' >SELECT * FROM <xsl:value-of select="../../@table"/> p</query>
+             <query type='SQL' >SELECT * FROM <xsl:value-of select="../../@table"/> p<xsl:value-of select="java:sql.Util.orderByWith(../..)"/></query>
     </handler-select>
 </xsl:template>
 

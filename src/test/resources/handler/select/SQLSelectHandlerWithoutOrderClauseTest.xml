@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <entity name="generated.Dividend" table="AP_DIVIDEND" order-clause="portfolioCode,portfolioLabel">
+  <entity name="generated.Dividend" table="AP_DIVIDEND">
     <description>Mon dividend a moi</description>
 
     <feature>

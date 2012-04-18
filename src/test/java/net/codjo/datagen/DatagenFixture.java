@@ -4,15 +4,15 @@
  * Copyright (c) 2001 AGF Asset Management.
  */
 package net.codjo.datagen;
-import net.codjo.test.common.PathUtil;
-import net.codjo.test.common.fixture.DirectoryFixture;
-import net.codjo.test.common.fixture.Fixture;
-import net.codjo.util.file.FileUtil;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import junit.framework.Assert;
 import kernel.Main;
+import net.codjo.test.common.PathUtil;
+import net.codjo.test.common.fixture.DirectoryFixture;
+import net.codjo.test.common.fixture.Fixture;
+import net.codjo.util.file.FileUtil;
 /**
  * Fixture pour l'utilisation de datagen.
  */
@@ -21,18 +21,23 @@ public class DatagenFixture implements Fixture {
     private static final String ENTITIES_END_TAG = "</entities>";
     private static final String FILE_SEPARATOR = "/";
     private Class testCaseClass;
-    private String entityFileRelativePath;
+    private DatagenInput datagenInput;
     private DirectoryFixture datagenDirectory;
 
 
     public DatagenFixture(Class testCaseClass) {
-        this(testCaseClass, "src/datagen/datagen.xml");
+        this(testCaseClass, DatagenInput.file("src/datagen/datagen.xml"));
     }
 
 
     public DatagenFixture(Class testCaseClass, String entityFileRelativePath) {
+        this(testCaseClass, DatagenInput.file(entityFileRelativePath));
+    }
+
+
+    public DatagenFixture(Class testCaseClass, DatagenInput datagenInput) {
         this.testCaseClass = testCaseClass;
-        this.entityFileRelativePath = entityFileRelativePath;
+        this.datagenInput = datagenInput;
         datagenDirectory = new DirectoryFixture(PathUtil.findTargetDirectory(testCaseClass) + "/datagen");
     }
 
@@ -50,8 +55,7 @@ public class DatagenFixture implements Fixture {
     public void generate() throws Exception {
         Main main = new Main(Main.DB_TYPE_SYBASE);
 
-        File datagenFile = buildDatagenFile(PathUtil.findBaseDirectory(testCaseClass)
-                                            + FILE_SEPARATOR + entityFileRelativePath);
+        File datagenFile = buildDatagenFile(datagenInput.entityFileAbsolutePath(testCaseClass));
 
         main.generate(datagenFile.getAbsolutePath());
     }
@@ -82,13 +86,23 @@ public class DatagenFixture implements Fixture {
     }
 
 
+    public String getHandlerPath() {
+        return getDatagenDirectory() + "/handler";
+    }
+
+
+    public File getHandlerFile(String relativePath) {
+        return new File(getHandlerPath(), relativePath);
+    }
+
+
     public File getTargetFile() {
         return new File(determineCurrentTargetPath());
     }
 
 
     public File getEntityFile() {
-        return new File(determineCurrentTestPath(), entityFileRelativePath);
+        return new File(datagenInput.entityFileAbsolutePath(testCaseClass));
     }
 
 
@@ -142,5 +156,42 @@ public class DatagenFixture implements Fixture {
 
     private String buildNode(String nodeName, String nodeValue) throws IOException {
         return "<" + nodeName + ">" + new File(nodeValue).getCanonicalPath() + "</" + nodeName + ">";
+    }
+
+
+    enum LocalisationStrategy {
+        LOCATE_AS_A_RESOURCE,
+        LOCATE_FROM_BASE_DIR
+    }
+    public static class DatagenInput {
+        private LocalisationStrategy localisationStrategy;
+        private String path;
+
+
+        private DatagenInput(LocalisationStrategy localisationStrategy, String path) {
+            this.localisationStrategy = localisationStrategy;
+            this.path = path;
+        }
+
+
+        public static DatagenInput resource(String path) {
+            return new DatagenInput(LocalisationStrategy.LOCATE_AS_A_RESOURCE, path);
+        }
+
+
+        public static DatagenInput file(String path) {
+            return new DatagenInput(LocalisationStrategy.LOCATE_FROM_BASE_DIR, path);
+        }
+
+
+        public String entityFileAbsolutePath(Class testCaseClass) {
+            switch (localisationStrategy) {
+                case LOCATE_AS_A_RESOURCE:
+                    return new File(testCaseClass.getResource(path).getFile()).getAbsolutePath();
+                case LOCATE_FROM_BASE_DIR:
+                    return PathUtil.findBaseDirectory(testCaseClass) + FILE_SEPARATOR + path;
+            }
+            throw new InternalError("impossible");
+        }
     }
 }

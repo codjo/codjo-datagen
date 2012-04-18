@@ -1,6 +1,4 @@
 package handler;
-import static net.codjo.test.common.matcher.JUnitMatchers.*;
-import net.codjo.util.file.FileUtil;
 import java.io.File;
 import java.io.StringWriter;
 import javax.xml.transform.ErrorListener;
@@ -11,7 +9,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import kernel.DomUtil;
 import kernel.Util;
+import net.codjo.util.file.FileUtil;
 import org.junit.Before;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.*;
 /**
  *
  */
@@ -28,13 +29,19 @@ public abstract class HandlerTestCase {
     protected void assertTransformation(Transformer xsl, String xmlSource, String etalon)
           throws Exception {
 
+        assertThat(assertXslTransformAndCollectWaning(xsl, xmlSource, etalon).warning,
+                   describedAs("Aucun warning émis lors de la transformation", equalTo("")));
+    }
+
+
+    private WarningCollector assertXslTransformAndCollectWaning(Transformer xsl, String xmlSource, String etalon)
+          throws Exception {
         WarningCollector warningCollector = new WarningCollector();
         xsl.setErrorListener(warningCollector);
 
-        Util.compare(Util.flatten(FileUtil.loadContent(new File(etalon))),
-                     Util.flatten(transformUsing(xsl, xmlSource)));
-        assertThat(warningCollector.warning,
-                   describedAs("Aucun warning émis lors de la transformation", equalTo("")));
+        Util.compare(Util.flatten(FileUtil.loadContent(new File(etalon)), true),
+                     Util.flatten(transformUsing(xsl, xmlSource), true));
+        return warningCollector;
     }
 
 
@@ -43,12 +50,7 @@ public abstract class HandlerTestCase {
                                         String etalon,
                                         String warning) throws Exception {
 
-        WarningCollector warningCollector = new WarningCollector();
-        xsl.setErrorListener(warningCollector);
-
-        Util.compare(Util.flatten(FileUtil.loadContent(new File(etalon))),
-                     Util.flatten(transformUsing(xsl, xmlSource)));
-        assertThat(warningCollector.warning,
+        assertThat(assertXslTransformAndCollectWaning(xsl, xmlSource, etalon).warning,
                    describedAs("Warning émis lors de la transformation", equalTo(warning)));
     }
 

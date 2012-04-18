@@ -194,6 +194,7 @@
                     <xs:attribute name="table" type="xs:string"/>
                     <xs:attribute name="type" type="xs:string"/>
                     <xs:attribute name="extends" type="xs:string"/>
+                    <xs:attribute name="order-clause" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -226,7 +227,7 @@
         </xs:complexType>
     </xs:element>
 
-     <xs:element name="functional-key">
+    <xs:element name="functional-key">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="field" minOccurs="1"
@@ -508,6 +509,17 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute name="type" type="xs:string"/>
+                <xs:attribute name="converter" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="fr">
+                            Optional attribute - Override the default mechanism used to convert this argument from
+                            String. The value is a fullname of a class that contains a method with the following
+                            signature:
+                            <br/>
+                            public static &lt;T> T convertFromStringValue(Class&lt;T> propertyClass, String value){...}
+                        </xs:documentation>
+                    </xs:annotation>
+              </xs:attribute>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
