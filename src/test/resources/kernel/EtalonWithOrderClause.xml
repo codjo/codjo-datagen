@@ -180,7 +180,7 @@
         </properties>
     </entity>
 
-    <entity name="TEMPLATE" table="NO" order-clause="quarantineId">
+    <entity name="TEMPLATE" table="NO" order-clause="quarantineId,sourceFile">
         <description>Tables de quarantaine des taux de FDG</description>
         <feature>
         </feature>
@@ -389,7 +389,7 @@
         </properties>
     </entity>
 
-    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA" order-clause="quarantineId">
+    <entity table="AP_MEI_A" name="net.codjo.pims.data.MeiRealManagA" order-clause="quarantineId,sourceFile">
         <feature>
             <doc-structure/>
             <sql pk-generator="no" name="AP_MEI_A"/>
@@ -425,7 +425,8 @@
                and (CREATION_DATE = ? or ? = '9999-12-31')
                and (COMMENT = ? or ? = 'Tout')
                and (CREATED_BY = ? or ? = 'Tout')
-            ]]>
+             order by QUARANTINE_ID,SOURCE_FILE
+             ]]>
                 </query>
                 <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
                 <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
@@ -515,6 +516,7 @@
                and (CREATION_DATE = ? or ? = '9999-12-31')
                and (COMMENT = ? or ? = 'Tout')
                and (CREATED_BY = ? or ? = 'Tout')
+             order by QUARANTINE_ID
             ]]>
                 </query>
                 <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">sourceFile</arg>
@@ -570,7 +572,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB" order-clause="quarantineId">
+    <entity table="AP_MEI_B" name="net.codjo.pims.data.MeiRealManagB" order-clause="quarantineId,sourceFile">
         <feature>
             <sql pk-generator="no" name="AP_MEI_B"/>
             <bean/>
@@ -617,7 +619,7 @@
             <field name="audit" structure="generated.Audit"/>
         </properties>
     </entity>
-    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC" order-clause="quarantineId">
+    <entity table="AP_MEI_C" name="net.codjo.pims.data.MeiRealManagC" order-clause="quarantineId,sourceFile">
         <feature>
             <sql pk-generator="no" name="AP_MEI_C"/>
             <bean/>
