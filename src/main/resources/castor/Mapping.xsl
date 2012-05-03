@@ -6,14 +6,23 @@
     exclude-result-prefixes="java">
 <xsl:output method="xml" indent="yes"/>
 
-<!-- ***************************************************************************
-    Démarrage
--->
-<xsl:template match="/">
-    <mapping>
-        <xsl:apply-templates select="//data/*[feature/castor]"/>
-    </mapping>
-</xsl:template>
+    <!-- ***************************************************************************
+        Démarrage
+    -->
+    <xsl:template match="/">
+        <mapping>
+            <!-- ***************************************************************************
+                Gestion des sequences ORACLE
+            -->
+            <xsl:if test="/data/entity/primary-key/@key-generator='SEQUENCE'">
+                <key-generator name="SEQUENCE" alias="ORACLE_SEQUENCE">
+                    <param name="returning" value="true"/>
+                    <param name="trigger" value="true"/>
+                </key-generator>
+            </xsl:if>
+            <xsl:apply-templates select="//data/*[feature/castor]"/>
+        </mapping>
+    </xsl:template>
 
 <!-- ***************************************************************************
     Declaration du mapping d'une entity
@@ -22,10 +31,9 @@
     <class name="{@name}"
          identity="{java:castor.Util.toList(primary-key/field)}">
         <xsl:if test="primary-key/@key-generator">
-            <xsl:attribute name="key-generator"><xsl:value-of select="primary-key/@key-generator"/></xsl:attribute>
+            <xsl:attribute name="key-generator"><xsl:value-of select="java:castor.Util.mapCastorKeyGenerator(primary-key/@key-generator)"/></xsl:attribute>
         </xsl:if>
         <cache-type type="none"/>
-
         <map-to table="{@table}" />
 
         <xsl:apply-templates select="properties/field" />

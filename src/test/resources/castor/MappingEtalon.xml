@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping>
+    <class identity="portfolioCode dividendDate" name="generated.Dividend" key-generator="MAX">
+        <cache-type type="none"/>
+        <map-to table="AP_DIVIDEND"/>
+        <field type="string" name="portfolioCode">
+            <sql name="PORTFOLIO_CODE" type="varchar"/>
+        </field>
+        <field type="big-decimal" name="netDividend">
+            <sql name="NET_DIVIDEND" type="numeric" dirty="ignore"/>
+        </field>
+        <field type="java.sql.Timestamp" name="dividendDate">
+            <sql name="DIVIDEND_DATE" type="timestamp"/>
+        </field>
+        <field type="boolean" name="automaticUpdate">
+            <sql name="AUTOMATIC_UPDATE" type="bit" dirty="ignore"/>
+        </field>
+        <!-- Declaration de la structure generated.Audit-->
+        <field type="string" name="audit.comment">
+            <sql name="COMMENT" type="varchar" dirty="ignore"/>
+        </field>
+        <field type="string" name="audit.createdBy">
+            <sql name="CREATED_BY" type="varchar" dirty="ignore"/>
+        </field>
+    </class>
+</mapping>
