@@ -1,0 +1,69 @@
+package generated;
+import net.codjo.database.api.Database;
+import net.codjo.database.api.query.PreparedQuery;
+import net.codjo.mad.server.handler.XMLUtils;
+import net.codjo.mad.server.handler.sql.SqlHandler;
+import net.codjo.mad.server.handler.sql.Getter;
+
+import java.sql.*;
+import java.util.Map;
+/**
+* Classe Handler de selection pour generated.Dividend. <p>
+*
+
+        * Query : <code>select QUARANTINE_ID,CALENDAR_CODE,HOLIDAY_DATE,IMPORT_DATE from Q_AP_USER_HOLIDAY where (CALENDAR_CODE = ? or ? = 'Tout') and (HOLIDAY_DATE = ? or ? = 'Tout') and (IMPORT_DATE = ? or ? = 'Tout') </code>
+
+*/
+public class NeoSelectHandler extends SqlHandler {
+
+private static final String[] PK =
+{
+
+"quarantineId"
+
+};
+
+
+
+public NeoSelectHandler(Database database)
+
+{
+super(PK, "select QUARANTINE_ID,CALENDAR_CODE,HOLIDAY_DATE,IMPORT_DATE from Q_AP_USER_HOLIDAY where (CALENDAR_CODE = ? or ? = 'Tout') and (HOLIDAY_DATE = ? or ? = 'Tout') and (IMPORT_DATE = ? or ? = 'Tout') ", database);
+
+
+addGetter("quarantineId", new Getter(1));
+
+
+addGetter("calendarCode", new Getter(2, java.sql.Types.VARCHAR));
+
+
+addGetter("holidayDate", new Getter(3, java.sql.Types.VARCHAR));
+
+
+addGetter("importDate", new Getter(4, java.sql.Types.VARCHAR));
+
+}
+
+public String getId() {
+return "neoSelect";
+}
+
+@Override
+protected void fillQuery(PreparedQuery query, Map<String, String> pks) throws SQLException {
+
+    query.setString(1,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("calendarCode")));
+
+    query.setString(2,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("calendarCode")));
+
+    query.setString(3,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("holidayDate")));
+
+    query.setString(4,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("holidayDate")));
+
+    query.setString(5,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("importDate")));
+
+    query.setString(6,  net.codjo.control.server.handler.FilterValueConverter.convertFromStringValue(String.class, (String) pks.get("importDate")));
+
+}
+
+}
+

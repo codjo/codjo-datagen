@@ -132,7 +132,7 @@
         </properties>
     </structure>
 
-    <entity name="TEMPLATE" table="NO" order-clause="quarantineId">
+    <entity name="TEMPLATE" table="NO" order-clause="quarantineId,sourceFile">
         <description>Tables de quarantaine des taux de FDG</description>
         <feature>
             <user-quarantine name="net.codjo.pims.data.MeiRealManagA" requetor="true" table="AP_MEI_A"/>

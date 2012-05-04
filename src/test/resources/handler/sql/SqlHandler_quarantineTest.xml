@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <entity table="Q_AP_USER_HOLIDAY" name="generated.Dividend" order-clause="quarantineId,sourceFile">
+        <feature>
+            <doc-structure/>
+            <sql pk-generator="no" name="Q_AP_USER_HOLIDAY"/>
+            <sql-index>
+                <idx name-prefix="X1_" type="primary-key"/>
+            </sql-index>
+            <bean/>
+            <castor/>
+            <handler-sql id="neoSelect">
+                <attributes>
+                    <name>quarantineId</name>
+                    <name>calendarCode</name>
+                    <name>holidayDate</name>
+                    <name>importDate</name>
+                </attributes>
+                <query><![CDATA[
+             select
+             QUARANTINE_ID,CALENDAR_CODE,HOLIDAY_DATE,IMPORT_DATE
+             from Q_AP_USER_HOLIDAY
+             where
+
+            (CALENDAR_CODE = ? or ? =
+            'Tout')
+
+                            and
+
+            (HOLIDAY_DATE = ? or ? =
+            'Tout')
+
+                            and
+
+            (IMPORT_DATE = ? or ? =
+            'Tout')
+
+    ]]></query>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">calendarCode</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">calendarCode</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">holidayDate</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">holidayDate</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">importDate</arg>
+                <arg type="string" converter="net.codjo.control.server.handler.FilterValueConverter">importDate</arg>
+            </handler-sql>
+        </feature>
+        <primary-key>
+            <field name="quarantineId"/>
+        </primary-key>
+        <properties>
+            <field name="quarantineId" type="big-decimal">
+                <description>Quarantine Id</description>
+                <sql identity="true" precision="23" required="true" type="numeric"/>
+            </field>
+            <field name="calendarCode" type="string">
+                <description>Calendar code</description>
+                <sql precision="255" type="varchar"/>
+            </field>
+            <field name="holidayDate" type="string">
+                <description>Holiday date</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="importDate" type="string">
+                <description>Import date</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+</data>
