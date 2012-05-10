@@ -166,7 +166,8 @@
     <xsl:template match="entity" mode="userQ">
         <xsl:param name="className" select="java:bean.Util.extractClassName(feature/user-quarantine/@name)"/>
         <xsl:param name="requetorName" select="java:bean.Util.lowerize(java:bean.Util.extractClassName(feature/user-quarantine/@name))"/>
-
+        <xsl:param name="orderClause" select="@order-clause"/>
+        
         <entity name="{feature/user-quarantine/@name}" table="{feature/user-quarantine/@table}">
             <xsl:if test="@order-clause">
                 <xsl:attribute name="order-clause">
@@ -197,6 +198,9 @@
                     <xsl:with-param name="className">
                         <xsl:value-of select="$className"/>
                     </xsl:with-param>
+                    <xsl:with-param name="orderClause">
+                        <xsl:value-of select="$orderClause"/>
+                    </xsl:with-param>
                 </xsl:call-template>
             </feature>
             <xsl:copy-of select="primary-key"/>
@@ -207,6 +211,7 @@
 
     <xsl:template name="selectAllWithParameters">
         <xsl:param name="className"/>
+        <xsl:param name="orderClause"/>
         <handler-sql id="selectAll{$className}WithParameters">
             <attributes>
                 <xsl:for-each select="properties/field">
@@ -266,7 +271,12 @@
                  </xsl:if>
              </xsl:for-each>
 
-            <xsl:text disable-output-escaping="yes">]]&gt;</xsl:text>
+             <xsl:if test="@order-clause">
+                 order by
+                 <xsl:value-of select="java:sql.Util.toSqlName(@order-clause)"/>
+             </xsl:if>
+             <xsl:text disable-output-escaping="yes">
+                 ]]&gt;</xsl:text>
 
             </query>
             <xsl:for-each select="properties/field[not(@name='quarantineId')]">

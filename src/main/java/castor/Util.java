@@ -14,10 +14,12 @@ import org.w3c.dom.NodeList;
  * @version $Revision: 1.2 $
  */
 public final class Util {
-    private Util() {}
+    private Util() {
+    }
+
 
     public static String toList(NodeList list) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
             buffer.append(DomUtil.getAttributeValue(node, "name"));
@@ -26,5 +28,13 @@ public final class Util {
             }
         }
         return buffer.toString();
+    }
+
+
+    public static String mapCastorKeyGenerator(String keyGenerator) {
+        if (keyGenerator.equals("SEQUENCE")) {
+            return "ORACLE_SEQUENCE";
+        }
+        return keyGenerator;
     }
 }

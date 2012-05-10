@@ -5,9 +5,15 @@
  */
 package castor;
 import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import junit.framework.TestCase;
 import kernel.DomUtil;
+import net.codjo.database.common.impl.FileUtil;
+import net.codjo.test.common.XmlUtil;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 /**
  * DOCUMENT ME!
  *
@@ -19,12 +25,32 @@ public class CastorGeneratorTest extends TestCase {
     private File mappingFile;
     private Document source;
 
+
     public void test_generate() throws Exception {
+        assertXmlOutput("src/test/resources/castor/CastorTest.xml", "/castor/MappingEtalon.xml");
+    }
+
+
+    public void test_generateWithSequence() throws Exception {
+        assertXmlOutput("src/test/resources/castor/CastorTestWithSequence.xml",
+                        "/castor/MappingEtalonWithSequence.xml");
+    }
+
+
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
+    private void assertXmlOutput(String srcFile, String etalon)
+          throws IOException, ParserConfigurationException, SAXException, TransformerException {
         mappingFile.delete();
 
+        source = DomUtil.toDocument(srcFile);
         generator.generate(source, ROOT);
 
         assertTrue(mappingFile + " existe", mappingFile.exists());
+
+        String actual = FileUtil.loadContent(mappingFile);
+        String expected = FileUtil.loadContent(new File(getClass().getResource(etalon).getFile()));
+
+        XmlUtil.assertEquivalent(expected, actual);
     }
 
 
@@ -41,12 +67,12 @@ public class CastorGeneratorTest extends TestCase {
 
 
     protected void setUp() throws Exception {
-        source = DomUtil.toDocument("src/test/resources/castor/CastorTest.xml");
         mappingFile = new File(ROOT, "Mapping.xml");
         generator = new CastorGenerator();
     }
 
 
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     protected void tearDown() {
         mappingFile.delete();
     }

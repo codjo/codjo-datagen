@@ -145,6 +145,14 @@ public class SqlHandlerTest extends HandlerTestCase {
     }
 
 
+    @Test
+    public void test_generation_quarantine() throws Exception {
+        assertTransformation(transformer,
+                             file("SqlHandler_quarantineTest.xml"),
+                             file("SqlHandler_quarantineTest_etalon.txt"));
+    }
+
+
     private Node getQueryNode(Document doc) throws TransformerException {
         return getQueryNode(doc, "neoSelect");
     }

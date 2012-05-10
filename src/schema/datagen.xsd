@@ -223,7 +223,15 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="key-generator" type="xs:string"/>
+            <xs:attribute name="key-generator">
+                <xs:simpleType>
+                   <xs:restriction base="xs:string">
+                     <xs:enumeration value="IDENTITY"/>
+                     <xs:enumeration value="SEQUENCE"/>
+                     <xs:enumeration value="MAX"/>
+                   </xs:restriction>
+                 </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
 
