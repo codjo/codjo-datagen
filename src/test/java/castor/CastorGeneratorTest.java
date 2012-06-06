@@ -10,8 +10,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import junit.framework.TestCase;
 import kernel.DomUtil;
-import net.codjo.database.common.impl.FileUtil;
 import net.codjo.test.common.XmlUtil;
+import net.codjo.util.file.FileUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 /**
