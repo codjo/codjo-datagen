@@ -81,12 +81,13 @@ public class <xsl:value-of select="$handlerClasseName"/> extends AbstractHandler
         try {
             Map pks = XMLUtils.getPrimaryKeys(node);
             Connection con = getContext().getTxConnection();
+            PreparedStatement stmt = null;
             try {
-                PreparedStatement stmt = con.prepareStatement(SQL);
+                stmt = con.prepareStatement(SQL);
                 fillSqlQuery(stmt, pks);
 
         <xsl:if test="feature/historic-audit-trail">
-               PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
+                PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
 
                 PreparedStatement selectStmt = con.prepareStatement(SELECT_SQL);
                 fillSqlQuery(selectStmt, pks);
@@ -121,6 +122,9 @@ public class <xsl:value-of select="$handlerClasseName"/> extends AbstractHandler
                 return expected;
             }
             finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
                 con.close();
             }
         }

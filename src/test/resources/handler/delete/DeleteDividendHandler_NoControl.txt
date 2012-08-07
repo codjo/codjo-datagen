@@ -45,8 +45,9 @@ public class DeleteDividendHandler extends AbstractHandler {
             Map pks = XMLUtils.getPrimaryKeys(node);
 
             Connection con = getContext().getTxConnection();
+            PreparedStatement stmt = null;
             try {
-                PreparedStatement stmt = con.prepareStatement(SQL);
+                stmt = con.prepareStatement(SQL);
                 fillSqlQuery(stmt, pks);
 
                PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
@@ -86,6 +87,9 @@ public class DeleteDividendHandler extends AbstractHandler {
                 return expected;
             }
             finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
                 con.close();
             }
         }
