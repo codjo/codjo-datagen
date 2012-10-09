@@ -4,21 +4,22 @@
  * Copyright (c) 2001 AGF Asset Management.
  */
 package kernel;
-import net.codjo.database.common.api.DatabaseFactory;
-import net.codjo.database.common.api.DatabaseHelper;
-import net.codjo.database.common.api.ExecSqlScript;
-import static net.codjo.test.common.matcher.JUnitMatchers.*;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import kernel.Generator.GeneratorType;
+import net.codjo.database.common.api.DatabaseFactory;
+import net.codjo.database.common.api.DatabaseHelper;
+import net.codjo.database.common.api.ExecSqlScript;
 import org.apache.log4j.Logger;
 import org.junit.After;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.*;
+import static org.junit.Assert.assertTrue;
 /**
  * TestCase de {@link Generator}.
  *
@@ -109,7 +110,7 @@ public abstract class GeneratorTestCase {
         execSqlScript.setConnectionMetadata(databaseHelper.createApplicationConnectionMetadata());
         execSqlScript.setLogger(new MyLogger());
         execSqlScript.execute(scripFile.getParentFile().getAbsolutePath(),
-                              scripFile.getAbsolutePath());
+                              scripFile.getName());
         return execSqlScript;
     }
 
