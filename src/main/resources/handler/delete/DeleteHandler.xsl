@@ -101,11 +101,14 @@ public class <xsl:value-of select="$handlerClasseName"/> extends AbstractHandler
                 auditStmt.setString(2, buildFunctionKey(rs, getFunctionalKey()));
                 auditStmt.setString(3, getContext().getUser());
                 auditStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
-                 try {
+                try {
                     auditStmt.executeUpdate();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     throw new HandlerException("Erreur lors de l'audit de la suppression de la table "+getDbTableName());
+                } finally {
+                    auditStmt.close();
+                    selectStmt.close();
                 }
         </xsl:if>
 
@@ -255,7 +258,7 @@ public class <xsl:value-of select="$handlerClasseName"/> extends AbstractHandler
         <xsl:value-of select="$entityClassName"/> obj = (<xsl:value-of select="$entityClassName"/>) results.next();
 
         <xsl:if test="feature/historic-audit-trail">
-               PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
+                PreparedStatement auditStmt = con.prepareStatement(AUDIT_SQL);
 
                 PreparedStatement selectStmt = con.prepareStatement(SELECT_SQL);
                 fillSqlQuery(selectStmt, pks);
@@ -268,11 +271,14 @@ public class <xsl:value-of select="$handlerClasseName"/> extends AbstractHandler
                 auditStmt.setString(1, getDbTableName());
                 auditStmt.setString(2, buildFunctionKey(rs, getFunctionalKey()));
                 auditStmt.setString(3, getContext().getUser());
-                 try {
+                try {
                     auditStmt.executeUpdate();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     throw new HandlerException("Erreur lors de l'audit de la suppression de la table "+getDbTableName());
+                } finally {
+                    auditStmt.close();
+                    selectStmt.close();
                 }
         </xsl:if>
 

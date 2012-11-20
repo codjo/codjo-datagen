@@ -80,11 +80,14 @@ public class DeleteDividendHandler extends AbstractHandler {
                 auditStmt.setString(1, getDbTableName());
                 auditStmt.setString(2, buildFunctionKey(rs, getFunctionalKey()));
                 auditStmt.setString(3, getContext().getUser());
-                 try {
+                try {
                     auditStmt.executeUpdate();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     throw new HandlerException("Erreur lors de l'audit de la suppression de la table "+getDbTableName());
+                } finally {
+                    auditStmt.close();
+                    selectStmt.close();
                 }
 
 
