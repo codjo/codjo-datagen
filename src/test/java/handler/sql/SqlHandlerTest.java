@@ -53,6 +53,14 @@ public class SqlHandlerTest extends HandlerTestCase {
                              file("SqlHandler_factoryTest.xml"),
                              file("SqlHandler_factoryTestEtalon.txt"));
     }
+    
+
+    @Test
+    public void test_generation_statement_class() throws Exception {
+        assertTransformation(transformer,
+                             file("SqlHandler_factoryStatementTest.xml"),
+                             file("SqlHandler_factoryStatementTestEtalon.txt"));
+    }
 
 
     @Test
