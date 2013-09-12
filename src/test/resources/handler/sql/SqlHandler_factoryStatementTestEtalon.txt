@@ -4,7 +4,8 @@ import net.codjo.database.api.query.PreparedQuery;
 import net.codjo.mad.server.handler.XMLUtils;
 import net.codjo.mad.server.handler.sql.SqlHandler;
 import net.codjo.mad.server.handler.sql.Getter;
-import net.codjo.mad.server.handler.sql.StatementBuilder;
+import net.codjo.mad.server.handler.sql.QueryBuilder;
+import net.codjo.mad.server.handler.sql.QueryParameterFiller;
 import net.codjo.mad.server.handler.HandlerException;
 import java.sql.*;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class NeoSelectHandler extends SqlHandler {
     private static final String[] PK = {"portfolioCode" , "dividendDate"};
 
-    private StatementBuilder statementBuilder;
+    private QueryBuilder queryBuilder;
 
     public NeoSelectHandler(Database database) throws Exception {
         super(PK, "", database);
@@ -25,7 +26,7 @@ public class NeoSelectHandler extends SqlHandler {
         addGetter("dividendDate", new Getter(2, java.sql.Types.DATE));
         addGetter("label", new Getter(3));
 
-        statementBuilder = (StatementBuilder)Class.forName("net.codjo.truc.StatementBidule").newInstance();
+        queryBuilder = (QueryBuilder)Class.forName("net.codjo.truc.QueryBidule").newInstance();
     }
 
     public String getId() {
@@ -38,6 +39,8 @@ public class NeoSelectHandler extends SqlHandler {
             return;
         }
 
+        ((QueryParameterFiller)queryBuilder).fillQuery(query, pks);
+
         int idx = 1;
         if (pks.containsKey("date")) {
            query.setDate(idx++, XMLUtils.convertFromStringValue(java.sql.Date.class, (String) pks.get("date")));
@@ -48,8 +51,8 @@ public class NeoSelectHandler extends SqlHandler {
     }
 
     @Override
-    protected PreparedStatement buildStatement(Map<String, String> arguments) throws HandlerException {
-        return statementBuilder.buildStatement(arguments, this);
+    protected String buildQuery(Map<String, String> arguments) throws HandlerException {
+        return queryBuilder.buildQuery(arguments, this);
     }
 }
 

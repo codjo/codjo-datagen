@@ -11,7 +11,7 @@
                 <name>label</name>
             </attributes>
 
-           <query factory="net.codjo.truc.StatementBidule" statement="true"/>
+           <query factory="net.codjo.truc.QueryBidule" with-parameter="true"/>
 
            <arg type="java.sql.Date">date</arg>
            <arg>portfolioCode</arg>

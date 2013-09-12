@@ -23,7 +23,7 @@
         <xsl:variable name="selectClassName" select="java:bean.Util.capitalize($handlerId)"/>
         <xsl:variable name="sqlQuery" select="java:kernel.Util.flatten(feature/handler-sql[@id=$handlerId]/query)"/>
         <xsl:variable name="hasQueryFactory" select="feature/handler-sql[@id=$handlerId]/query[@factory]"/>
-        <xsl:variable name="isStatementFactory" select="feature/handler-sql[@id=$handlerId]/query[@statement='true']"/>
+        <xsl:variable name="hasParameter" select="feature/handler-sql[@id=$handlerId]/query[@with-parameter='true']"/>
         <xsl:variable name="inTransaction" select="feature/handler-sql[@id=$handlerId and @transaction='true']"/>
         <xsl:variable name="inTransactionForce"
                       select="feature/handler-sql[@id=$handlerId and @force-transaction-mode='true']"/>
@@ -34,13 +34,12 @@
         import net.codjo.mad.server.handler.XMLUtils;
         import net.codjo.mad.server.handler.sql.SqlHandler;
         import net.codjo.mad.server.handler.sql.Getter;
-        <xsl:if test="$hasQueryFactory and not($isStatementFactory)">
-            import net.codjo.mad.server.handler.sql.QueryBuilder;
-            import net.codjo.mad.server.handler.HandlerException;
+        <xsl:if test="$hasQueryFactory">
+        import net.codjo.mad.server.handler.sql.QueryBuilder;
+        <xsl:if test="$hasParameter">
+        import net.codjo.mad.server.handler.sql.QueryParameterFiller;
         </xsl:if>
-        <xsl:if test="$hasQueryFactory and $isStatementFactory">
-            import net.codjo.mad.server.handler.sql.StatementBuilder;
-            import net.codjo.mad.server.handler.HandlerException;
+        import net.codjo.mad.server.handler.HandlerException;
         </xsl:if>
         import java.sql.*;
         import java.util.Map;
@@ -65,11 +64,8 @@
         </xsl:if>
         };
 
-        <xsl:if test="$hasQueryFactory and not($isStatementFactory)">
+        <xsl:if test="$hasQueryFactory">
             private QueryBuilder queryBuilder;
-        </xsl:if>
-        <xsl:if test="$hasQueryFactory and $isStatementFactory">
-            private StatementBuilder statementBuilder;
         </xsl:if>
 
         public <xsl:value-of select="$selectClassName"/>Handler(Database database)
@@ -100,11 +96,8 @@
                 </xsl:message>
             </xsl:if>
         </xsl:if>
-        <xsl:if test="$hasQueryFactory and not($isStatementFactory)">
+        <xsl:if test="$hasQueryFactory">
             queryBuilder = (QueryBuilder)Class.forName("<xsl:value-of select="$factory"/>").newInstance();
-        </xsl:if>
-         <xsl:if test="$hasQueryFactory and $isStatementFactory">
-            statementBuilder = (StatementBuilder)Class.forName("<xsl:value-of select="$factory"/>").newInstance();
         </xsl:if>
         }
 
@@ -118,21 +111,18 @@
             if (pks == null) {
             return;
             }
+        <xsl:if test="$hasParameter">
+            ((QueryParameterFiller)queryBuilder).fillQuery(query, pks);
+        </xsl:if>
 
             int idx = 1;
         </xsl:if>
         <xsl:apply-templates select="feature/handler-sql[@id=$handlerId]/arg" mode="sql"/>
         }
-        <xsl:if test="$hasQueryFactory and not($isStatementFactory)">
+        <xsl:if test="$hasQueryFactory">
             @Override
             protected String buildQuery(Map&lt;String, String> arguments) throws HandlerException {
             return queryBuilder.buildQuery(arguments, this);
-            }
-        </xsl:if>
-        <xsl:if test="$hasQueryFactory and $isStatementFactory">
-            @Override
-            protected PreparedStatement buildStatement(Map&lt;String, String> arguments) throws HandlerException {
-            return statementBuilder.buildStatement(arguments, this);
             }
         </xsl:if>
         }
