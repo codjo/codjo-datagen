@@ -23,6 +23,7 @@
         <xsl:variable name="selectClassName" select="java:bean.Util.capitalize($handlerId)"/>
         <xsl:variable name="sqlQuery" select="java:kernel.Util.flatten(feature/handler-sql[@id=$handlerId]/query)"/>
         <xsl:variable name="hasQueryFactory" select="feature/handler-sql[@id=$handlerId]/query[@factory]"/>
+        <xsl:variable name="hasParameter" select="feature/handler-sql[@id=$handlerId]/query[@with-parameter='true']"/>
         <xsl:variable name="inTransaction" select="feature/handler-sql[@id=$handlerId and @transaction='true']"/>
         <xsl:variable name="inTransactionForce"
                       select="feature/handler-sql[@id=$handlerId and @force-transaction-mode='true']"/>
@@ -34,8 +35,11 @@
         import net.codjo.mad.server.handler.sql.SqlHandler;
         import net.codjo.mad.server.handler.sql.Getter;
         <xsl:if test="$hasQueryFactory">
-            import net.codjo.mad.server.handler.sql.QueryBuilder;
-            import net.codjo.mad.server.handler.HandlerException;
+        import net.codjo.mad.server.handler.sql.QueryBuilder;
+        <xsl:if test="$hasParameter">
+        import net.codjo.mad.server.handler.sql.QueryParameterFiller;
+        </xsl:if>
+        import net.codjo.mad.server.handler.HandlerException;
         </xsl:if>
         import java.sql.*;
         import java.util.Map;
@@ -107,6 +111,9 @@
             if (pks == null) {
             return;
             }
+        <xsl:if test="$hasParameter">
+            ((QueryParameterFiller)queryBuilder).fillQuery(query, pks);
+        </xsl:if>
 
             int idx = 1;
         </xsl:if>
