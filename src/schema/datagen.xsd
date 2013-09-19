@@ -538,6 +538,7 @@
                 <xs:attribute name="type" type="xs:string"/>
                 <xs:attribute name="factory" type="xs:string"/>
                 <xs:attribute name="with-handler" type="xs:boolean"/>
+                <xs:attribute name="with-parameter" type="xs:boolean"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
