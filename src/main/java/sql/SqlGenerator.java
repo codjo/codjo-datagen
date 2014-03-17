@@ -74,6 +74,7 @@ public class SqlGenerator implements Generator {
         File dest = new File(root, tableName + ".tab");
         dest.delete();
         kernel.Util.mkdirs(dest.getParentFile());
+        kernel.Util.createNewFile(dest);
         FileWriter writer = new FileWriter(dest);
         try {
             log("Generation de la definition SQL " + tableName);
@@ -101,6 +102,7 @@ public class SqlGenerator implements Generator {
             File dest = new File(root, tableName + "-sequence.sql");
             dest.delete();
             kernel.Util.mkdirs(dest.getParentFile());
+            kernel.Util.createNewFile(dest);
             FileWriter writer = new FileWriter(dest);
             try {
                 log("Generation de la definition de la sequence SQL " + tableName);
@@ -129,6 +131,7 @@ public class SqlGenerator implements Generator {
         File dest = new File(root, "TR_" +tableName+"_SEQ_I.sql");
         dest.delete();
         kernel.Util.mkdirs(dest.getParentFile());
+        kernel.Util.createNewFile(dest);
         FileWriter writer = new FileWriter(dest);
         try {
             log("Generation de la definition SQL " + tableName);
@@ -156,6 +159,7 @@ public class SqlGenerator implements Generator {
 
         File dest = new File(root, tableName + "-gap.sql");
         dest.delete();
+        kernel.Util.createNewFile(dest);
         FileWriter writer = new FileWriter(dest);
         try {
             log("Generation de la definition GAP " + tableName);
