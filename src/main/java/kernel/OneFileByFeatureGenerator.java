@@ -83,6 +83,7 @@ public abstract class OneFileByFeatureGenerator implements Generator {
                   determineOutputFile(rootDir, fullClassName, selectNode, featureId);
             dest.delete();
             kernel.Util.mkdirs(dest.getParentFile());
+            kernel.Util.createNewFile(dest);
             FileWriter writer = new FileWriter(dest);
             try {
                 LOG.debug("   Generation du " + featureTag + " " + featureId + " pour "

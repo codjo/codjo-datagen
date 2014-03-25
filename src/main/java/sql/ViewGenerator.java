@@ -60,6 +60,7 @@ public class ViewGenerator implements Generator {
             File dest = new File(root, viewName + ".sql");
             dest.delete();
             kernel.Util.mkdirs(dest.getParentFile());
+            kernel.Util.createNewFile(dest);
             FileWriter writer = new FileWriter(dest);
             try {
                 log("   Generation de la vue " + viewName + "pour " + entityName);

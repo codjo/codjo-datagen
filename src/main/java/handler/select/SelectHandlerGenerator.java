@@ -63,6 +63,7 @@ public class SelectHandlerGenerator implements Generator {
                                            + bean.Util.extractClassName(fullClassName));
         File dest = new File(root, handlerClassName + ".java");
         dest.delete();
+        kernel.Util.createNewFile(dest);
         FileWriter writer = new FileWriter(dest);
         try {
             log("Generation de la definition du AbstractSelectHandler pour " + fullClassName);
@@ -94,6 +95,7 @@ public class SelectHandlerGenerator implements Generator {
 
             File dest = new File(root, bean.Util.capitalize(selectName) + "Handler.java");
             dest.delete();
+            kernel.Util.createNewFile(dest);
             FileWriter writer = new FileWriter(dest);
             try {
                 log("   Generation du SelectHandler " + selectName + "pour " + fullClassName);
