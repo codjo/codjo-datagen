@@ -63,6 +63,7 @@ public abstract class OneFileGenerator implements Generator {
 
         File dest = new File(rootDir, destFileName);
         dest.delete();
+        kernel.Util.createNewFile(dest);
         FileWriter writer = new FileWriter(dest);
         try {
             LOG.debug("Generation de " + featureTag);

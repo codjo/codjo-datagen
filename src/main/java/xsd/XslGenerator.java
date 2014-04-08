@@ -41,6 +41,7 @@ public abstract class XslGenerator {
 
         File destinationFile = new File(rootDir, getDestinationFileName());
         destinationFile.delete();
+        kernel.Util.createNewFile(destinationFile);
         FileWriter writer = new FileWriter(destinationFile);
         try {
             debug("Generation de " + getDestinationFileName());

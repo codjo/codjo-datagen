@@ -383,4 +383,23 @@ public final class Util {
             }
         }
     }
+
+    
+     public static void createNewFile(File file) {
+        int count = 0;
+        while (count++ < 5) {
+            try {
+                file.createNewFile();
+                break;
+            }
+            catch (IOException e) {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 }

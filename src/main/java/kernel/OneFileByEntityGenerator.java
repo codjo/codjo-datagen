@@ -55,6 +55,7 @@ public abstract class OneFileByEntityGenerator implements Generator {
             File dest = determineOutputFile(entityNode, rootDir);
             dest.delete();
             kernel.Util.mkdirs(dest.getParentFile());
+            kernel.Util.createNewFile(dest);
             FileWriter writer = new FileWriter(dest);
             try {
                 String entityName = DomUtil.getAttributeValue(entityNode, "name");
